@@ -790,11 +790,7 @@ export default function ProductsGridCompact({
               </div>
 
               <div>
-                <h4 className="font-semibold text-gray-900 mb-2 text-sm sm:text-base">Schärfegrad</h4>
-                <div className="flex items-center gap-1">
-                  <div className="flex">{renderHeatLevel(product.heatLevel, "lg")}</div>
-                  <span className="text-sm text-gray-600 ml-2">{product.heatLevel}/5</span>
-                </div>
+               
               </div>
             </div>
 
@@ -972,11 +968,7 @@ export default function ProductsGridCompact({
                 <div className="flex items-center gap-1 lg:gap-2">
                   <div className="flex">{renderStars(product.rating)}</div>
                   <span className="text-gray-600 ml-1 font-medium">{product.rating}</span>
-                  {/* MEJORADO: Heat level visible en pantallas grandes */}
-                  <div className="hidden lg:flex items-center gap-1 ml-3">
-                    <div className="flex">{renderHeatLevel(product.heatLevel)}</div>
-                    <span className="text-gray-600 ml-1 text-xs">{product.heatLevel}/5</span>
-                  </div>
+               
                 </div>
                 <div className="flex items-center gap-1 text-gray-500">
                   <MapPin className="w-3 h-3 lg:w-4 lg:h-4" />

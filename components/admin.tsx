@@ -18,6 +18,7 @@ import {
   Trash2,
   Search,
   Star,
+  Shield,
   X,
   AlertTriangle,
   Package2,
@@ -611,11 +612,11 @@ export function Admin({ onClose }: AdminProps) {
         <div className="max-w-7xl mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center">
-                <Flame className="w-6 h-6 text-white" />
+              <div className="w-12 h-12 bg-gradient-to-r from-gray-900 to-gray-500 rounded-full flex items-center justify-center">
+                <Shield className="w-6 h-6 text-black" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-gray-800">FEUER KÖNIGREICH</h1>
+                <h1 className="text-2xl font-bold text-gray-800">GLUTWERK</h1>
                 <p className="text-gray-600">Verwaltungspanel</p>
               </div>
             </div>
@@ -628,7 +629,7 @@ export function Admin({ onClose }: AdminProps) {
               <Button
                 onClick={activeTab === "orders" ? loadOrders : loadProducts}
                 disabled={ordersLoading || productsLoading}
-                className="bg-orange-500 hover:bg-orange-600 text-white"
+                className="bg-gray-500 hover:bg-orange-600 text-white"
               >
                 <RefreshCw className={`w-4 h-4 mr-2 ${ordersLoading || productsLoading ? "animate-spin" : ""}`} />
                 Aktualisieren
@@ -785,7 +786,7 @@ export function Admin({ onClose }: AdminProps) {
                       onClick={() => {
                         setOrderFilters({ search: "", status: "all", email: "" })
                       }}
-                      className="bg-orange-500 hover:bg-orange-600 text-white"
+                      className="bg-gray-500 hover:bg-orange-600 text-white"
                     >
                       Filter zurücksetzen
                     </Button>
@@ -1375,17 +1376,15 @@ export function Admin({ onClose }: AdminProps) {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <Label htmlFor="heat_level">Schärfegrad (1-5)</Label>
+                  <Label htmlFor="heat_level">Unterkategorie</Label>
                   <Select name="heat_level" defaultValue={currentEditingProduct?.heat_level?.toString() || "1"}>
                     <SelectTrigger className="bg-white border-gray-300">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent className="bg-white">
-                      <SelectItem value="1">1 - Mild</SelectItem>
-                      <SelectItem value="2">2 - Leicht scharf</SelectItem>
-                      <SelectItem value="3">3 - Mittel</SelectItem>
-                      <SelectItem value="4">4 - Scharf</SelectItem>
-                      <SelectItem value="5">5 - Sehr scharf</SelectItem>
+                      <SelectItem value="1">1 - Leder</SelectItem>
+                      <SelectItem value="2">2 - kunststoff</SelectItem>
+          
                     </SelectContent>
                   </Select>
                 </div>
@@ -1410,7 +1409,7 @@ export function Admin({ onClose }: AdminProps) {
                   <Input
                     id="badge"
                     name="badge"
-                    placeholder="z.B. Sonnig, Scharf"
+                    placeholder="z.B. Neue, Aktion"
                     defaultValue={currentEditingProduct?.badge || ""}
                     className="bg-white"
                   />
@@ -1420,7 +1419,7 @@ export function Admin({ onClose }: AdminProps) {
                   <Input
                     id="origin"
                     name="origin"
-                    placeholder="z.B. USA, Mexiko"
+                    placeholder="z.B. USA, Europa"
                     defaultValue={currentEditingProduct?.origin || ""}
                     className="bg-white"
                   />
