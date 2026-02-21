@@ -1,9 +1,9 @@
 "use client"
 
-import { useState, useEffect, useRef, memo } from "react"
+import { useState, useEffect, useCallback, memo } from "react"
 import { useSearchParams, useRouter } from "next/navigation"
 import {
-  ShoppingCart, Star, ChevronLeft, ChevronRight,
+  ShoppingCart, ChevronLeft, ChevronRight,
   Search, SlidersHorizontal, X, Check, MapPin,
   ArrowUp, ChevronDown
 } from "lucide-react"
@@ -26,6 +26,125 @@ interface CartItem {
   badge?: string; origin?: string; quantity: number
 }
 interface Category { id: number; slug: string; name: string }
+
+// ─── Standalone helpers ────────────────────────────────────────────────────────
+
+function getImages(p: Product): string[] {
+  return (p.image_urls ?? [p.image_url]).filter((u): u is string => !!u)
+}
+
+// ─── ProductCard (defined OUTSIDE ShopGrid so memo() actually works) ──────────
+
+interface ProductCardProps {
+  product: Product
+  addedIds: Set<number>
+  onSelect: (p: Product) => void
+  onAddToCart: (p: Product) => void
+}
+
+const ProductCard = memo(function ProductCard({ product, addedIds, onSelect, onAddToCart }: ProductCardProps) {
+  const [idx, setIdx] = useState(0)
+  const images  = getImages(product)
+  const inStock = (product.stock ?? 0) > 0
+  const isAdded = addedIds.has(product.id)
+
+  return (
+    <div className="group bg-white rounded-2xl overflow-hidden flex flex-col shadow-sm hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 border border-[#EBEBEB] hover:border-[#D5D5D5]">
+      {/* Image */}
+      <div
+        className="relative aspect-square bg-[#F8F8F8] overflow-hidden cursor-pointer"
+        onClick={() => onSelect(product)}
+      >
+        {images.length > 0 ? (
+          <img
+            src={images[idx]}
+            alt={product.name}
+            loading="lazy"
+            className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-500"
+            onError={() => {
+              if (idx < images.length - 1) setIdx(i => i + 1)
+              else {
+                const el = document.querySelector(`[data-pid="${product.id}"] img`) as HTMLImageElement
+                if (el) el.src = "/placeholder.svg?height=300&width=300"
+              }
+            }}
+          />
+        ) : (
+          <ProductImage
+            src={product.image_url}
+            candidates={product.image_url_candidates}
+            alt={product.name}
+            loading="lazy"
+            className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-500"
+          />
+        )}
+
+        {images.length > 1 && (
+          <>
+            <button
+              onClick={e => { e.stopPropagation(); setIdx(i => (i - 1 + images.length) % images.length) }}
+              className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/90 backdrop-blur-sm rounded-full w-7 h-7 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all shadow-md"
+            >
+              <ChevronLeft className="w-3.5 h-3.5 text-[#333]" />
+            </button>
+            <button
+              onClick={e => { e.stopPropagation(); setIdx(i => (i + 1) % images.length) }}
+              className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/90 backdrop-blur-sm rounded-full w-7 h-7 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all shadow-md"
+            >
+              <ChevronRight className="w-3.5 h-3.5 text-[#333]" />
+            </button>
+            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1">
+              {images.map((_, i) => (
+                <div key={i} className={`rounded-full transition-all ${i === idx ? "w-4 h-1.5 bg-white" : "w-1.5 h-1.5 bg-white/50"}`} />
+              ))}
+            </div>
+          </>
+        )}
+
+        {!inStock && (
+          <div className="absolute inset-0 bg-white/60 flex items-center justify-center">
+            <span className="bg-[#1A1A1A]/80 text-white text-xs font-bold px-3 py-1.5 rounded-full">Ausverkauft</span>
+          </div>
+        )}
+        {product.badge && (
+          <span className="absolute top-2.5 left-2.5 bg-[#2C5F2E] text-white text-[10px] font-bold px-2 py-0.5 rounded-full tracking-wide shadow-sm">
+            {product.badge}
+          </span>
+        )}
+      </div>
+
+      {/* Details */}
+      <div className="p-3.5 flex flex-col flex-1 gap-1.5">
+        <p className="text-[10px] font-bold text-[#BBBBBB] uppercase tracking-widest truncate">
+          {product.supplier || product.origin || "—"}
+        </p>
+        <h3
+          className="text-sm font-bold text-[#1A1A1A] line-clamp-2 leading-snug cursor-pointer hover:text-[#2C5F2E] transition-colors"
+          onClick={() => onSelect(product)}
+        >
+          {product.name}
+        </h3>
+        <div className="mt-auto pt-2.5 flex items-center justify-between gap-2 border-t border-[#F5F5F5]">
+          <span className="text-base font-black text-[#1A1A1A] tracking-tight">CHF {product.price.toFixed(2)}</span>
+          <button
+            onClick={() => onAddToCart(product)}
+            disabled={!inStock}
+            className={`flex items-center gap-1.5 text-xs font-bold px-3.5 py-2 rounded-full transition-all duration-200 ${
+              isAdded
+                ? "bg-emerald-500 text-white"
+                : inStock
+                  ? "bg-[#2C5F2E] hover:bg-[#1A4520] text-white hover:shadow-md active:scale-95"
+                  : "bg-[#F0F0F0] text-[#CCC] cursor-not-allowed"
+            }`}
+          >
+            {isAdded ? <Check className="w-3.5 h-3.5" /> : <ShoppingCart className="w-3.5 h-3.5" />}
+            {isAdded ? "✓" : "Kaufen"}
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+})
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
@@ -52,10 +171,7 @@ export default function ShopGrid() {
   const [cartCount, setCartCount] = useState(0)
   const [addedIds, setAddedIds]   = useState<Set<number>>(new Set())
   const [currentView, setCurrentView] = useState<"products"|"checkout">("products")
-  const [imgIndex, setImgIndex]   = useState<Record<number, number>>({})
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
-
-  const API = process.env.NEXT_PUBLIC_API_BASE_URL
 
   useEffect(() => { loadProducts(); loadCategories(); loadCart() }, [])
   useEffect(() => { setVisibleCount(PAGE_SIZE) }, [search, activeCategory, stockFilter, sortBy])
@@ -88,7 +204,7 @@ export default function ShopGrid() {
   const loadProducts = async () => {
     try {
       setLoading(true)
-      const res = await fetch(`${API}/get_products.php`)
+      const res = await fetch(`/api/products`)
       const data = await res.json()
       if (data.success) setProducts(data.products)
       else throw new Error(data.error)
@@ -97,7 +213,7 @@ export default function ShopGrid() {
   }
   const loadCategories = async () => {
     try {
-      const res = await fetch(`${API}/get_categories.php`, { method: "POST" })
+      const res = await fetch(`/api/categories`)
       const data = await res.json()
       if (data.success) setCategories(data.categories)
     } catch {}
@@ -149,9 +265,6 @@ export default function ShopGrid() {
     setCart([]); setCartCount(0)
     localStorage.removeItem("cantina-cart"); localStorage.removeItem("cantina-cart-count")
   }
-  const getImages = (p: Product): string[] =>
-    (p.image_urls ?? [p.image_url]).filter((u): u is string => !!u)
-
   const filtered = products
     .filter(p => {
       const matchSearch   = !search || p.name.toLowerCase().includes(search.toLowerCase()) || p.description.toLowerCase().includes(search.toLowerCase())
@@ -172,118 +285,8 @@ export default function ShopGrid() {
   const visibleProducts = filtered.slice(0, visibleCount)
   const hasMore = visibleCount < filtered.length
 
-  // ─── Stars ────────────────────────────────────────────────────────────────
-  const Stars = ({ rating }: { rating: number }) => (
-    <div className="flex gap-0.5">
-      {Array.from({ length: 5 }, (_, i) => (
-        <Star key={i} className={`w-3 h-3 ${i < Math.floor(rating) ? "fill-amber-400 text-amber-400" : "text-gray-200"}`} />
-      ))}
-    </div>
-  )
-
-  // ─── Product Card ─────────────────────────────────────────────────────────
-  const ProductCard = memo(({ product }: { product: Product }) => {
-    const images  = getImages(product)
-    const idx     = imgIndex[product.id] ?? 0
-    const inStock = (product.stock ?? 0) > 0
-    const isAdded = addedIds.has(product.id)
-
-    return (
-      <div className="group bg-white rounded-2xl overflow-hidden flex flex-col shadow-sm hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 border border-[#EBEBEB] hover:border-[#D5D5D5]">
-        {/* Image */}
-        <div
-          className="relative aspect-square bg-[#F8F8F8] overflow-hidden cursor-pointer"
-          onClick={() => setSelectedProduct(product)}
-        >
-          {images.length > 0 ? (
-            <img
-              src={images[idx]}
-              alt={product.name}
-              className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-500"
-              onError={e => { (e.target as HTMLImageElement).src = "/placeholder.svg?height=300&width=300" }}
-            />
-          ) : (
-            <ProductImage
-              src={product.image_url}
-              candidates={product.image_url_candidates}
-              alt={product.name}
-              className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-500"
-            />
-          )}
-
-          {images.length > 1 && (
-            <>
-              <button
-                onClick={e => { e.stopPropagation(); setImgIndex(p => ({ ...p, [product.id]: (idx - 1 + images.length) % images.length })) }}
-                className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/90 backdrop-blur-sm rounded-full w-7 h-7 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all shadow-md"
-              >
-                <ChevronLeft className="w-3.5 h-3.5 text-[#333]" />
-              </button>
-              <button
-                onClick={e => { e.stopPropagation(); setImgIndex(p => ({ ...p, [product.id]: (idx + 1) % images.length })) }}
-                className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/90 backdrop-blur-sm rounded-full w-7 h-7 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all shadow-md"
-              >
-                <ChevronRight className="w-3.5 h-3.5 text-[#333]" />
-              </button>
-              {/* Dots */}
-              <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1">
-                {images.map((_, i) => (
-                  <div key={i} className={`rounded-full transition-all ${i === idx ? "w-4 h-1.5 bg-white" : "w-1.5 h-1.5 bg-white/50"}`} />
-                ))}
-              </div>
-            </>
-          )}
-
-          {/* Stock badge */}
-          {!inStock && (
-            <div className="absolute inset-0 bg-white/60 flex items-center justify-center">
-              <span className="bg-[#1A1A1A]/80 text-white text-xs font-bold px-3 py-1.5 rounded-full">Ausverkauft</span>
-            </div>
-          )}
-
-          {product.badge && (
-            <span className="absolute top-2.5 left-2.5 bg-[#2C5F2E] text-white text-[10px] font-bold px-2 py-0.5 rounded-full tracking-wide shadow-sm">
-              {product.badge}
-            </span>
-          )}
-        </div>
-
-        {/* Details */}
-        <div className="p-3.5 flex flex-col flex-1 gap-1.5">
-          <p className="text-[10px] font-bold text-[#BBBBBB] uppercase tracking-widest truncate">
-            {product.supplier || product.origin || "—"}
-          </p>
-
-          <h3
-            className="text-sm font-bold text-[#1A1A1A] line-clamp-2 leading-snug cursor-pointer hover:text-[#2C5F2E] transition-colors"
-            onClick={() => setSelectedProduct(product)}
-          >
-            {product.name}
-          </h3>
-
-          <div className="mt-auto pt-2.5 flex items-center justify-between gap-2 border-t border-[#F5F5F5]">
-            <div>
-              <span className="text-base font-black text-[#1A1A1A] tracking-tight">CHF {product.price.toFixed(2)}</span>
-            </div>
-            <button
-              onClick={() => addToCart(product)}
-              disabled={!inStock}
-              className={`flex items-center gap-1.5 text-xs font-bold px-3.5 py-2 rounded-full transition-all duration-200 ${
-                isAdded
-                  ? "bg-emerald-500 text-white"
-                  : inStock
-                    ? "bg-[#2C5F2E] hover:bg-[#1A4520] text-white hover:shadow-md active:scale-95"
-                    : "bg-[#F0F0F0] text-[#CCC] cursor-not-allowed"
-              }`}
-            >
-              {isAdded ? <Check className="w-3.5 h-3.5" /> : <ShoppingCart className="w-3.5 h-3.5" />}
-              {isAdded ? "✓" : "Kaufen"}
-            </button>
-          </div>
-        </div>
-      </div>
-    )
-  })
+  const handleSelect   = useCallback((p: Product) => setSelectedProduct(p), [])
+  const handleAddToCart = useCallback((p: Product) => addToCart(p), [addedIds, cart]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // ─── Detail Modal ─────────────────────────────────────────────────────────
   const DetailModal = ({ product }: { product: Product }) => {
@@ -688,7 +691,15 @@ export default function ShopGrid() {
             ) : (
               <>
                 <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-4">
-                  {visibleProducts.map(product => <ProductCard key={product.id} product={product} />)}
+                  {visibleProducts.map(product => (
+                    <ProductCard
+                      key={product.id}
+                      product={product}
+                      addedIds={addedIds}
+                      onSelect={handleSelect}
+                      onAddToCart={handleAddToCart}
+                    />
+                  ))}
                 </div>
 
                 {hasMore && (

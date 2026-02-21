@@ -36,16 +36,14 @@ export function CategoryPreviewSection() {
   const markFailed = (id: number) =>
     setFailedIds(prev => new Set([...prev, id]))
 
-  const API = process.env.NEXT_PUBLIC_API_BASE_URL
-
   useEffect(() => {
     let cancelled = false
 
-    const load = async (retries = 3): Promise<void> => {
+    const load = async (retries = 2): Promise<void> => {
       try {
         const [r1, r2] = await Promise.all([
-          fetch(`${API}/get_products.php`),
-          fetch(`${API}/get_categories.php`, { method: "POST" }),
+          fetch(`/api/products`),
+          fetch(`/api/categories`),
         ])
         if (!r1.ok || !r2.ok) throw new Error("not ok")
         const [prodData, catData] = await Promise.all([r1.json(), r2.json()])

@@ -26,14 +26,12 @@ export function RecommendedProducts() {
   const markFailed = (id: number) =>
     setFailedIds(prev => new Set([...prev, id]))
 
-  const API = process.env.NEXT_PUBLIC_API_BASE_URL
-
   useEffect(() => {
     let cancelled = false
 
-    const load = async (retries = 3): Promise<void> => {
+    const load = async (retries = 2): Promise<void> => {
       try {
-        const r = await fetch(`${API}/get_products.php`)
+        const r = await fetch(`/api/products`)
         if (!r.ok) throw new Error(`${r.status}`)
         const data = await r.json()
         if (!data.success || cancelled) return

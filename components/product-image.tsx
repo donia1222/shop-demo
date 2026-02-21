@@ -38,6 +38,7 @@ export function ProductImage({ src, candidates, alt, onAllFailed, ...props }: Pr
     <img
       src={urls[attempt]}
       alt={alt}
+      loading="lazy"
       onError={() => setAttempt(a => a + 1)}
       {...props}
     />
