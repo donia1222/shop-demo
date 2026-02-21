@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef, memo } from "react"
+import { useSearchParams, useRouter } from "next/navigation"
 import {
   ShoppingCart, Star, ChevronLeft, ChevronRight,
   Search, SlidersHorizontal, X, Check, MapPin,
@@ -8,6 +9,7 @@ import {
 } from "lucide-react"
 import { ShoppingCartComponent } from "./shopping-cart"
 import { CheckoutPage } from "@/components/checkout-page"
+import { LoginAuth } from "./login-auth"
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -27,6 +29,8 @@ interface Category { id: number; slug: string; name: string }
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export default function ShopGrid() {
+  const router = useRouter()
+  const searchParams = useSearchParams()
   const [products, setProducts]     = useState<Product[]>([])
   const [categories, setCategories] = useState<Category[]>([])
   const [loading, setLoading]       = useState(true)
@@ -54,6 +58,26 @@ export default function ShopGrid() {
 
   useEffect(() => { loadProducts(); loadCategories(); loadCart() }, [])
   useEffect(() => { setVisibleCount(PAGE_SIZE) }, [search, activeCategory, stockFilter, sortBy])
+
+  // Apply category filter from URL param once categories are loaded
+  useEffect(() => {
+    const catParam = searchParams.get("cat")
+    if (!catParam || categories.length === 0) return
+    // Match against category name (API names like "Messer 2026" contain the display name)
+    const matched = categories.find((c) =>
+      c.name.toLowerCase().includes(catParam.toLowerCase())
+    )
+    if (matched) setActiveCategory(matched.slug)
+  }, [categories, searchParams])
+
+  // Open product detail modal from URL param (e.g. ?product=123)
+  useEffect(() => {
+    const productParam = searchParams.get("product")
+    if (!productParam || products.length === 0) return
+    const productId = parseInt(productParam, 10)
+    const found = products.find((p) => p.id === productId)
+    if (found) setSelectedProduct(found)
+  }, [products, searchParams])
   useEffect(() => {
     const onScroll = () => setShowBackTop(window.scrollY > 500)
     window.addEventListener("scroll", onScroll)
@@ -164,16 +188,16 @@ export default function ShopGrid() {
     const isAdded = addedIds.has(product.id)
 
     return (
-      <div className="group bg-white rounded-2xl overflow-hidden flex flex-col shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-gray-200">
+      <div className="group bg-white rounded-2xl overflow-hidden flex flex-col shadow-sm hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 border border-[#EBEBEB] hover:border-[#D5D5D5]">
         {/* Image */}
         <div
-          className="relative aspect-square bg-gray-50 overflow-hidden cursor-pointer"
+          className="relative aspect-square bg-[#F8F8F8] overflow-hidden cursor-pointer"
           onClick={() => setSelectedProduct(product)}
         >
           <img
             src={images[idx] ?? "/placeholder.svg?height=300&width=300"}
             alt={product.name}
-            className="w-full h-full object-contain p-3 group-hover:scale-105 transition-transform duration-500"
+            className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-500"
             onError={e => { (e.target as HTMLImageElement).src = "/placeholder.svg?height=300&width=300" }}
           />
 
@@ -181,68 +205,69 @@ export default function ShopGrid() {
             <>
               <button
                 onClick={e => { e.stopPropagation(); setImgIndex(p => ({ ...p, [product.id]: (idx - 1 + images.length) % images.length })) }}
-                className="absolute left-2 top-1/2 -translate-y-1/2 bg-white rounded-full w-7 h-7 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all shadow-md"
+                className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/90 backdrop-blur-sm rounded-full w-7 h-7 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all shadow-md"
               >
-                <ChevronLeft className="w-3.5 h-3.5 text-gray-700" />
+                <ChevronLeft className="w-3.5 h-3.5 text-[#333]" />
               </button>
               <button
                 onClick={e => { e.stopPropagation(); setImgIndex(p => ({ ...p, [product.id]: (idx + 1) % images.length })) }}
-                className="absolute right-2 top-1/2 -translate-y-1/2 bg-white rounded-full w-7 h-7 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all shadow-md"
+                className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/90 backdrop-blur-sm rounded-full w-7 h-7 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all shadow-md"
               >
-                <ChevronRight className="w-3.5 h-3.5 text-gray-700" />
+                <ChevronRight className="w-3.5 h-3.5 text-[#333]" />
               </button>
               {/* Dots */}
               <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1">
                 {images.map((_, i) => (
-                  <div key={i} className={`rounded-full transition-all ${i === idx ? "w-4 h-1.5 bg-gray-800" : "w-1.5 h-1.5 bg-gray-400"}`} />
+                  <div key={i} className={`rounded-full transition-all ${i === idx ? "w-4 h-1.5 bg-white" : "w-1.5 h-1.5 bg-white/50"}`} />
                 ))}
               </div>
             </>
           )}
 
+          {/* Stock badge */}
+          {!inStock && (
+            <div className="absolute inset-0 bg-white/60 flex items-center justify-center">
+              <span className="bg-[#1A1A1A]/80 text-white text-xs font-bold px-3 py-1.5 rounded-full">Ausverkauft</span>
+            </div>
+          )}
+
           {product.badge && (
-            <span className="absolute top-2.5 left-2.5 bg-gray-900 text-white text-[10px] font-bold px-2 py-0.5 rounded-full tracking-wide">
+            <span className="absolute top-2.5 left-2.5 bg-[#2C5F2E] text-white text-[10px] font-bold px-2 py-0.5 rounded-full tracking-wide shadow-sm">
               {product.badge}
             </span>
           )}
         </div>
 
         {/* Details */}
-        <div className="p-3.5 flex flex-col flex-1 gap-2">
-          <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest truncate">
+        <div className="p-3.5 flex flex-col flex-1 gap-1.5">
+          <p className="text-[10px] font-bold text-[#BBBBBB] uppercase tracking-widest truncate">
             {product.supplier || product.origin || "—"}
           </p>
 
           <h3
-            className="text-sm font-bold text-gray-900 line-clamp-2 leading-snug cursor-pointer hover:text-gray-600 transition-colors"
+            className="text-sm font-bold text-[#1A1A1A] line-clamp-2 leading-snug cursor-pointer hover:text-[#2C5F2E] transition-colors"
             onClick={() => setSelectedProduct(product)}
           >
             {product.name}
           </h3>
 
-          <div className="flex items-center gap-1.5">
-            <Stars rating={product.rating} />
-            <span className="text-[10px] text-gray-400 font-medium">{product.rating.toFixed(1)}</span>
-          </div>
-
-          <div className="mt-auto pt-2 flex items-center justify-between gap-2">
+          <div className="mt-auto pt-2.5 flex items-center justify-between gap-2 border-t border-[#F5F5F5]">
             <div>
-              <span className="text-lg font-black text-gray-900 tracking-tight">{product.price.toFixed(2)}</span>
-              <span className="text-xs text-gray-400 ml-1">CHF</span>
+              <span className="text-base font-black text-[#1A1A1A] tracking-tight">CHF {product.price.toFixed(2)}</span>
             </div>
             <button
               onClick={() => addToCart(product)}
               disabled={!inStock}
-              className={`flex items-center gap-1.5 text-xs font-bold px-3 py-2 rounded-xl transition-all duration-200 ${
+              className={`flex items-center gap-1.5 text-xs font-bold px-3.5 py-2 rounded-full transition-all duration-200 ${
                 isAdded
-                  ? "bg-emerald-500 text-white scale-95"
+                  ? "bg-emerald-500 text-white"
                   : inStock
-                    ? "bg-blue-950 hover:bg-blue-900 text-white hover:scale-105 active:scale-95"
-                    : "bg-gray-100 text-gray-300 cursor-not-allowed"
+                    ? "bg-[#2C5F2E] hover:bg-[#1A4520] text-white hover:shadow-md active:scale-95"
+                    : "bg-[#F0F0F0] text-[#CCC] cursor-not-allowed"
               }`}
             >
               {isAdded ? <Check className="w-3.5 h-3.5" /> : <ShoppingCart className="w-3.5 h-3.5" />}
-              {isAdded ? "OK" : "Kaufen"}
+              {isAdded ? "✓" : "Kaufen"}
             </button>
           </div>
         </div>
@@ -290,10 +315,6 @@ export default function ShopGrid() {
             <div className="p-6 flex flex-col gap-4">
               <div>
                 <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">{product.supplier || product.origin}</p>
-                <div className="flex items-center gap-2">
-                  <Stars rating={product.rating} />
-                  <span className="text-xs text-gray-500">{product.rating.toFixed(1)} / 5</span>
-                </div>
               </div>
               <p className="text-sm text-gray-600 leading-relaxed">{product.description}</p>
               {product.origin && (
@@ -315,7 +336,7 @@ export default function ShopGrid() {
                   onClick={() => { addToCart(product); setSelectedProduct(null) }}
                   disabled={!inStock}
                   className={`w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl font-bold text-sm transition-all duration-200 ${
-                    inStock ? "bg-blue-950 hover:bg-blue-900 text-white hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-blue-950/20" : "bg-gray-100 text-gray-300 cursor-not-allowed"
+                    inStock ? "bg-[#2C5F2E] hover:bg-[#1A4520] text-white hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-[#2C5F2E]/20" : "bg-gray-100 text-gray-300 cursor-not-allowed"
                   }`}
                 >
                   <ShoppingCart className="w-4 h-4" />
@@ -335,10 +356,21 @@ export default function ShopGrid() {
   }
   if (loading) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-10 h-10 border-[3px] border-gray-200 border-t-gray-900 rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-sm text-gray-400 font-medium">Produkte werden geladen…</p>
+      <div className="min-h-screen bg-[#f7f7f8]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+          <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-4">
+            {Array.from({ length: 12 }).map((_, i) => (
+              <div key={i} className="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm animate-pulse">
+                <div className="aspect-square bg-gray-100" />
+                <div className="p-3.5 space-y-2">
+                  <div className="h-3 bg-gray-100 rounded-full w-1/2" />
+                  <div className="h-4 bg-gray-100 rounded-full w-5/6" />
+                  <div className="h-3 bg-gray-100 rounded-full w-3/4" />
+                  <div className="h-8 bg-gray-100 rounded-xl mt-2" />
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     )
@@ -364,18 +396,6 @@ export default function ShopGrid() {
         onClearCart={clearCart}
       />
 
-      {/* Floating cart */}
-      <button
-        onClick={() => setCartOpen(true)}
-        className="fixed top-5 right-5 z-40 bg-blue-950 hover:bg-blue-900 text-white rounded-2xl p-3.5 shadow-xl transition-all hover:scale-110 active:scale-95"
-      >
-        <ShoppingCart className="w-5 h-5" />
-        {cartCount > 0 && (
-          <span className="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center shadow-sm">
-            {cartCount > 99 ? "99+" : cartCount}
-          </span>
-        )}
-      </button>
 
       {/* Back to top */}
       {showBackTop && (
@@ -392,34 +412,82 @@ export default function ShopGrid() {
       <div className="min-h-screen bg-[#f7f7f8]">
 
         {/* ── Top bar ── */}
-        <div className="bg-white/90 backdrop-blur-md border-b border-gray-100 sticky top-0 z-30 shadow-sm">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 h-14 flex items-center gap-3">
-            <span className="text-base font-black text-gray-900 tracking-tight hidden sm:block">Shop</span>
+        <div className="bg-white border-b border-[#E0E0E0] sticky top-0 z-30 shadow-sm">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center gap-3">
 
-            <div className="flex-1 max-w-sm relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            {/* ← Home button */}
+            <button
+              onClick={() => router.push("/")}
+              className="flex items-center gap-2 text-[#555] hover:text-[#2C5F2E] transition-colors group flex-shrink-0"
+            >
+              <div className="w-8 h-8 rounded-full border border-[#E5E5E5] group-hover:border-[#2C5F2E]/60 group-hover:bg-[#2C5F2E]/5 flex items-center justify-center transition-all">
+                <ChevronLeft className="w-4 h-4" />
+              </div>
+              <span className="text-sm font-bold hidden sm:block">Home</span>
+            </button>
+
+            {/* Divider */}
+            <div className="w-px h-6 bg-[#E5E5E5] flex-shrink-0" />
+
+            {/* Logo */}
+            <div className="hidden md:flex items-center flex-shrink-0">
+              <img src="/Security_n.png" alt="Logo" className="h-12 w-auto object-contain" />
+            </div>
+
+            <div className="hidden md:block w-px h-6 bg-[#E5E5E5] flex-shrink-0" />
+
+            {/* Search */}
+            <div className="flex-1 max-w-xl relative">
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9CA3AF] pointer-events-none" />
               <input
                 type="text"
-                placeholder="Suchen…"
+                placeholder="Produkte suchen…"
                 value={search}
                 onChange={e => setSearch(e.target.value)}
-                className="w-full pl-9 pr-8 py-2 text-sm bg-gray-100 rounded-xl focus:outline-none focus:bg-white focus:ring-2 focus:ring-gray-900/10 transition-all"
+                className="w-full pl-10 pr-9 py-2.5 text-sm bg-[#F3F4F6] rounded-full border border-transparent focus:outline-none focus:bg-white focus:border-[#2C5F2E] focus:ring-2 focus:ring-[#2C5F2E]/10 transition-all placeholder-[#9CA3AF]"
               />
               {search && (
-                <button onClick={() => setSearch("")} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-700">
+                <button onClick={() => setSearch("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#AAA] hover:text-[#555]">
                   <X className="w-3.5 h-3.5" />
                 </button>
               )}
             </div>
 
-            <span className="text-xs text-gray-400 font-medium hidden md:block">{filtered.length} Produkte</span>
+            <span className="text-xs text-[#999] font-semibold hidden lg:block whitespace-nowrap">
+              <span className="text-[#1A1A1A] font-black">{filtered.length}</span> Produkte
+            </span>
 
             <button
               onClick={() => setSidebarOpen(p => !p)}
-              className="ml-auto lg:hidden flex items-center gap-1.5 text-sm font-semibold text-gray-700 bg-gray-100 hover:bg-gray-200 px-3 py-2 rounded-xl transition-colors"
+              className="lg:hidden flex items-center gap-1.5 text-sm font-bold text-[#1A1A1A] bg-[#F3F4F6] hover:bg-[#E8E9EB] px-4 py-2 rounded-full transition-colors flex-shrink-0"
             >
               <SlidersHorizontal className="w-4 h-4" />
               Filter
+            </button>
+
+            {/* Login — header style */}
+            <div className="flex flex-col items-center min-w-[56px]">
+              <LoginAuth
+                onLoginSuccess={() => {}}
+                onLogout={() => {}}
+                onShowProfile={() => {}}
+                isLightSection={true}
+                variant="button"
+              />
+            </div>
+
+            {/* Cart icon — header style */}
+            <button
+              onClick={() => setCartOpen(true)}
+              className="relative flex flex-col items-center p-2 hover:bg-[#F5F5F5] rounded-xl transition-colors flex-shrink-0"
+            >
+              <ShoppingCart className="w-5 h-5 text-[#555]" />
+              <span className="text-[10px] text-[#555] mt-0.5 leading-none">Warenkorb</span>
+              {cartCount > 0 && (
+                <span className="absolute -top-0.5 -right-0.5 bg-[#CC0000] text-white text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center shadow-sm">
+                  {cartCount > 9 ? "9+" : cartCount}
+                </span>
+              )}
             </button>
           </div>
         </div>
@@ -428,10 +496,10 @@ export default function ShopGrid() {
 
           {/* ── Sidebar ── */}
           <aside className={`${sidebarOpen ? "block" : "hidden"} lg:block w-full lg:w-52 xl:w-60 flex-shrink-0 lg:sticky lg:top-20 lg:self-start`}>
-            <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 space-y-5">
+            <div className="bg-white rounded-2xl p-4 shadow-sm border border-[#EBEBEB] space-y-5">
 
               <div>
-                <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">Kategorien</p>
+                <p className="text-[10px] font-black text-[#AAAAAA] uppercase tracking-[0.15em] mb-3">Kategorien</p>
                 <ul className="space-y-0.5">
                   {[{ slug: "all", name: "Alle" }, ...categories].map(cat => {
                     const count = cat.slug === "all" ? products.filter(p => (p.stock ?? 0) > 0).length : products.filter(p => p.category === cat.slug).length
@@ -439,13 +507,15 @@ export default function ShopGrid() {
                     return (
                       <li key={cat.slug}>
                         <button
-                          onClick={() => setActiveCategory(cat.slug)}
+                          onClick={() => setActiveCategory(prev => prev === cat.slug ? "all" : cat.slug)}
                           className={`w-full text-left flex items-center justify-between text-sm px-3 py-2 rounded-xl transition-all font-medium ${
-                            isActive ? "bg-blue-950 text-white" : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+                            isActive
+                              ? "bg-[#2C5F2E] text-white shadow-sm"
+                              : "text-[#555] hover:bg-[#F5F5F5] hover:text-[#1A1A1A]"
                           }`}
                         >
-                          <span className="truncate">{cat.name}</span>
-                          <span className={`text-[10px] font-bold ml-2 px-1.5 py-0.5 rounded-full ${isActive ? "bg-white/20 text-white" : "bg-gray-100 text-gray-500"}`}>{count}</span>
+                          <span className="truncate">{cat.name.replace(/\s*\d{4}$/, "")}</span>
+                          <span className={`text-[10px] font-bold ml-2 px-1.5 py-0.5 rounded-full flex-shrink-0 ${isActive ? "bg-white/25 text-white" : "bg-[#F0F0F0] text-[#888]"}`}>{count}</span>
                         </button>
                       </li>
                     )
@@ -453,15 +523,15 @@ export default function ShopGrid() {
                 </ul>
               </div>
 
-              <div>
-                <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">Verfügbarkeit</p>
+              <div className="border-t border-[#F3F3F3] pt-4">
+                <p className="text-[10px] font-black text-[#AAAAAA] uppercase tracking-[0.15em] mb-3">Verfügbarkeit</p>
                 <ul className="space-y-0.5">
                   {([["all", "Auf Lager"], ["out_of_stock", "Ausverkauft"]] as const).map(([val, label]) => (
                     <li key={val}>
                       <button
                         onClick={() => setStockFilter(val)}
                         className={`w-full text-left text-sm px-3 py-2 rounded-xl transition-all font-medium ${
-                          stockFilter === val ? "bg-blue-950 text-white" : "text-gray-600 hover:bg-gray-100"
+                          stockFilter === val ? "bg-[#2C5F2E] text-white shadow-sm" : "text-[#555] hover:bg-[#F5F5F5]"
                         }`}
                       >
                         {label}
@@ -474,9 +544,9 @@ export default function ShopGrid() {
               {(activeCategory !== "all" || stockFilter !== "all" || search) && (
                 <button
                   onClick={() => { setActiveCategory("all"); setStockFilter("all"); setSearch("") }}
-                  className="w-full text-xs font-semibold text-gray-400 hover:text-gray-700 transition-colors text-left"
+                  className="w-full text-xs font-semibold text-[#CC0000]/70 hover:text-[#CC0000] transition-colors text-left flex items-center gap-1.5 pt-1"
                 >
-                  ✕ Filter zurücksetzen
+                  <X className="w-3 h-3" /> Filter zurücksetzen
                 </button>
               )}
             </div>
@@ -485,22 +555,83 @@ export default function ShopGrid() {
           {/* ── Main ── */}
           <main className="flex-1 min-w-0">
 
-            {/* Category chips */}
-            <div className="overflow-x-auto mb-5 -mx-1 px-1">
+            {/* ── Category image banners — desktop only ── */}
+            {(() => {
+              const CAT_IMAGES: Record<string, string> = {
+                "zubeh":     "/images/categories/Armbrust%20Zubeh%C3%B6r026.jpg",
+                "armbrust":  "/images/categories/Armbrust.jpg",
+                "messer":    "/images/categories/m%20esser2026_n.jpg",
+                "beil":      "/images/categories/Beil.jpg",
+                "lampen":    "/images/categories/Lampen2026.jpg",
+                "schleuder": "/images/categories/Schleuder.png",
+                "security":  "/images/categories/Security.jpg",
+                "pfeilbogen":"https://www.bogensportwelt.ch/media/image/product/174716/lg/drake-black-raven-58-zoll-30-lbs-take-down-recurvebogen.webp",
+                "rauch":     "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&h=240&fit=crop&auto=format",
+                "grill":     "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&h=240&fit=crop&auto=format",
+              }
+              const getCatImg = (name: string, slug: string) => {
+                const key = Object.keys(CAT_IMAGES).find(k =>
+                  name.toLowerCase().includes(k) || slug.toLowerCase().includes(k)
+                )
+                return key ? CAT_IMAGES[key] : null
+              }
+              return (
+                <div className="hidden lg:grid grid-cols-3 gap-2 mb-6">
+                  {/* Category image cards */}
+                  {categories.map(cat => {
+                    const img = getCatImg(cat.name, cat.slug)
+                    const isActive = activeCategory === cat.slug
+                    const displayName = cat.name.replace(/\s*\d{4}$/, "")
+                    return (
+                      <button
+                        key={cat.slug}
+                        onClick={() => setActiveCategory(prev => prev === cat.slug ? "all" : cat.slug)}
+                        className={`relative overflow-hidden rounded-xl group transition-all duration-300 ${isActive ? "ring-2 ring-[#2C5F2E] ring-offset-1 shadow-lg" : "hover:shadow-md"}`}
+                        style={{ height: "90px", backgroundColor: "#1a1a1a" }}
+                      >
+                        {img && (
+                          <img
+                            src={img}
+                            alt={displayName}
+                            className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                            onError={e => { (e.target as HTMLImageElement).style.display = "none" }}
+                          />
+                        )}
+                        <div className={`absolute inset-0 transition-all duration-300 ${isActive ? "bg-[#2C5F2E]/60" : "bg-black/55 group-hover:bg-black/40"}`} />
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <span className="bg-white/90 backdrop-blur-md text-[#1A1A1A] font-black text-sm leading-none px-4 py-2 rounded-full shadow-lg border border-white/60 group-hover:bg-white transition-colors duration-200">
+                            {displayName}
+                          </span>
+                        </div>
+                        {isActive && (
+                          <div className="absolute top-2 right-2 w-5 h-5 bg-[#2C5F2E] rounded-full flex items-center justify-center shadow-md">
+                            <Check className="w-3 h-3 text-white" />
+                          </div>
+                        )}
+                      </button>
+                    )
+                  })}
+                </div>
+              )
+            })()}
+
+            {/* ── Category pills — mobile only ── */}
+            <div className="lg:hidden overflow-x-auto mb-5 -mx-1 px-1">
               <div className="flex gap-2 min-w-max pb-1">
                 {[{ slug: "all", name: "Alle" }, ...categories].map(cat => {
                   const isActive = activeCategory === cat.slug
+                  const displayName = cat.name.replace(/\s*\d{4}$/, "")
                   return (
                     <button
                       key={cat.slug}
-                      onClick={() => setActiveCategory(cat.slug)}
+                      onClick={() => setActiveCategory(prev => prev === cat.slug ? "all" : cat.slug)}
                       className={`px-4 py-2 text-sm font-semibold rounded-full transition-all whitespace-nowrap ${
                         isActive
-                          ? "bg-blue-950 text-white shadow-md shadow-blue-950/20 scale-[1.03]"
-                          : "bg-white text-gray-600 hover:bg-gray-100 border border-gray-200 hover:border-gray-300"
+                          ? "bg-[#2C5F2E] text-white shadow-md shadow-[#2C5F2E]/25"
+                          : "bg-white text-[#555] hover:bg-[#F5F5F5] border border-[#E5E5E5] hover:border-[#CCC]"
                       }`}
                     >
-                      {cat.name}
+                      {displayName}
                     </button>
                   )
                 })}
@@ -509,14 +640,14 @@ export default function ShopGrid() {
 
             {/* Sort + count */}
             <div className="flex items-center justify-between mb-4 gap-3">
-              <p className="text-sm text-gray-500 font-medium">
-                <span className="font-black text-gray-900">{filtered.length}</span> Produkte
+              <p className="text-sm text-[#888] font-medium">
+                <span className="font-black text-[#1A1A1A]">{filtered.length}</span> Produkte
               </p>
               <div className="relative">
                 <select
                   value={sortBy}
                   onChange={e => setSortBy(e.target.value as typeof sortBy)}
-                  className="appearance-none text-sm font-semibold text-gray-700 bg-white border border-gray-200 rounded-xl pl-3 pr-8 py-2 focus:outline-none focus:ring-2 focus:ring-gray-900/10 cursor-pointer"
+                  className="appearance-none text-sm font-semibold text-[#555] bg-white border border-[#E5E5E5] rounded-full pl-4 pr-8 py-2 focus:outline-none focus:ring-2 focus:ring-[#2C5F2E]/20 cursor-pointer"
                 >
                   <option value="default">Empfehlung</option>
                   <option value="name_asc">Name A–Z</option>
@@ -524,7 +655,7 @@ export default function ShopGrid() {
                   <option value="price_asc">Preis ↑</option>
                   <option value="price_desc">Preis ↓</option>
                 </select>
-                <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400 pointer-events-none" />
+                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#AAA] pointer-events-none" />
               </div>
             </div>
 
@@ -545,10 +676,10 @@ export default function ShopGrid() {
                   <div className="text-center mt-10">
                     <button
                       onClick={() => setVisibleCount(c => c + PAGE_SIZE)}
-                      className="inline-flex items-center gap-2 px-8 py-3.5 bg-white hover:bg-gray-900 hover:text-white text-gray-800 border border-gray-200 hover:border-gray-900 rounded-2xl text-sm font-bold transition-all duration-300 shadow-sm hover:shadow-lg hover:scale-[1.02] active:scale-[0.98]"
+                      className="inline-flex items-center gap-2.5 px-8 py-3.5 bg-white hover:bg-[#2C5F2E] hover:text-white text-[#1A1A1A] border-2 border-[#2C5F2E]/25 hover:border-[#2C5F2E] rounded-full text-sm font-bold transition-all duration-300 shadow-sm hover:shadow-lg hover:shadow-[#2C5F2E]/15 active:scale-[0.98]"
                     >
                       Mehr laden
-                      <span className="bg-gray-100 text-gray-500 text-xs font-bold px-2 py-0.5 rounded-full group-hover:bg-white/20">
+                      <span className="bg-[#2C5F2E]/10 text-[#2C5F2E] text-xs font-black px-2.5 py-0.5 rounded-full">
                         +{filtered.length - visibleCount}
                       </span>
                     </button>

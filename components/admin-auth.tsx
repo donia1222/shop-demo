@@ -368,7 +368,7 @@ export function AdminAuth({ onAdminOpen, isLightSection = false }: AdminAuthProp
               onClick={onAdminOpen}
               className="px-4 py-3 cursor-pointer hover:bg-gray-50/80 transition-colors focus:bg-gray-50/80"
             >
-              <Settings className="w-4 h-4 mr-3 text-orange-500" />
+              <Settings className="w-4 h-4 mr-3 text-[#2C5F2E]" />
               <div className="flex-1">
                 <p className="font-medium text-gray-800">Admin-Panel</p>
                 <p className="text-xs text-gray-500">Websiteverwaltung</p>
@@ -398,8 +398,8 @@ export function AdminAuth({ onAdminOpen, isLightSection = false }: AdminAuthProp
               size="icon"
               className={`relative p-2.5 rounded-xl border transition-all duration-300 backdrop-blur-sm ${
                 isLightSection
-                  ? "bg-white/10 hover:bg-white/20 text-white border-white/20 hover:border-orange-400/50"
-                  : "bg-white/5 hover:bg-white/10 text-white border-white/10 hover:border-orange-400/30"
+                  ? "bg-white/10 hover:bg-white/20 text-white border-white/20 hover:border-[#2C5F2E]/50"
+                  : "bg-white/5 hover:bg-white/10 text-white border-white/10 hover:border-[#2C5F2E]/30"
               }`}
               title="Iniciar Sesión Admin"
             >
@@ -409,8 +409,8 @@ export function AdminAuth({ onAdminOpen, isLightSection = false }: AdminAuthProp
           <DialogContent className="sm:max-w-md">
             <DialogHeader>
               <DialogTitle className="flex items-center space-x-2">
-                <Shield className="w-5 h-5 text-orange-600" />
-                <h2 className="text-3xl font-black bg-gradient-to-r from-orange-400 via-red-400 to-orange-500 bg-clip-text text-transparent tracking-tight leading-none">
+                <Shield className="w-5 h-5 text-[#2C5F2E]" />
+                <h2 className="text-3xl font-black text-[#1A1A1A] tracking-tight leading-none">
                   Admin-Anmeldung
                 </h2>
               </DialogTitle>
@@ -485,7 +485,7 @@ export function AdminAuth({ onAdminOpen, isLightSection = false }: AdminAuthProp
                   id="rememberMe"
                   checked={rememberMe}
                   onChange={(e) => setRememberMe(e.target.checked)}
-                  className="rounded border-gray-300 text-orange-600 focus:ring-orange-500"
+                  className="rounded border-gray-300 text-[#2C5F2E] focus:ring-orange-500"
                 />
                 <Label htmlFor="rememberMe" className="text-sm text-gray-600">
                   7 Tage angemeldet bleiben
@@ -501,7 +501,7 @@ export function AdminAuth({ onAdminOpen, isLightSection = false }: AdminAuthProp
               <Button
                 type="submit"
                 disabled={isLoggingIn}
-                className="w-full bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700"
+                className="w-full bg-[#2C5F2E] hover:bg-[#1A4520]"
               >
                 {isLoggingIn ? (
                   <>
@@ -590,7 +590,7 @@ export function AdminAuth({ onAdminOpen, isLightSection = false }: AdminAuthProp
                   setIsProfileOpen(false)
                   onAdminOpen()
                 }}
-                className="flex-1 bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700"
+                className="flex-1 bg-[#2C5F2E] hover:bg-[#1A4520]"
               >
                 Zum Admin-Panel
               </Button>

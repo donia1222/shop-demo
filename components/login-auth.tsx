@@ -551,22 +551,18 @@ export function LoginAuth({
   return (
     <>
       {/* User Icon Button */}
-      <Button
+      <button
         onClick={handleUserIconClick}
-        variant="ghost"
-        size="sm"
-        className={`p-2 rounded-xl transition-all duration-300 ${
-          isLightSection
-            ? "text-gray-900/10 hover:bg-white/20 text-white border-white/20"
-            : "text-gray-900/5 hover:bg-white/10 text-gray-600 hover:text-gray-800"
-        } ${className}`}
+        className={`relative flex flex-col items-center p-2 hover:bg-[#F5F5F5] rounded min-w-[64px] ${className}`}
       >
-        <User className="w-6 h-6 text-gray-200" />
-
+        <User className={`w-6 h-6 ${isLoggedIn ? "text-[#2C5F2E]" : "text-[#555]"}`} />
+        <span className="text-xs text-[#555] mt-0.5 leading-none text-center font-medium">
+          {isLoggedIn && currentUser ? currentUser.firstName || "Konto" : "Anmelden"}
+        </span>
         {isLoggedIn && currentUser && (
-          <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
+          <div className="absolute top-1.5 right-1.5 w-2 h-2 bg-green-500 rounded-full border border-white"></div>
         )}
-      </Button>
+      </button>
 
       {/* Auth Modal (Login/Register) */}
       <Dialog open={showAuthModal} onOpenChange={setShowAuthModal}>

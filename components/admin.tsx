@@ -634,11 +634,11 @@ export function Admin({ onClose }: AdminProps) {
     (activeTab === "products" && productsLoading && products.length === 0)
   ) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-orange-50 to-red-50 p-4">
+      <div className="min-h-screen bg-[#F0F1F3] p-4">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center justify-center min-h-[60vh]">
             <div className="text-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto mb-4"></div>
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#2C5F2E] mx-auto mb-4"></div>
               <p className="text-gray-600">Verwaltungspanel wird geladen...</p>
             </div>
           </div>
@@ -648,34 +648,35 @@ export function Admin({ onClose }: AdminProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-red-50">
+    <div className="min-h-screen bg-[#F0F1F3]">
       {/* Header */}
-      <div className="bg-white shadow-lg border-b-4 border-orange-500">
-        <div className="max-w-7xl mx-auto px-4 py-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <div className="w-12 h-12 bg-gradient-to-r from-gray-900 to-gray-500 rounded-full flex items-center justify-center">
-                <Shield className="w-6 h-6 text-black" />
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold text-gray-800">GLUTWERK</h1>
-                <p className="text-gray-600">Verwaltungspanel</p>
+      <div className="bg-white border-b border-[#E0E0E0] sticky top-0 z-50 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex items-center justify-between h-16">
+            <div className="flex items-center gap-3">
+              <button onClick={onClose} className="w-9 h-9 flex items-center justify-center rounded-full border-2 border-[#2C5F2E]/30 text-[#2C5F2E] hover:bg-[#2C5F2E] hover:text-white hover:border-[#2C5F2E] transition-all">
+                <ArrowLeft className="w-4 h-4" />
+              </button>
+              <div className="w-px h-6 bg-[#E0E0E0]" />
+              <img src="/Security_n.png" alt="Logo" className="h-10 w-auto object-contain" />
+              <div className="hidden sm:block">
+                <div className="font-black text-[#1A1A1A] text-base leading-none tracking-tight">US - Fishing &amp; Huntingshop</div>
+                <div className="text-[10px] text-[#888] tracking-widest uppercase flex items-center gap-1.5 mt-0.5">
+                  <Shield className="w-3 h-3 text-[#2C5F2E]" />
+                  Verwaltungspanel
+                </div>
               </div>
             </div>
 
-            <div className="flex items-center space-x-4">
-              <Button onClick={onClose} variant="outline" className="border-gray-300 bg-white text-gray-700 hover:bg-gray-50">
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Zurück
-              </Button>
-              <Button
+            <div className="flex items-center gap-2">
+              <button
                 onClick={activeTab === "orders" ? loadOrders : loadProducts}
                 disabled={ordersLoading || productsLoading}
-                className="bg-gray-500 hover:bg-orange-600 text-white"
+                className="flex items-center gap-2 px-4 py-2 bg-[#2C5F2E] hover:bg-[#1A4520] text-white text-sm font-bold rounded-full transition-all disabled:opacity-60"
               >
-                <RefreshCw className={`w-4 h-4 mr-2 ${ordersLoading || productsLoading ? "animate-spin" : ""}`} />
-                Aktualisieren
-              </Button>
+                <RefreshCw className={`w-4 h-4 ${ordersLoading || productsLoading ? "animate-spin" : ""}`} />
+                <span className="hidden sm:inline">Aktualisieren</span>
+              </button>
             </div>
           </div>
         </div>
@@ -683,17 +684,17 @@ export function Admin({ onClose }: AdminProps) {
 
       <div className="max-w-7xl mx-auto px-4 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-2 mb-8 bg-white border border-gray-200">
+          <TabsList className="grid w-full grid-cols-2 mb-8 bg-white border border-[#EBEBEB] rounded-2xl p-1 shadow-sm">
             <TabsTrigger
               value="orders"
-              className="flex items-center space-x-2 data-[state=active]:bg-orange-100 data-[state=active]:text-orange-800"
+              className="flex items-center gap-2 rounded-xl font-semibold data-[state=active]:bg-[#2C5F2E] data-[state=active]:text-white data-[state=active]:shadow-sm transition-all"
             >
               <ShoppingBag className="w-4 h-4" />
               <span>Bestellungen</span>
             </TabsTrigger>
             <TabsTrigger
               value="products"
-              className="flex items-center space-x-2 data-[state=active]:bg-orange-100 data-[state=active]:text-orange-800"
+              className="flex items-center gap-2 rounded-xl font-semibold data-[state=active]:bg-[#2C5F2E] data-[state=active]:text-white data-[state=active]:shadow-sm transition-all"
             >
               <Package className="w-4 h-4" />
               <span>Produkte</span>
@@ -704,66 +705,67 @@ export function Admin({ onClose }: AdminProps) {
           <TabsContent value="orders">
             {/* Orders Stats Cards */}
             {orderStats && (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                <Card className="hover:shadow-lg transition-shadow">
-                  <CardContent className="p-6">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                <Card className="rounded-2xl border-[#EBEBEB] shadow-sm hover:shadow-md transition-shadow">
+                  <CardContent className="p-5">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-gray-600 text-sm">Gesamtbestellungen</p>
-                        <p className="text-2xl font-bold text-gray-800">
+                        <p className="text-[#888] text-xs font-medium uppercase tracking-wide">Bestellungen</p>
+                        <p className="text-3xl font-black text-[#1A1A1A] mt-1">
                           {Number.parseInt(String(orderStats.total_orders ?? 0)) || 0}
                         </p>
                       </div>
-                      <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                        <ShoppingBag className="w-6 h-6 text-blue-600" />
+                      <div className="w-11 h-11 bg-blue-50 rounded-xl flex items-center justify-center">
+                        <ShoppingBag className="w-5 h-5 text-blue-500" />
                       </div>
                     </div>
                   </CardContent>
                 </Card>
 
-                <Card className="hover:shadow-lg transition-shadow">
-                  <CardContent className="p-6">
+                <Card className="rounded-2xl border-[#EBEBEB] shadow-sm hover:shadow-md transition-shadow">
+                  <CardContent className="p-5">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-gray-600 text-sm">Gesamtumsatz</p>
-                        <p className="text-2xl font-bold text-green-600">
-                          {(Number.parseFloat(String(orderStats.total_revenue ?? 0)) || 0).toFixed(2)} CHF
+                        <p className="text-[#888] text-xs font-medium uppercase tracking-wide">Umsatz</p>
+                        <p className="text-2xl font-black text-[#2C5F2E] mt-1">
+                          {(Number.parseFloat(String(orderStats.total_revenue ?? 0)) || 0).toFixed(2)}
+                          <span className="text-sm font-semibold text-[#888] ml-1">CHF</span>
                         </p>
                       </div>
-                      <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                        <DollarSign className="w-6 h-6 text-green-600" />
+                      <div className="w-11 h-11 bg-[#2C5F2E]/10 rounded-xl flex items-center justify-center">
+                        <DollarSign className="w-5 h-5 text-[#2C5F2E]" />
                       </div>
                     </div>
                   </CardContent>
                 </Card>
 
-                <Card className="hover:shadow-lg transition-shadow">
-                  <CardContent className="p-6">
+                <Card className="rounded-2xl border-[#EBEBEB] shadow-sm hover:shadow-md transition-shadow">
+                  <CardContent className="p-5">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-gray-600 text-sm">Abgeschlossen</p>
-                        <p className="text-2xl font-bold text-green-600">
+                        <p className="text-[#888] text-xs font-medium uppercase tracking-wide">Abgeschlossen</p>
+                        <p className="text-3xl font-black text-[#2C5F2E] mt-1">
                           {Number.parseInt(String(orderStats.completed_orders ?? 0)) || 0}
                         </p>
                       </div>
-                      <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                        <CheckCircle className="w-6 h-6 text-green-600" />
+                      <div className="w-11 h-11 bg-[#2C5F2E]/10 rounded-xl flex items-center justify-center">
+                        <CheckCircle className="w-5 h-5 text-[#2C5F2E]" />
                       </div>
                     </div>
                   </CardContent>
                 </Card>
 
-                <Card className="hover:shadow-lg transition-shadow">
-                  <CardContent className="p-6">
+                <Card className="rounded-2xl border-[#EBEBEB] shadow-sm hover:shadow-md transition-shadow">
+                  <CardContent className="p-5">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-gray-600 text-sm">Ausstehend</p>
-                        <p className="text-2xl font-bold text-yellow-600">
+                        <p className="text-[#888] text-xs font-medium uppercase tracking-wide">Ausstehend</p>
+                        <p className="text-3xl font-black text-yellow-600 mt-1">
                           {Number.parseInt(String(orderStats.pending_orders ?? 0)) || 0}
                         </p>
                       </div>
-                      <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
-                        <Clock className="w-6 h-6 text-yellow-600" />
+                      <div className="w-11 h-11 bg-yellow-50 rounded-xl flex items-center justify-center">
+                        <Clock className="w-5 h-5 text-yellow-500" />
                       </div>
                     </div>
                   </CardContent>
@@ -772,10 +774,10 @@ export function Admin({ onClose }: AdminProps) {
             )}
 
             {/* Orders Filters */}
-            <Card className="mb-8">
+            <Card className="mb-8 rounded-2xl border-[#EBEBEB] shadow-sm">
               <CardHeader>
-                <CardTitle className="flex items-center">
-                  <Filter className="w-5 h-5 mr-2 text-orange-600" />
+                <CardTitle className="flex items-center text-base">
+                  <Filter className="w-4 h-4 mr-2 text-[#2C5F2E]" />
                   Bestellungsfilter
                 </CardTitle>
               </CardHeader>
@@ -828,7 +830,7 @@ export function Admin({ onClose }: AdminProps) {
                       onClick={() => {
                         setOrderFilters({ search: "", status: "all", email: "" })
                       }}
-                      className="bg-gray-500 hover:bg-orange-600 text-white"
+                      className="bg-[#2C5F2E] hover:bg-[#1A4520] text-white rounded-full text-sm"
                     >
                       Filter zurücksetzen
                     </Button>
@@ -840,7 +842,7 @@ export function Admin({ onClose }: AdminProps) {
             {/* Orders List */}
             <div className="grid grid-cols-1 gap-4">
               {orders.map((order) => (
-                <Card key={order.id} className="hover:shadow-lg transition-shadow">
+                <Card key={order.id} className="rounded-2xl border-[#EBEBEB] shadow-sm hover:shadow-md transition-shadow">
                   <CardHeader>
                     <CardTitle className="flex items-center justify-between">
                       <div className="flex items-center space-x-2">
@@ -882,7 +884,7 @@ export function Admin({ onClose }: AdminProps) {
                     <div className="mt-4">
                       <Button
                         onClick={() => showOrderDetail(order)}
-                        className="bg-orange-500 hover:bg-orange-600 text-white"
+                        className="bg-[#2C5F2E] hover:bg-[#1A4520] text-white rounded-full px-5 text-sm"
                       >
                         Details anzeigen
                       </Button>
@@ -893,23 +895,23 @@ export function Admin({ onClose }: AdminProps) {
             </div>
 
             {/* Orders Pagination */}
-            <div className="flex items-center justify-center mt-8">
+            <div className="flex items-center justify-center gap-3 mt-8">
               <Button
                 onClick={() => setCurrentOrderPage((prev) => Math.max(prev - 1, 1))}
                 disabled={currentOrderPage === 1}
-                className="bg-orange-500 hover:bg-orange-600 text-white mr-2"
+                className="bg-[#2C5F2E] hover:bg-[#1A4520] text-white rounded-full px-5 disabled:opacity-40"
               >
-                Zurück
+                ← Zurück
               </Button>
-              <span className="text-gray-600">
-                Seite {currentOrderPage} von {totalOrderPages}
+              <span className="text-sm font-semibold text-[#666] bg-white border border-[#EBEBEB] rounded-full px-4 py-2 shadow-sm">
+                {currentOrderPage} / {totalOrderPages}
               </span>
               <Button
                 onClick={() => setCurrentOrderPage((prev) => Math.min(prev + 1, totalOrderPages))}
                 disabled={currentOrderPage === totalOrderPages}
-                className="bg-orange-500 hover:bg-orange-600 text-white ml-2"
+                className="bg-[#2C5F2E] hover:bg-[#1A4520] text-white rounded-full px-5 disabled:opacity-40"
               >
-                Weiter
+                Weiter →
               </Button>
             </div>
           </TabsContent>
@@ -918,58 +920,58 @@ export function Admin({ onClose }: AdminProps) {
           <TabsContent value="products">
             {/* Products Stats Cards */}
             {productStats && (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                <Card className="hover:shadow-lg transition-shadow">
-                  <CardContent className="p-6">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                <Card className="rounded-2xl border-[#EBEBEB] shadow-sm hover:shadow-md transition-shadow">
+                  <CardContent className="p-5">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-gray-600 text-sm">Gesamtprodukte</p>
-                        <p className="text-2xl font-bold text-gray-800">{productStats.total_products}</p>
+                        <p className="text-[#888] text-xs font-medium uppercase tracking-wide">Produkte</p>
+                        <p className="text-3xl font-black text-[#1A1A1A] mt-1">{productStats.total_products}</p>
                       </div>
-                      <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                        <Package className="w-6 h-6 text-blue-600" />
+                      <div className="w-11 h-11 bg-blue-50 rounded-xl flex items-center justify-center">
+                        <Package className="w-5 h-5 text-blue-500" />
                       </div>
                     </div>
                   </CardContent>
                 </Card>
 
-                <Card className="hover:shadow-lg transition-shadow">
-                  <CardContent className="p-6">
+                <Card className="rounded-2xl border-[#EBEBEB] shadow-sm hover:shadow-md transition-shadow">
+                  <CardContent className="p-5">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-gray-600 text-sm">Gesamtlagerbestand</p>
-                        <p className="text-2xl font-bold text-green-600">{productStats.total_stock}</p>
+                        <p className="text-[#888] text-xs font-medium uppercase tracking-wide">Lagerbestand</p>
+                        <p className="text-3xl font-black text-[#2C5F2E] mt-1">{productStats.total_stock}</p>
                       </div>
-                      <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                        <Package2 className="w-6 h-6 text-green-600" />
+                      <div className="w-11 h-11 bg-[#2C5F2E]/10 rounded-xl flex items-center justify-center">
+                        <Package2 className="w-5 h-5 text-[#2C5F2E]" />
                       </div>
                     </div>
                   </CardContent>
                 </Card>
 
-                <Card className="hover:shadow-lg transition-shadow">
-                  <CardContent className="p-6">
+                <Card className="rounded-2xl border-[#EBEBEB] shadow-sm hover:shadow-md transition-shadow">
+                  <CardContent className="p-5">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-gray-600 text-sm">Geringer Lagerbestand</p>
-                        <p className="text-2xl font-bold text-yellow-600">{productStats.low_stock}</p>
+                        <p className="text-[#888] text-xs font-medium uppercase tracking-wide">Wenig Lager</p>
+                        <p className="text-3xl font-black text-yellow-600 mt-1">{productStats.low_stock}</p>
                       </div>
-                      <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
-                        <AlertTriangle className="w-6 h-6 text-yellow-600" />
+                      <div className="w-11 h-11 bg-yellow-50 rounded-xl flex items-center justify-center">
+                        <AlertTriangle className="w-5 h-5 text-yellow-500" />
                       </div>
                     </div>
                   </CardContent>
                 </Card>
 
-                <Card className="hover:shadow-lg transition-shadow">
-                  <CardContent className="p-6">
+                <Card className="rounded-2xl border-[#EBEBEB] shadow-sm hover:shadow-md transition-shadow">
+                  <CardContent className="p-5">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-gray-600 text-sm">Nicht vorrätig</p>
-                        <p className="text-2xl font-bold text-red-600">{productStats.out_of_stock}</p>
+                        <p className="text-[#888] text-xs font-medium uppercase tracking-wide">Ausverkauft</p>
+                        <p className="text-3xl font-black text-red-500 mt-1">{productStats.out_of_stock}</p>
                       </div>
-                      <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
-                        <X className="w-6 h-6 text-red-600" />
+                      <div className="w-11 h-11 bg-red-50 rounded-xl flex items-center justify-center">
+                        <X className="w-5 h-5 text-red-500" />
                       </div>
                     </div>
                   </CardContent>
@@ -978,7 +980,7 @@ export function Admin({ onClose }: AdminProps) {
             )}
 
             {/* Excel Import */}
-            <Card className="mb-6 border-dashed border-2 border-orange-200">
+            <Card className="mb-6 border-dashed border-2 border-[#2C5F2E]/25 rounded-2xl shadow-sm">
               <CardHeader className="pb-3">
                 <CardTitle className="flex items-center text-base">
                   <FileSpreadsheet className="w-5 h-5 mr-2 text-green-600" />
@@ -1046,13 +1048,13 @@ export function Admin({ onClose }: AdminProps) {
 
             {/* Products Header Actions */}
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-bold text-gray-800">Produktverwaltung</h2>
+              <h2 className="text-xl font-black text-[#1A1A1A] tracking-tight">Produktverwaltung</h2>
               <div className="flex items-center space-x-2">
-                <Button onClick={() => { setEditingCategory(null); setIsCategoryModalOpen(true) }} variant="outline" className="border-orange-400 text-orange-600 bg-white hover:bg-orange-50">
+                <Button onClick={() => { setEditingCategory(null); setIsCategoryModalOpen(true) }} variant="outline" className="border-[#2C5F2E]/40 text-[#2C5F2E] bg-white hover:bg-[#2C5F2E]/5 rounded-full">
                   <Plus className="w-4 h-4 mr-2" />
                   Kategorie erstellen
                 </Button>
-                <Button onClick={showAddProductModal} className="bg-white hover:bg-orange-50 text-orange-600 border border-orange-400">
+                <Button onClick={showAddProductModal} className="bg-[#2C5F2E] hover:bg-[#1A4520] text-white rounded-full">
                   <Plus className="w-4 h-4 mr-2" />
                   Produkt hinzufügen
                 </Button>
@@ -1100,10 +1102,10 @@ export function Admin({ onClose }: AdminProps) {
             )}
 
             {/* Products Filters */}
-            <Card className="mb-8">
+            <Card className="mb-8 rounded-2xl border-[#EBEBEB] shadow-sm">
               <CardHeader>
-                <CardTitle className="flex items-center">
-                  <Filter className="w-5 h-5 mr-2 text-orange-600" />
+                <CardTitle className="flex items-center text-base">
+                  <Filter className="w-4 h-4 mr-2 text-[#2C5F2E]" />
                   Produktfilter
                 </CardTitle>
               </CardHeader>
@@ -1185,7 +1187,7 @@ export function Admin({ onClose }: AdminProps) {
                       onClick={() => {
                         setProductFilters({ search: "", category: "", stock_status: "", sortBy: "name" })
                       }}
-                      className="bg-orange-500 hover:bg-orange-600 text-white"
+                      className="bg-[#2C5F2E] hover:bg-[#1A4520] text-white rounded-full text-sm"
                     >
                       Filter zurücksetzen
                     </Button>
@@ -1197,7 +1199,7 @@ export function Admin({ onClose }: AdminProps) {
             {/* Products Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredProducts.map((product) => (
-                <Card key={product.id} className="hover:shadow-lg transition-shadow">
+                <Card key={product.id} className="rounded-2xl border-[#EBEBEB] shadow-sm hover:shadow-md transition-shadow">
                   <CardContent className="p-6">
                     <div className="flex items-start justify-between mb-4">
                       <img
@@ -1228,7 +1230,7 @@ export function Admin({ onClose }: AdminProps) {
 
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
-                        <Badge className="bg-orange-100 text-orange-800">{getCategoryDisplay(product.category)}</Badge>
+                        <Badge className="bg-[#2C5F2E]/10 text-[#2C5F2E]">{getCategoryDisplay(product.category)}</Badge>
                         <span className="font-bold text-lg text-gray-800">
                           {Number.parseFloat(product.price.toString()).toFixed(2)} CHF
                         </span>
@@ -1585,7 +1587,7 @@ export function Admin({ onClose }: AdminProps) {
                 <Button type="button" variant="outline" onClick={() => setIsProductModalOpen(false)} className="bg-white text-gray-700 hover:bg-gray-50">
                   Abbrechen
                 </Button>
-                <Button type="submit" className="bg-orange-500 hover:bg-orange-600 text-white">
+                <Button type="submit" className="bg-[#2C5F2E] hover:bg-[#1A4520] text-white rounded-full px-6">
                   {currentEditingProduct ? "Aktualisieren" : "Erstellen"}
                 </Button>
               </div>
@@ -1634,7 +1636,7 @@ export function Admin({ onClose }: AdminProps) {
                 <Button type="button" variant="outline" onClick={() => { setIsCategoryModalOpen(false); setEditingCategory(null) }} className="bg-white text-gray-700 hover:bg-gray-50">
                   Abbrechen
                 </Button>
-                <Button type="submit" className="bg-orange-500 hover:bg-orange-600 text-white">
+                <Button type="submit" className="bg-[#2C5F2E] hover:bg-[#1A4520] text-white rounded-full px-6">
                   {editingCategory ? "Speichern" : "Erstellen"}
                 </Button>
               </div>

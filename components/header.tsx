@@ -2,10 +2,8 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { Home, ShoppingBag, Flame, Compass, Grid3X3, Menu, X } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet"
-import { AdminAuth } from "./admin-auth"
+import { ShoppingCart, ChevronDown, Menu, ArrowUp } from "lucide-react"
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { LoginAuth } from "./login-auth"
 import { UserProfile } from "./user-profile"
 
@@ -15,335 +13,178 @@ interface HeaderProps {
 
 export function Header({ onAdminOpen }: HeaderProps) {
   const router = useRouter()
-  // Estados del header y navegación
-  const [showHeader, setShowHeader] = useState(true)
-  const [lastScrollY, setLastScrollY] = useState(0)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [currentSection, setCurrentSection] = useState("hero")
   const [showUserProfile, setShowUserProfile] = useState(false)
-  // Secciones con fondo claro
-  const lightSections = ["premium-showcase", "offers"]
-  // Secciones con fondo oscuro
-  const darkSections = ["spice-discovery"]
-  const isLightSection = lightSections.includes(currentSection)
-  const isDarkSection = darkSections.includes(currentSection)
+  const [isLightSection] = useState(true)
+  const [showScrollTop, setShowScrollTop] = useState(false)
 
-  // Detecta la sección actual basada en el scroll
   useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY
+    const onScroll = () => setShowScrollTop(window.scrollY > 400)
+    window.addEventListener("scroll", onScroll, { passive: true })
+    return () => window.removeEventListener("scroll", onScroll)
+  }, [])
 
-      // Lógica para ocultar/mostrar header
-      if (currentScrollY > lastScrollY && currentScrollY > 50) {
-        setShowHeader(false)
-      } else {
-        setShowHeader(true)
-      }
-      setLastScrollY(currentScrollY)
-
-      // Detectar sección actual
-      const sections = ["hero", "premium-showcase", "offers", "recipes", "pairing"]
-      const sectionElements = sections.map((id) => ({
-        id,
-        element: document.getElementById(id),
-        offset: document.getElementById(id)?.offsetTop || 0,
-      }))
-
-      const currentSectionId =
-        sectionElements.find((section, index) => {
-          const nextSection = sectionElements[index + 1]
-          const sectionTop = section.offset - 100 // Offset para el header
-          const sectionBottom = nextSection ? nextSection.offset - 100 : Number.POSITIVE_INFINITY
-          return currentScrollY >= sectionTop && currentScrollY < sectionBottom
-        })?.id || "hero"
-
-      setCurrentSection(currentSectionId)
-    }
-
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [lastScrollY])
-
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId)
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" })
-      setIsMenuOpen(false)
-    }
-  }
-
-  const navItems = [
-    {
-      id: "hero",
-      label: "Startseite",
-      icon: Home,
-      description: "Zur Hauptseite",
-      href: null,
-      color: "bg-amber-50 text-amber-700",
-    },
-    {
-      id: "spice-discovery",
-      label: "Entdecken",
-      icon: Compass,
-      description: "Produkte entdecken",
-      href: null,
-      color: "bg-blue-50 text-blue-700",
-    },
-    {
-      id: "produkte",
-      label: "Produkte",
-      icon: Grid3X3,
-      description: "Alle Produkte",
-      href: "/shop",
-      color: "bg-violet-50 text-violet-700",
-    },
-    {
-      id: "offers",
-      label: "Kollektion",
-      icon: ShoppingBag,
-      description: "Unsere Kollektion",
-      href: "/shop",
-      color: "bg-emerald-50 text-emerald-700",
-    },
-    {
-      id: "recipes",
-      label: "Inspiration",
-      icon: Flame,
-      description: "Stil & Schärfe",
-      href: null,
-      color: "bg-red-50 text-red-600",
-    },
+  const categories = [
+    { label: "% Sale %", href: "/shop", highlight: true },
+    { label: "Messer", href: "/shop?cat=Messer" },
+    { label: "Armbrust", href: "/shop?cat=Armbrust" },
+    { label: "Pfeilbogen", href: "/shop?cat=Pfeilbogen" },
+    { label: "Beil", href: "/shop?cat=Beil" },
+    { label: "Security", href: "/shop?cat=Security" },
+    { label: "Lampen", href: "/shop?cat=Lampen" },
+    { label: "Schleuder & Blasrohr", href: "/shop?cat=Schleuder%20%26%20Blasrohr" },
+    { label: "Rauch & Grill", href: "/shop?cat=Rauch%20%26%20Grill" },
   ]
 
-  // Estilos dinámicos basados en la sección actual
-  const headerStyles = "bg-white/95 backdrop-blur-xl border-b border-[#E8E0D5] shadow-sm"
-
-  const menuStyles = "bg-white border-r border-[#E8E0D5] shadow-xl"
-
-  const textColor = "text-[#9B9189]"
-  const textColorHover = "hover:text-[#2E1F0F]"
-
-  const handleLoginSuccess = (user: any) => {
-    console.log("Usuario logueado en header:", user)
-    // Aquí puedes manejar el estado global del usuario si es necesario
-  }
-
-  const handleLogout = () => {
-    console.log("Usuario deslogueado en header")
-    // Aquí puedes limpiar el estado global del usuario si es necesario
-  }
-
+  const handleLoginSuccess = (_user: any) => {}
+  const handleLogout = () => {}
   const handleShowProfile = () => {
     setShowUserProfile(true)
-    setIsMenuOpen(false) // Cerrar menú móvil al abrir perfil
+    setIsMenuOpen(false)
   }
-
-  const handleProfileClose = () => {
-    setShowUserProfile(false)
-  }
+  const handleProfileClose = () => setShowUserProfile(false)
 
   return (
     <>
-      <header
-        className={`
-          fixed top-0 left-0 w-full z-50
-          ${headerStyles}
-          transform transition-all duration-500 ease-out
-          ${showHeader ? "translate-y-0" : "-translate-y-full"}
-        `}
-      >
-        <div className="container mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            {/* Logo + Admin Button + Login Button Desktop */}
-            <div className="hidden lg:flex items-center space-x-4">
-              <div className="w-10 h-10 bg-[#2E1F0F] flex items-center justify-center">
-                <span className="text-[#B8864E] font-black text-xs tracking-wider">GW</span>
-              </div>
-
-              <div className="space-y-1">
-                <h1 className="text-2xl font-black text-[#2E1F0F] tracking-tight leading-none">
-                  GLUTWERK
-                </h1>
-                <p className="text-xs font-medium tracking-[0.15em] uppercase text-[#B8864E]">
-                  Handwerk · Schärfe · Präzision
-                </p>
-              </div>
-            </div>
-
-            {/* Mobile Layout - Todos los botones a la izquierda */}
-            <div className="lg:hidden flex items-center justify-between w-full">
-              {/* Logo + Admin Button + Login Button + Menu Button (todos a la izquierda) */}
-              <div className="flex items-center space-x-3">
-                {/* Logo Mobile */}
-                <div className="w-10 h-10 bg-[#2E1F0F] flex items-center justify-center">
-                  <span className="text-[#B8864E] font-black text-xs tracking-wider">GW</span>
-                </div>
-
-                {/* Menu Button - Al final */}
-                <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
-                  <SheetTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="relative p-2.5 rounded-xl border transition-all duration-300 bg-[#F9F7F4] hover:bg-[#E8E0D5] text-[#2E1F0F] border-[#E8E0D5]"
-                    >
-                      <Menu className="w-4 h-4" />
-                      <span className="sr-only">Menü öffnen</span>
-                    </Button>
-                  </SheetTrigger>
-
-                  <SheetContent side="left" className={`w-80 ${menuStyles}`}>
-                    {/* Background overlay */}
-                    <div className="absolute inset-0 pointer-events-none"></div>
-
-                    <SheetHeader className="relative pb-6 mb-8 border-b border-[#E8E0D5]">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-3">
-                          <div className="w-10 h-10 bg-[#2E1F0F] flex items-center justify-center">
-                            <span className="text-[#B8864E] font-black text-xs tracking-wider">GW</span>
-                          </div>
-                          <div>
-                            <SheetTitle className="text-xl font-black text-[#2E1F0F] tracking-tight">
-                              GLUTWERK
-                            </SheetTitle>
-                            <p className="text-xs font-medium tracking-[0.15em] uppercase text-[#B8864E]">
-                              Handwerk · Schärfe · Präzision
-                            </p>
-                          </div>
-                        </div>
-
-                        <SheetClose asChild>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="rounded-xl transition-all duration-300 bg-[#F9F7F4] hover:bg-[#E8E0D5] text-[#9B9189] hover:text-[#2E1F0F]"
-                          >
-                            <X className="w-4 h-4" />
-                          </Button>
-                        </SheetClose>
-                      </div>
-
-                      {/* Login en el menú móvil */}
-                      <div className="mt-4 pt-4 border-t border-[#E8E0D5]">
-                        <LoginAuth
-                          onLoginSuccess={handleLoginSuccess}
-                          onLogout={handleLogout}
-                          isLightSection={isLightSection}
-                          onShowProfile={handleShowProfile}
-                          variant="inline"
-                          buttonText="Anmelden"
-                          className="w-full"
-                        />
-                      </div>
-                    </SheetHeader>
-
-                    <nav className="space-y-1.5 relative">
-                      {navItems.map((item, index) => {
-                        const IconComponent = item.icon
-                        const isActive = item.href ? false : currentSection === item.id
-
-                        return (
-                          <button
-                            key={item.id}
-                            onClick={() => { item.href ? router.push(item.href) : scrollToSection(item.id); setIsMenuOpen(false) }}
-                            className={`w-full group flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 ${
-                              isActive
-                                ? "bg-[#2E1F0F] text-white"
-                                : "text-[#2E1F0F] hover:bg-[#F9F7F4]"
-                            }`}
-                            style={{ animationDelay: `${index * 60}ms` }}
-                          >
-                            <span className={`w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 ${
-                              isActive ? "bg-white/20" : item.color
-                            }`}>
-                              <IconComponent className="w-4 h-4" />
-                            </span>
-                            <div className="flex-1 text-left">
-                              <span className="font-semibold text-sm block">{item.label}</span>
-                              <span className={`text-xs ${isActive ? "text-white/60" : "text-[#9B9189]"}`}>
-                                {item.description}
-                              </span>
-                            </div>
-                          </button>
-                        )
-                      })}
-                    </nav>
-
-                    {/* Footer Info */}
-                    <div className="absolute bottom-8 left-6 right-6">
-                      <div className="relative rounded-none p-5 border overflow-hidden bg-[#F9F7F4] border-[#E8E0D5]">
-                        <div className="relative z-10 text-center">
-                          <p className="text-sm font-semibold text-[#2E1F0F] tracking-wider uppercase">
-                            GLUTWERK
-                          </p>
-                          <p className="text-xs mt-1 text-[#9B9189] tracking-[0.1em]">
-                            Handwerk · Schärfe · Präzision
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </SheetContent>
-                </Sheet>
-              </div>
-
-              <div></div>
-            </div>
-
-            {/* Navigation Desktop */}
-            <nav className="hidden lg:flex items-center gap-2 flex-1 justify-center">
-              {navItems.map((item) => {
-                const IconComponent = item.icon
-                const isActive = item.href ? false : currentSection === item.id
-
-                return (
-                  <button
-                    key={item.id}
-                    onClick={() => item.href ? router.push(item.href) : scrollToSection(item.id)}
-                    title={item.description}
-                    className={`group flex items-center gap-2.5 pl-2 pr-4 py-1.5 rounded-full border transition-all duration-200 ${
-                      isActive
-                        ? "bg-[#2E1F0F] border-[#2E1F0F] text-white shadow-md"
-                        : "bg-white border-[#E8E0D5] text-[#2E1F0F] hover:border-[#B8864E] hover:shadow-sm"
-                    }`}
-                  >
-                    <span className={`w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 transition-all duration-200 ${
-                      isActive ? "bg-white/20" : item.color
-                    }`}>
-                      <IconComponent className="w-3.5 h-3.5" />
-                    </span>
-                    <span className="text-sm font-semibold tracking-wide whitespace-nowrap">{item.label}</span>
-                  </button>
-                )
-              })}
-            </nav>
-
-            {/* Login button - Desktop derecha */}
-            <div className="hidden lg:flex items-center">
-              <div className="bg-[#F9F7F4] border border-[#E8E0D5] shadow-sm">
-                <LoginAuth
-                  onLoginSuccess={handleLoginSuccess}
-                  onLogout={handleLogout}
-                  onShowProfile={handleShowProfile}
-                  isLightSection={isLightSection}
-                  variant="button"
-                />
-              </div>
-            </div>
+      {/* ── TIER 1: Top info bar ── */}
+      <div className="bg-[#F5F5F5] border-b border-[#E0E0E0] text-xs text-[#555555]">
+        <div className="container mx-auto px-4 flex items-center justify-between h-8">
+          <span className="hidden md:block">Ihr Schweizer Outdoor-Spezialist</span>
+          <div className="flex items-center gap-5 ml-auto">
+            <button className="hover:text-[#2C5F2E]">Kontakt</button>
+            <button className="hover:text-[#2C5F2E]">Blog</button>
           </div>
         </div>
+      </div>
 
-        {/* Bottom border line */}
-        <div className="absolute bottom-0 left-0 right-0 h-px bg-[#E8E0D5]"></div>
-      </header>
+      {/* ── TIER 2: Logo + Search + Icons ── */}
+      <div className="bg-white border-b border-[#E0E0E0] sticky top-0 z-50">
+        <div className="container mx-auto px-4 h-20 flex items-center justify-between gap-3">
 
-      {/* User Profile Modal */}
+          {/* LEFT: Mobile menu + Logo */}
+          <div className="flex items-center gap-3">
+            <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
+              <SheetTrigger asChild>
+                <button className="lg:hidden p-2 border border-[#E0E0E0] rounded hover:bg-[#F5F5F5] flex-shrink-0">
+                  <Menu className="w-5 h-5 text-[#333]" />
+                </button>
+              </SheetTrigger>
+              <SheetContent side="left" className="w-72 bg-white p-0">
+                <div className="flex items-center p-4 border-b border-[#E0E0E0]">
+                  <div className="flex items-center gap-2">
+                    <img src="/Security_n.png" alt="Logo" className="h-8 w-auto object-contain" />
+                    <span className="font-black text-[#1A1A1A] text-sm">US - Fishing &amp; Huntingshop</span>
+                  </div>
+                </div>
+                <nav className="p-4 space-y-1">
+                  {categories.map((cat, i) => (
+                    <button
+                      key={i}
+                      onClick={() => { router.push(cat.href); setIsMenuOpen(false) }}
+                      className={`w-full text-left px-3 py-2.5 text-sm rounded hover:bg-[#F5F5F5] ${cat.highlight ? "text-[#CC0000] font-bold" : "text-[#333333] font-medium"}`}
+                    >
+                      {cat.label}
+                    </button>
+                  ))}
+                </nav>
+                {/* Login + Cart in mobile menu */}
+                <div className="p-4 border-t border-[#E0E0E0] space-y-2">
+                  <LoginAuth
+                    onLoginSuccess={handleLoginSuccess}
+                    onLogout={handleLogout}
+                    onShowProfile={handleShowProfile}
+                    isLightSection={true}
+                    variant="button"
+                    className="w-full !flex-row justify-start gap-3 px-3 py-2.5 rounded hover:bg-[#F5F5F5] min-w-0"
+                  />
+                  <button
+                    onClick={() => { router.push("/shop"); setIsMenuOpen(false) }}
+                    className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-[#333333] rounded hover:bg-[#F5F5F5]"
+                  >
+                    <ShoppingCart className="w-5 h-5 text-[#555]" />
+                    Warenkorb
+                  </button>
+                </div>
+              </SheetContent>
+            </Sheet>
+
+            {/* Logo */}
+            <button
+              onClick={() => router.push("/")}
+              className="flex items-center gap-3 flex-shrink-0"
+            >
+              <img
+                src="/Security_n.png"
+                alt="US - Fishing & Huntingshop"
+                className="h-16 w-auto object-contain"
+              />
+              <div className="hidden sm:block">
+                <div className="font-black text-[#1A1A1A] text-xl leading-none tracking-tight">US - Fishing &amp; Huntingshop</div>
+                <div className="text-xs text-[#666] tracking-widest uppercase mt-1">Jagd · Angeln · Outdoor</div>
+              </div>
+            </button>
+          </div>
+
+          {/* RIGHT: Login + Cart */}
+          <div className="flex items-center gap-2 justify-end">
+            <div className="flex flex-col items-center min-w-[64px]">
+              <LoginAuth
+                onLoginSuccess={handleLoginSuccess}
+                onLogout={handleLogout}
+                onShowProfile={handleShowProfile}
+                isLightSection={isLightSection}
+                variant="button"
+              />
+            </div>
+            <button
+              onClick={() => router.push("/shop")}
+              className="flex flex-col items-center p-2 hover:bg-[#F5F5F5] rounded min-w-[64px]"
+            >
+              <ShoppingCart className="w-6 h-6 text-[#555]" />
+              <span className="text-xs text-[#555] mt-0.5 leading-none font-medium">Waren<br/>Korb</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* ── TIER 3: Category navigation bar ── */}
+      <div className="bg-white border-b border-[#E0E0E0] hidden lg:block sticky top-20 z-40">
+        <div className="container mx-auto px-4">
+          <nav className="flex items-center justify-center gap-0">
+            {categories.map((cat, i) => (
+              <button
+                key={i}
+                onClick={() => router.push(cat.href)}
+                className={`
+                  flex items-center gap-1 px-4 py-3.5 text-[15px] font-medium whitespace-nowrap border-b-2 border-transparent
+                  hover:border-[#2C5F2E] hover:text-[#2C5F2E] transition-colors
+                  ${cat.highlight ? "text-[#CC0000] font-bold hover:border-[#CC0000] hover:text-[#CC0000]" : "text-[#333333]"}
+                `}
+              >
+                {cat.label}
+                <ChevronDown className="w-3.5 h-3.5 opacity-40" />
+              </button>
+            ))}
+          </nav>
+        </div>
+      </div>
+
       {showUserProfile && (
         <UserProfile
           onClose={handleProfileClose}
-          onAccountDeleted={() => {
-            setShowUserProfile(false)
-          }}
+          onAccountDeleted={() => setShowUserProfile(false)}
         />
+      )}
+
+      {/* Scroll to top */}
+      {showScrollTop && (
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          className="fixed bottom-6 right-6 z-50 bg-[#2C5F2E] hover:bg-[#1A4520] text-white rounded-full w-11 h-11 flex items-center justify-center shadow-lg hover:shadow-xl hover:scale-110 active:scale-95 transition-all duration-200"
+          aria-label="Nach oben scrollen"
+        >
+          <ArrowUp className="w-5 h-5" />
+        </button>
       )}
     </>
   )

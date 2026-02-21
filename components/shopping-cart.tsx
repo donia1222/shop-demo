@@ -55,7 +55,7 @@ export function ShoppingCartComponent({
         <SheetHeader className="px-5 py-4 border-b border-gray-100 flex-shrink-0">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 bg-blue-950 rounded-xl flex items-center justify-center">
+              <div className="w-8 h-8 bg-[#2C5F2E] rounded-xl flex items-center justify-center">
                 <ShoppingCart className="w-4 h-4 text-white" />
               </div>
               <div>
@@ -63,12 +63,6 @@ export function ShoppingCartComponent({
                 <p className="text-xs text-gray-400 mt-0.5">{totalItems} {totalItems === 1 ? "Artikel" : "Artikel"}</p>
               </div>
             </div>
-            <button
-              onClick={() => onOpenChange(false)}
-              className="w-8 h-8 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors"
-            >
-              <X className="w-4 h-4 text-gray-500" />
-            </button>
           </div>
         </SheetHeader>
 

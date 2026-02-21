@@ -1,9 +1,9 @@
 "use client"
 
-import { Truck, Shield, MapPin, CreditCard, Phone, Mail, Heart, ExternalLink } from "lucide-react"
 import { useState } from "react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { AdminLoginButton } from "@/components/admin-auth"
+import { Facebook, Twitter, Instagram } from "lucide-react"
 
 interface FooterProps {
   onAdminOpen?: () => void
@@ -14,316 +14,449 @@ export function Footer({ onAdminOpen }: FooterProps = {}) {
 
   const legalContent = {
     agb: {
-      title: "Allgemeine Geschäftsbedingungen",
-      content: `
-        1. Geltungsbereich
-        Diese Allgemeinen Geschäftsbedingungen gelten für alle Bestellungen über unseren Online-Shop.
+      title: "Allgemeine Geschäftsbedingungen (AGB)",
+      content: `US – Fishing & Huntingshop | Bahnhofstrasse 2, 9475 Sevelen | info@lweb.ch
 
-        2. Vertragsschluss
-        Der Vertrag kommt durch Ihre Bestellung und unsere Auftragsbestätigung zustande.
+1. GELTUNGSBEREICH
+Diese Allgemeinen Geschäftsbedingungen (AGB) gelten für alle Bestellungen, die über den Online-Shop von US – Fishing & Huntingshop abgeschlossen werden. Abweichende Bedingungen des Käufers werden nicht anerkannt, es sei denn, wir stimmen ihrer Geltung ausdrücklich schriftlich zu.
 
-        3. Preise und Zahlung
-        Alle Preise verstehen sich in CHF inklusive der gesetzlichen Mehrwertsteuer.
-        Zahlung erfolgt per PayPal, Kreditkarte oder Banküberweisung.
+2. VERTRAGSSCHLUSS
+Das Angebot in unserem Online-Shop stellt eine unverbindliche Einladung zur Bestellung dar. Durch das Absenden der Bestellung geben Sie ein verbindliches Angebot ab. Der Kaufvertrag kommt erst mit unserer schriftlichen Auftragsbestätigung per E-Mail zustande. Wir behalten uns das Recht vor, Bestellungen ohne Angabe von Gründen abzulehnen.
 
-        4. Lieferung
-        Wir liefern nur innerhalb der Schweiz.
-        Die Lieferzeit beträgt 1-3 Werktage.
-        Versandkosten werden bei Bestellungen unter 50 CHF erhoben.
+3. SORTIMENT & PRODUKTE
+Unser Sortiment umfasst Artikel aus den Bereichen Jagd, Angeln und Outdoor, insbesondere: Messer, Armbrüste, Pfeilbogen, Beile, Sicherheitsprodukte, Lampen, Schleudern, Blasrohre sowie Grill- und Räucherzubehör. Alle Produkte werden in Übereinstimmung mit den geltenden Schweizer Gesetzen angeboten. Für bestimmte Artikel (z. B. Messer, Armbrüste) gelten gesetzliche Altersbeschränkungen. Mit der Bestellung bestätigen Sie, das gesetzlich vorgeschriebene Mindestalter erreicht zu haben.
 
-        5. Widerrufsrecht
-        Sie haben das Recht, binnen 14 Tagen ohne Angabe von Gründen diesen Vertrag zu widerrufen.
+4. PREISE UND ZAHLUNG
+Alle Preise verstehen sich in Schweizer Franken (CHF) inklusive der gesetzlichen Mehrwertsteuer (MwSt.). Versandkosten werden im Bestellprozess separat ausgewiesen. Wir akzeptieren folgende Zahlungsmittel: TWINT, PostFinance, VISA, Mastercard, American Express sowie PayPal. Der Kaufpreis ist mit Abschluss der Bestellung fällig.
 
-        6. Gewährleistung
-        Es gelten die gesetzlichen Gewährleistungsbestimmungen.
-      `,
+5. LIEFERUNG
+Wir liefern ausschliesslich innerhalb der Schweiz. Die Lieferzeit beträgt in der Regel 1–3 Werktage nach Zahlungseingang. Bei Lieferverzögerungen informieren wir Sie unverzüglich. Das Versandrisiko geht mit Übergabe an den Paketdienstleister auf den Käufer über.
+
+6. WIDERRUFSRECHT & RÜCKGABE
+Sie haben das Recht, Ihre Bestellung innerhalb von 14 Tagen ab Erhalt der Ware ohne Angabe von Gründen zu widerrufen. Die Ware ist in originalem, unbenutztem Zustand und in der Originalverpackung zurückzusenden. Die Rücksendekosten trägt der Käufer. Ausgenommen vom Widerrufsrecht sind auf Kundenwunsch angefertigte oder personalisierte Artikel sowie Hygieneartikel nach Entsiegelung.
+
+7. GEWÄHRLEISTUNG
+Es gelten die gesetzlichen Gewährleistungsrechte nach Schweizer OR. Bei Sachmängeln haben Sie das Recht auf Nachbesserung oder Ersatzlieferung. Schlägt die Nacherfüllung fehl, können Sie vom Vertrag zurücktreten oder den Kaufpreis mindern.
+
+8. HAFTUNG
+Wir haften unbeschränkt für Vorsatz und grobe Fahrlässigkeit. Im Übrigen ist unsere Haftung auf den vorhersehbaren, vertragstypischen Schaden beschränkt. Die Haftung für leichte Fahrlässigkeit ist ausgeschlossen, soweit keine wesentlichen Vertragspflichten verletzt werden.
+
+9. ANWENDBARES RECHT & GERICHTSSTAND
+Es gilt ausschliesslich Schweizer Recht. Gerichtsstand für alle Streitigkeiten ist Sevelen, Kanton St. Gallen, Schweiz.
+
+10. SCHLUSSBESTIMMUNGEN
+Sollten einzelne Bestimmungen dieser AGB unwirksam sein, bleibt die Wirksamkeit der übrigen Bestimmungen unberührt. Stand: Februar 2026.`,
     },
     datenschutz: {
-      title: "Datenschutzrichtlinie",
-      content: `
-        1. Datenerhebung
-        Wir erheben nur die für die Bestellabwicklung notwendigen Daten.
+      title: "Datenschutzerklärung",
+      content: `US – Fishing & Huntingshop | Bahnhofstrasse 2, 9475 Sevelen | info@lweb.ch
 
-        2. Verwendung der Daten
-        Ihre Daten werden ausschließlich zur Bestellabwicklung verwendet.
+Diese Datenschutzerklärung informiert Sie gemäss dem Schweizer Datenschutzgesetz (DSG) sowie der EU-Datenschutz-Grundverordnung (DSGVO) über die Verarbeitung Ihrer personenbezogenen Daten.
 
-        3. Datenweitergabe
-        Eine Weitergabe an Dritte erfolgt nur zur Bestellabwicklung (Versanddienstleister).
+1. VERANTWORTLICHE STELLE
+US – Fishing & Huntingshop
+Bahnhofstrasse 2, 9475 Sevelen, Schweiz
+Telefon: 078 606 61 05
+E-Mail: info@lweb.ch
 
-        4. Datensicherheit
-        Wir verwenden SSL-Verschlüsselung zum Schutz Ihrer Daten.
+2. WELCHE DATEN WIR ERHEBEN
+Im Rahmen der Bestellabwicklung erheben wir folgende Daten: Vor- und Nachname, Lieferadresse, E-Mail-Adresse, Telefonnummer sowie Zahlungsinformationen. Beim Besuch unserer Website werden technische Daten wie IP-Adresse, Browsertyp, Besuchsdauer und aufgerufene Seiten automatisch erfasst.
 
-        5. Ihre Rechte
-        Sie haben das Recht auf Auskunft, Berichtigung und Löschung Ihrer Daten.
+3. ZWECK DER DATENVERARBEITUNG
+Wir verwenden Ihre Daten ausschliesslich für folgende Zwecke: Abwicklung und Bestätigung Ihrer Bestellungen, Versand und Lieferung der gekauften Produkte (Messer, Outdoor- und Jagdausrüstung, Angelzubehör etc.), Kundenkommunikation und Support, Erfüllung gesetzlicher Pflichten sowie zur Verbesserung unseres Angebots.
 
-        6. Kontakt
-        Bei Fragen zum Datenschutz kontaktieren Sie uns unter info@lweb.ch
-      `,
+4. RECHTSGRUNDLAGE
+Die Verarbeitung Ihrer Daten erfolgt zur Vertragserfüllung (Art. 6 Abs. 1 lit. b DSGVO), zur Erfüllung rechtlicher Verpflichtungen (Art. 6 Abs. 1 lit. c DSGVO) sowie auf Basis unseres berechtigten Interesses an einem sicheren und effizienten Shopbetrieb (Art. 6 Abs. 1 lit. f DSGVO).
+
+5. WEITERGABE VON DATEN
+Ihre Daten werden nur an Dritte weitergegeben, soweit dies für die Vertragsabwicklung notwendig ist (z. B. Paketdienstleister für die Lieferung, Zahlungsanbieter wie PayPal, TWINT oder PostFinance). Eine Weitergabe zu Werbezwecken an Dritte findet nicht statt.
+
+6. DATENSICHERHEIT
+Wir setzen technische und organisatorische Sicherheitsmassnahmen ein, um Ihre Daten vor Verlust, Manipulation und unberechtigtem Zugriff zu schützen. Unser Online-Shop ist durch SSL/TLS-Verschlüsselung gesichert.
+
+7. SPEICHERDAUER
+Ihre Daten werden nur so lange gespeichert, wie es für den jeweiligen Zweck notwendig ist oder gesetzliche Aufbewahrungsfristen (in der Regel 10 Jahre für Buchhaltungsunterlagen) es erfordern.
+
+8. IHRE RECHTE
+Sie haben jederzeit das Recht auf: Auskunft über Ihre gespeicherten Daten, Berichtigung unrichtiger Daten, Löschung Ihrer Daten (sofern keine gesetzlichen Aufbewahrungspflichten entgegenstehen), Einschränkung der Verarbeitung sowie Datenübertragbarkeit. Zur Ausübung Ihrer Rechte wenden Sie sich an: info@lweb.ch
+
+9. COOKIES
+Unsere Website verwendet technisch notwendige Cookies, die für den Betrieb des Shops erforderlich sind. Analytische oder Marketing-Cookies werden nur mit Ihrer ausdrücklichen Einwilligung gesetzt.
+
+10. ÄNDERUNGEN
+Wir behalten uns vor, diese Datenschutzerklärung bei Bedarf anzupassen. Stand: Februar 2026.`,
+    },
+    zahlungsarten: {
+      title: "Zahlungsarten",
+      content: `US – Fishing & Huntingshop akzeptiert folgende Zahlungsmittel:
+
+TWINT
+Bezahlen Sie schnell und sicher direkt per Smartphone-App. TWINT ist die meistgenutzte Schweizer Bezahl-App und funktioniert ohne Kreditkarte. Der Betrag wird sofort von Ihrem Konto abgebucht.
+
+PostFinance
+Bezahlen Sie bequem über Ihr PostFinance-Konto (E-Finance oder PostFinance Card). Ideal für alle PostFinance-Kunden in der Schweiz.
+
+VISA / Mastercard / American Express
+Wir akzeptieren alle gängigen Kredit- und Debitkarten. Die Zahlung erfolgt verschlüsselt über eine sichere SSL-Verbindung. Ihr Kartendaten werden nicht gespeichert.
+
+PayPal
+Bezahlen Sie über Ihr bestehendes PayPal-Konto. PayPal bietet einen integrierten Käuferschutz und ist weltweit verbreitet.
+
+Allgemeine Hinweise
+— Alle Preise verstehen sich in Schweizer Franken (CHF) inkl. MwSt.
+— Der Kaufbetrag wird erst nach Versandbestätigung belastet.
+— Bei Fragen zur Zahlung erreichen Sie uns unter info@lweb.ch oder 078 606 61 05.`,
+    },
+    cookies: {
+      title: "Cookie Manager",
+      content: `Was sind Cookies?
+Cookies sind kleine Textdateien, die beim Besuch unserer Website auf Ihrem Gerät gespeichert werden. Sie ermöglichen es, Einstellungen zu speichern und die Nutzung der Website zu verbessern.
+
+Technisch notwendige Cookies
+Diese Cookies sind für den Betrieb des Online-Shops unbedingt erforderlich. Sie ermöglichen grundlegende Funktionen wie Warenkorb, Login und Sitzungsverwaltung. Diese Cookies können nicht deaktiviert werden.
+— Sitzungs-Cookie (Session): Speichert Ihre aktuelle Sitzung (Warenkorb, Login-Status).
+— Sicherheits-Cookie: Schützt vor Cross-Site-Request-Forgery (CSRF).
+
+Funktionale Cookies
+Diese Cookies ermöglichen erweiterte Funktionen wie gespeicherte Spracheinstellungen oder zuletzt angesehene Produkte. Sie können diese Cookies deaktivieren, was jedoch die Funktionalität einschränken kann.
+
+Analyse-Cookies
+Wir verwenden keine externen Analyse-Dienste (z. B. Google Analytics) ohne Ihre ausdrückliche Einwilligung.
+
+Ihre Rechte
+Gemäss Schweizer DSG und EU-DSGVO haben Sie das Recht, Cookies abzulehnen oder zu löschen. Sie können Cookies jederzeit über die Einstellungen Ihres Browsers verwalten oder löschen:
+— Chrome: Einstellungen → Datenschutz → Cookies
+— Firefox: Einstellungen → Datenschutz → Cookies
+— Safari: Einstellungen → Datenschutz → Cookies verwalten
+
+Bei Fragen: info@lweb.ch`,
+    },
+    ueberuns: {
+      title: "Über uns",
+      content: `US – Fishing & Huntingshop
+Ihr Schweizer Spezialist für Jagd, Angeln & Outdoor
+
+Wer wir sind
+US – Fishing & Huntingshop ist ein familiengeführtes Fachgeschäft mit Sitz in Sevelen, Kanton St. Gallen. Wir sind Ihr verlässlicher Partner für hochwertige Ausrüstung rund um Jagd, Angeln, Outdoor und Survival – mit persönlicher Beratung und einem sorgfältig kuratierten Sortiment.
+
+Was uns auszeichnet
+Unser Team besteht aus passionierten Outdoor-Enthusiasten, Jägern und Anglern, die ihre Produkte selbst kennen und lieben. Wir verkaufen nur, was wir selbst für gut befinden – Qualität vor Quantität.
+
+Unser Sortiment
+— Messer & Klingen: Jagdmesser, Taschenmesser, Outdoormesser führender Marken
+— Armbrüste & Bögen: Sportliche und jagdliche Armbrüste, Recurve- und Compoundbögen
+— Angelbedarf: Ruten, Rollen, Köder, Zubehör für alle Gewässer
+— Security & Outdoor: Taktische Ausrüstung, Lampen, Schlafsäcke, Survival-Tools
+— Grill & Rauch: Premium-Grillzubehör, Räucherschränke, Gewürze
+— Schleudern & Blasrohre: Sportartikel für Freizeit und Wettkampf
+
+Unsere Werte
+Wir legen grössten Wert auf Schweizer Qualitätsstandards, seriöse Beratung und die Einhaltung aller gesetzlichen Vorschriften. Für Produkte mit Altersbeschränkung (z. B. Messer, Armbrüste) führen wir eine gewissenhafte Alterskontrolle durch.
+
+Besuchen Sie uns
+Bahnhofstrasse 2, 9475 Sevelen
+Mo – Fr: 13:30 – 18:30 | Sa: 10:00 – 16:00
+📞 078 606 61 05 | info@lweb.ch`,
+    },
+    impressum: {
+      title: "Impressum",
+      content: `Angaben gemäss Schweizer Recht (OR Art. 944)
+
+BETREIBER DES ONLINE-SHOPS
+US – Fishing & Huntingshop
+Bahnhofstrasse 2
+9475 Sevelen
+Kanton St. Gallen, Schweiz
+
+KONTAKT
+Telefon: 078 606 61 05
+E-Mail: info@lweb.ch
+Website: www.usfh.ch
+
+ÖFFNUNGSZEITEN
+Montag – Donnerstag: 13:30 – 18:30 Uhr
+Freitag: 13:30 – 18:30 Uhr
+Samstag: 10:00 – 16:00 Uhr
+Sonntag: Geschlossen
+
+UNTERNEHMENSFORM
+Einzelunternehmen / Kleinunternehmen nach Schweizer Recht
+
+MEHRWERTSTEUER
+Alle Preise verstehen sich in CHF inklusive der gesetzlichen Schweizer Mehrwertsteuer (MwSt.).
+
+VERANTWORTLICH FÜR DEN INHALT
+US – Fishing & Huntingshop, Bahnhofstrasse 2, 9475 Sevelen
+
+WEBDESIGN & UMSETZUNG
+lweb.ch – Webdesign & Digitalagentur
+Website: https://lweb.ch
+
+HAFTUNGSAUSSCHLUSS
+Trotz sorgfältiger inhaltlicher Kontrolle übernehmen wir keine Haftung für die Inhalte externer Links. Für den Inhalt der verlinkten Seiten sind ausschliesslich deren Betreiber verantwortlich. Alle Inhalte dieser Website sind urheberrechtlich geschützt.
+
+ANWENDBARES RECHT
+Es gilt ausschliesslich Schweizer Recht. Gerichtsstand ist Sevelen, Kanton St. Gallen.
+
+Stand: Februar 2026`,
     },
     rueckgabe: {
-      title: "Rückgaberichtlinie",
-      content: `
-        1. Rückgaberecht
-        Sie können Artikel innerhalb von 14 Tagen nach Erhalt zurückgeben.
+      title: "Versand & Rückgabe",
+      content: `US – Fishing & Huntingshop | Bahnhofstrasse 2, 9475 Sevelen | info@lweb.ch
 
-        2. Zustand der Ware
-        Die Ware muss sich in originalem, unbenutztem Zustand befinden.
+1. VERSAND
+Wir liefern ausschliesslich innerhalb der Schweiz. Bestellungen werden in der Regel innerhalb von 1–3 Werktagen nach Zahlungseingang versandt. Der Versand erfolgt mit einem zuverlässigen Schweizer Paketdienstleister. Sie erhalten nach dem Versand eine E-Mail mit Ihrer Sendungsverfolgungsnummer. Versandkosten werden transparent im Bestellprozess ausgewiesen.
 
-        3. Rückgabeprozess
-        Kontaktieren Sie uns vor der Rücksendung unter info@lweb.ch
+2. RÜCKGABERECHT
+Sie können bestellte Artikel innerhalb von 14 Tagen ab Erhalt ohne Angabe von Gründen zurückgeben. Bitte kontaktieren Sie uns vor der Rücksendung per E-Mail an info@lweb.ch oder telefonisch unter 078 606 61 05.
 
-        4. Rücksendekosten
-        Die Kosten für die Rücksendung trägt der Kunde.
+3. ZUSTAND DER WARE
+Die Ware muss sich in originalem, unbenutztem Zustand befinden und in der Originalverpackung zurückgesendet werden. Bei Produkten wie Messern, Armbrüsten oder Outdoor-Ausrüstung dürfen keine Gebrauchsspuren vorhanden sein.
 
-        5. Erstattung
-        Die Erstattung erfolgt innerhalb von 14 Tagen nach Erhalt der Rücksendung.
+4. AUSNAHMEN VOM RÜCKGABERECHT
+Vom Rückgaberecht ausgenommen sind: auf Kundenwunsch angefertigte oder gravierte Artikel, entsiegelte Hygieneartikel sowie Munition und gesetzlich regulierte Waren, sofern das Siegel gebrochen wurde.
 
-        6. Ausnahmen
-        Aus hygienischen Gründen können geöffnete Lebensmittel nicht zurückgenommen werden.
-      `,
+5. RÜCKSENDEPROZESS
+Bitte senden Sie die Ware gut verpackt an folgende Adresse zurück:
+US – Fishing & Huntingshop
+Bahnhofstrasse 2
+9475 Sevelen
+
+Die Rücksendekosten trägt der Käufer. Wir empfehlen, die Sendung versichert zu verschicken.
+
+6. ERSTATTUNG
+Nach Erhalt und Prüfung der zurückgesandten Ware erstatten wir den Kaufpreis innerhalb von 14 Tagen auf dem ursprünglichen Zahlungsweg. Bei TWINT, PayPal, PostFinance sowie Kredit- und Debitkarten erfolgt die Gutschrift direkt auf das verwendete Konto.
+
+7. BESCHÄDIGTE ODER FALSCHE LIEFERUNG
+Falls Sie eine beschädigte oder falsche Ware erhalten haben, wenden Sie sich bitte umgehend an uns. Wir übernehmen in diesem Fall die Rücksendekosten und liefern Ihnen die korrekte Ware auf dem schnellsten Weg zu.`,
     },
   }
 
   return (
-    <footer className="relative bg-[#EDE8E0] overflow-hidden">
-      {/* Bottom accent line top */}
-      <div className="h-[2px] bg-[#B8864E]"></div>
+    <footer className="bg-white mt-0">
 
-      <div className="relative container mx-auto px-4 py-16">
-        {/* Top Section with Brand */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-3 mb-4">
-            <h2 className="text-4xl font-black text-[#2E1F0F]">
-              GLUTWERK
-            </h2>
-          </div>
-          <p className="text-lg text-[#9B9189] max-w-2xl mx-auto">
-            Handwerkliche Saucen. Direkt zu Ihnen.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-          {/* Shipping Information */}
-          <div className="group">
-            <div className="bg-white border border-[#E8E0D5] rounded-2xl p-6 hover:border-[#B8864E] transition-all duration-300 hover:shadow-lg h-full">
-              <h3 className="text-xl font-bold flex items-center gap-3 mb-6 text-[#2E1F0F] transition-colors">
-                <div className="p-2 bg-[#F9F7F4] rounded-lg">
-                  <Truck className="h-6 w-6 text-[#B8864E]" />
-                </div>
-                Versand
-              </h3>
-              <div className="space-y-4 text-sm">
-                <div className="flex items-start gap-3 text-[#9B9189] hover:text-[#B8864E] transition-colors">
-                  <MapPin className="h-5 w-5 text-[#B8864E] mt-0.5 flex-shrink-0" />
-                  <span>Schweizweite Lieferung mit A-Post</span>
-                </div>
-                <div className="flex items-start gap-3 text-[#9B9189] hover:text-[#B8864E] transition-colors">
-                  <Shield className="h-5 w-5 text-[#B8864E] mt-0.5 flex-shrink-0" />
-                  <span>Kostenloser Versand ab 50 CHF</span>
-                </div>
-                <div className="bg-[#F9F7F4] border border-[#E8E0D5] rounded-lg p-3 mt-4">
-                  <p className="text-[#B8864E] font-medium text-xs">Express-Lieferung: 1-3 Werktage</p>
-                </div>
+      {/* ── Payment icons strip ── */}
+      <div className="border-t border-b border-[#E0E0E0] py-6 bg-[#F9F9F9]">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-wrap items-center justify-center gap-4">
+            {[
+              { name: "TWINT", bg: "#000", text: "#fff", style: "font-black text-sm" },
+              { name: "PostFinance", bg: "#FFCC00", text: "#000", style: "font-bold text-xs" },
+              { name: "VISA", bg: "#1A1F71", text: "#fff", style: "font-black text-sm italic" },
+              { name: "Mastercard", bg: "#EB001B", text: "#fff", style: "font-bold text-xs" },
+              { name: "Amex", bg: "#2E77BC", text: "#fff", style: "font-bold text-xs" },
+              { name: "PayPal", bg: "#003087", text: "#009CDE", style: "font-black text-sm" },
+            ].map((p) => (
+              <div
+                key={p.name}
+                className="px-4 py-2 rounded"
+                style={{ backgroundColor: p.bg }}
+              >
+                <span className={p.style} style={{ color: p.text }}>{p.name}</span>
               </div>
-            </div>
-          </div>
-
-          {/* Payment Methods */}
-          <div className="group">
-            <div className="bg-white border border-[#E8E0D5] rounded-2xl p-6 hover:border-[#B8864E] transition-all duration-300 hover:shadow-lg h-full">
-              <h3 className="text-xl font-bold flex items-center gap-3 mb-6 text-[#2E1F0F] transition-colors">
-                <div className="p-2 bg-[#F9F7F4] rounded-lg">
-                  <CreditCard className="h-6 w-6 text-[#B8864E]" />
-                </div>
-                Sichere Zahlung
-              </h3>
-              <div className="space-y-4 text-sm">
-                <div className="flex items-center gap-3 text-[#9B9189] hover:text-[#B8864E] transition-colors">
-                  <div className="w-8 h-8 bg-[#2E1F0F] rounded flex items-center justify-center text-white font-bold text-xs">PP</div>
-                  <span>PayPal - 100% sicher</span>
-                </div>
-                <div className="flex items-center gap-3 text-[#9B9189] hover:text-[#B8864E] transition-colors">
-                  <CreditCard className="h-5 w-5 text-[#B8864E]" />
-                  <span>Kredit- und Debitkarten</span>
-                </div>
-                <div className="flex items-center gap-3 text-[#9B9189] hover:text-[#B8864E] transition-colors">
-                  <Shield className="h-5 w-5 text-[#B8864E]" />
-                  <span>Sichere Banküberweisung</span>
-                </div>
-                <div className="bg-[#F9F7F4] border border-[#E8E0D5] rounded-lg p-3 mt-4">
-                  <p className="text-[#B8864E] font-medium text-xs">SSL-verschlüsselt &amp; geschützt</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Company Info */}
-          <div className="group">
-            <div className="bg-white border border-[#E8E0D5] rounded-2xl p-6 hover:border-[#B8864E] transition-all duration-300 hover:shadow-lg h-full">
-              <h3 className="text-xl font-bold flex items-center gap-3 mb-6 text-[#2E1F0F] transition-colors">
-                <div className="p-2 bg-[#F9F7F4] rounded-lg">
-                  <Heart className="h-6 w-6 text-[#B8864E]" />
-                </div>
-                Über Uns
-              </h3>
-              <div className="space-y-4 text-sm">
-                <p className="text-[#9B9189] leading-relaxed">Premium handwerkliche Saucen direkt aus den USA importiert</p>
-                <div className="space-y-3">
-                  <div className="flex items-center gap-3 text-[#9B9189] hover:text-[#B8864E] transition-colors group/item">
-                    <Mail className="h-4 w-4 text-[#B8864E] group-hover/item:text-[#B8864E]" />
-                    <a href="mailto:info@lweb.ch" className="hover:text-[#B8864E] transition-colors">
-                      info@lweb.ch
-                    </a>
-                  </div>
-                  <div className="flex items-center gap-3 text-[#9B9189] hover:text-[#B8864E] transition-colors group/item">
-                    <Phone className="h-4 w-4 text-[#B8864E] group-hover/item:text-[#B8864E]" />
-                    <a href="tel:+41765608645" className="hover:text-[#B8864E] transition-colors">
-                      +41 76 560 86 45
-                    </a>
-                  </div>
-                </div>
-                <div className="bg-[#F9F7F4] border border-[#E8E0D5] rounded-lg p-3 mt-4">
-                  <p className="text-[#B8864E] font-medium text-xs">Handwerk. Schärfe. Präzision.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Legal & Support */}
-          <div className="group">
-            <div className="bg-white border border-[#E8E0D5] rounded-2xl p-6 hover:border-[#B8864E] transition-all duration-300 hover:shadow-lg h-full">
-              <h3 className="text-xl font-bold flex items-center gap-3 mb-6 text-[#2E1F0F] transition-colors">
-                <div className="p-2 bg-[#F9F7F4] rounded-lg">
-                  <Shield className="h-6 w-6 text-[#B8864E]" />
-                </div>
-                Support &amp; Recht
-              </h3>
-              <div className="space-y-4 text-sm">
-                <div>
-                  <Dialog open={openModal === "agb"} onOpenChange={(open) => setOpenModal(open ? "agb" : null)}>
-                    <DialogTrigger asChild>
-                      <button className="flex items-center gap-2 w-full text-left text-[#9B9189] hover:text-[#B8864E] transition-colors group/btn">
-                        <ExternalLink className="h-4 w-4 opacity-60 group-hover/btn:opacity-100" />
-                        Allgemeine Geschäftsbedingungen
-                      </button>
-                    </DialogTrigger>
-                    <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto bg-white border-[#E8E0D5]">
-                      <DialogHeader>
-                        <DialogTitle className="text-[#2E1F0F]">{legalContent.agb.title}</DialogTitle>
-                      </DialogHeader>
-                      <div className="whitespace-pre-line text-sm text-[#9B9189]">
-                        {legalContent.agb.content}
-                      </div>
-                    </DialogContent>
-                  </Dialog>
-                </div>
-
-                <div>
-                  <Dialog
-                    open={openModal === "datenschutz"}
-                    onOpenChange={(open) => setOpenModal(open ? "datenschutz" : null)}
-                  >
-                    <DialogTrigger asChild>
-                      <button className="flex items-center gap-2 w-full text-left text-[#9B9189] hover:text-[#B8864E] transition-colors group/btn">
-                        <ExternalLink className="h-4 w-4 opacity-60 group-hover/btn:opacity-100" />
-                        Datenschutzrichtlinie
-                      </button>
-                    </DialogTrigger>
-                    <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto bg-white border-[#E8E0D5]">
-                      <DialogHeader>
-                        <DialogTitle className="text-[#2E1F0F]">{legalContent.datenschutz.title}</DialogTitle>
-                      </DialogHeader>
-                      <div className="whitespace-pre-line text-sm text-[#9B9189]">
-                        {legalContent.datenschutz.content}
-                      </div>
-                    </DialogContent>
-                  </Dialog>
-                </div>
-
-                <div>
-                  <Dialog
-                    open={openModal === "rueckgabe"}
-                    onOpenChange={(open) => setOpenModal(open ? "rueckgabe" : null)}
-                  >
-                    <DialogTrigger asChild>
-                      <button className="flex items-center gap-2 w-full text-left text-[#9B9189] hover:text-[#B8864E] transition-colors group/btn">
-                        <ExternalLink className="h-4 w-4 opacity-60 group-hover/btn:opacity-100" />
-                        Rückgaberichtlinie
-                      </button>
-                    </DialogTrigger>
-                    <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto bg-white border-[#E8E0D5]">
-                      <DialogHeader>
-                        <DialogTitle className="text-[#2E1F0F]">{legalContent.rueckgabe.title}</DialogTitle>
-                      </DialogHeader>
-                      <div className="whitespace-pre-line text-sm text-[#9B9189]">
-                        {legalContent.rueckgabe.content}
-                      </div>
-                    </DialogContent>
-                  </Dialog>
-                </div>
-
-                <div className="bg-[#F9F7F4] border border-[#E8E0D5] rounded-lg p-3 mt-4">
-                  <p className="text-[#B8864E] font-medium text-xs">Schneller Kundenservice</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Credits and Design Info */}
-        <div className="border-t border-[#E8E0D5] pt-8 mb-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
-            <div className="bg-white rounded-xl p-4 border border-[#E8E0D5]">
-              <p className="text-[#9B9189] flex items-center gap-2">
-                <strong className="text-[#2E1F0F]">Bildnachweis:</strong> Einige Bilder stammen von Freepik
-              </p>
-            </div>
-            <div className="bg-white rounded-xl p-4 border border-[#E8E0D5]">
-              <p className="text-[#9B9189] flex items-center gap-2">
-                <strong className="text-[#2E1F0F]">Webseite Design:</strong>{" "}
-                <a
-                  href="https://lweb.ch"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[#B8864E] hover:text-[#2E1F0F] transition-colors font-medium"
-                >
-                  lweb.ch
-                </a>
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Bottom Bar */}
-        <div className="border-t border-[#E8E0D5] pt-8">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-            <div className="text-center md:text-left">
-              <p className="text-[#9B9189] text-sm">© 2026 GLUTWERK. Alle Rechte vorbehalten.</p>
-              <p className="text-xs text-[#9B9189] mt-1">Handwerk. Schärfe. Präzision.</p>
-            </div>
-            <div className="flex items-center gap-6 text-sm">
-              <div className="flex items-center gap-2 bg-white border border-[#E8E0D5] px-4 py-2 rounded-full text-[#9B9189]">
-                <MapPin className="h-4 w-4 text-[#B8864E]" />
-                <span>Made in USA</span>
-              </div>
-              <div className="flex items-center gap-2 bg-white border border-[#E8E0D5] px-4 py-2 rounded-full text-[#9B9189]">
-                <Shield className="h-4 w-4 text-[#B8864E]" />
-                <span>100% Sicher</span>
-              </div>
-              {/* Admin Login */}
-              {onAdminOpen && (
-                <AdminLoginButton
-                  onAdminOpen={onAdminOpen}
-                  className="hover:bg-[#F9F7F4] border border-[#E8E0D5]"
-                />
-              )}
-            </div>
+            ))}
           </div>
         </div>
       </div>
 
-      {/* Bottom accent line */}
-      <div className="h-[2px] bg-[#B8864E]"></div>
+      {/* ── Social icons ── */}
+      <div className="border-b border-[#E0E0E0] py-4 bg-white">
+        <div className="container mx-auto px-4 flex justify-center gap-6">
+          {[
+            { Icon: Facebook, href: "https://www.facebook.com/usfh.ch" },
+            { Icon: Twitter, href: null },
+            { Icon: Instagram, href: null },
+          ].map(({ Icon, href }, i) =>
+            href ? (
+              <a key={i} href={href} target="_blank" rel="noopener noreferrer" className="w-9 h-9 flex items-center justify-center text-[#666] hover:text-[#2C5F2E] transition-colors">
+                <Icon className="w-5 h-5" />
+              </a>
+            ) : (
+              <button key={i} className="w-9 h-9 flex items-center justify-center text-[#666] hover:text-[#2C5F2E] transition-colors">
+                <Icon className="w-5 h-5" />
+              </button>
+            )
+          )}
+        </div>
+      </div>
+
+      {/* ── Footer columns ── */}
+      <div className="bg-white border-t border-[#E8E8E8] py-14">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr_1fr] gap-10">
+
+            {/* LEFT: Logo + Contact + Hours */}
+            <div>
+              {/* Logo + name */}
+              <div className="flex items-center gap-3 mb-6">
+                <img src="/Security_n.png" alt="Logo" className="h-14 w-auto object-contain flex-shrink-0" />
+                <div>
+                  <div className="font-black text-[#1A1A1A] text-lg leading-tight tracking-tight">US - Fishing &amp; Huntingshop</div>
+                  <div className="text-xs text-[#888] uppercase tracking-widest mt-1">Jagd · Angeln · Outdoor</div>
+                </div>
+              </div>
+
+              {/* Contact pills */}
+              <div className="flex flex-wrap gap-2 mb-6">
+                <a href="https://maps.google.com/?q=Bahnhofstrasse+2+9475+Sevelen" target="_blank" rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 bg-[#F5F5F5] hover:bg-[#EBEBEB] text-[#444] text-sm px-3 py-1.5 rounded-full transition-colors">
+                  <span className="text-base">📍</span> Bahnhofstrasse 2, 9475 Sevelen
+                </a>
+                <a href="tel:0786066105"
+                  className="inline-flex items-center gap-2 bg-[#F5F5F5] hover:bg-[#2C5F2E] hover:text-white text-[#2C5F2E] font-semibold text-sm px-3 py-1.5 rounded-full transition-colors">
+                  <span className="text-base">📞</span> 078 606 61 05
+                </a>
+                <a href="mailto:info@lweb.ch"
+                  className="inline-flex items-center gap-2 bg-[#F5F5F5] hover:bg-[#2C5F2E] hover:text-white text-[#2C5F2E] font-semibold text-sm px-3 py-1.5 rounded-full transition-colors">
+                  <span className="text-base">✉️</span> info@lweb.ch
+                </a>
+              </div>
+
+              {/* Opening hours card */}
+              <div className="bg-[#F8FAF8] border border-[#E4EDE4] rounded-2xl p-4 max-w-xs">
+                <p className="text-xs font-black text-[#2C5F2E] uppercase tracking-widest mb-3">Öffnungszeiten</p>
+                <div className="space-y-1.5">
+                  {[
+                    { day: "Mo – Fr", hours: "13:30 – 18:30", open: true },
+                    { day: "Sa", hours: "10:00 – 16:00", open: true },
+                    { day: "So", hours: "Geschlossen", open: false },
+                  ].map(({ day, hours, open }) => (
+                    <div key={day} className="flex items-center justify-between gap-6">
+                      <span className={`text-sm font-medium ${open ? "text-[#333]" : "text-[#AAA]"}`}>{day}</span>
+                      <span className={`text-sm ${open ? "text-[#1A1A1A] font-semibold" : "text-[#AAA]"}`}>{hours}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Service */}
+            <div>
+              <h3 className="font-black text-[#1A1A1A] text-base mb-5 uppercase tracking-widest">Service</h3>
+              <ul className="space-y-3">
+                <li>
+                  <a href="mailto:info@lweb.ch" className="text-sm font-medium text-[#444] hover:text-[#2C5F2E] transition-colors">Kontakt</a>
+                </li>
+                <li>
+                  <Dialog open={openModal === "rueckgabe"} onOpenChange={(open) => setOpenModal(open ? "rueckgabe" : null)}>
+                    <DialogTrigger asChild>
+                      <button className="text-sm font-medium text-[#444] hover:text-[#2C5F2E] transition-colors text-left">Versand und Rückgabe</button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+                      <DialogHeader>
+                        <DialogTitle>{legalContent.rueckgabe.title}</DialogTitle>
+                      </DialogHeader>
+                      <div className="whitespace-pre-line text-sm text-[#555]">{legalContent.rueckgabe.content}</div>
+                    </DialogContent>
+                  </Dialog>
+                </li>
+                <li>
+                  <Dialog open={openModal === "zahlungsarten"} onOpenChange={(open) => setOpenModal(open ? "zahlungsarten" : null)}>
+                    <DialogTrigger asChild>
+                      <button className="text-sm font-medium text-[#444] hover:text-[#2C5F2E] transition-colors text-left">Zahlungsarten</button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+                      <DialogHeader>
+                        <DialogTitle>{legalContent.zahlungsarten.title}</DialogTitle>
+                      </DialogHeader>
+                      <div className="whitespace-pre-line text-sm text-[#555]">{legalContent.zahlungsarten.content}</div>
+                    </DialogContent>
+                  </Dialog>
+                </li>
+                <li>
+                  <Dialog open={openModal === "cookies"} onOpenChange={(open) => setOpenModal(open ? "cookies" : null)}>
+                    <DialogTrigger asChild>
+                      <button className="text-sm font-medium text-[#444] hover:text-[#2C5F2E] transition-colors text-left">Cookie Manager</button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+                      <DialogHeader>
+                        <DialogTitle>{legalContent.cookies.title}</DialogTitle>
+                      </DialogHeader>
+                      <div className="whitespace-pre-line text-sm text-[#555]">{legalContent.cookies.content}</div>
+                    </DialogContent>
+                  </Dialog>
+                </li>
+              </ul>
+            </div>
+
+            {/* Firma */}
+            <div>
+              <h3 className="font-black text-[#1A1A1A] text-base mb-5 uppercase tracking-widest">Firma</h3>
+              <ul className="space-y-3">
+                <li>
+                  <Dialog open={openModal === "ueberuns"} onOpenChange={(open) => setOpenModal(open ? "ueberuns" : null)}>
+                    <DialogTrigger asChild>
+                      <button className="text-sm font-medium text-[#444] hover:text-[#2C5F2E] transition-colors text-left">Über uns</button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+                      <DialogHeader>
+                        <DialogTitle>{legalContent.ueberuns.title}</DialogTitle>
+                      </DialogHeader>
+                      <div className="whitespace-pre-line text-sm text-[#555]">{legalContent.ueberuns.content}</div>
+                    </DialogContent>
+                  </Dialog>
+                </li>
+                <li>
+                  <Dialog open={openModal === "impressum"} onOpenChange={(open) => setOpenModal(open ? "impressum" : null)}>
+                    <DialogTrigger asChild>
+                      <button className="text-sm font-medium text-[#444] hover:text-[#2C5F2E] transition-colors text-left">Impressum</button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+                      <DialogHeader>
+                        <DialogTitle>{legalContent.impressum.title}</DialogTitle>
+                      </DialogHeader>
+                      <div className="whitespace-pre-line text-sm text-[#555]">{legalContent.impressum.content}</div>
+                    </DialogContent>
+                  </Dialog>
+                </li>
+                <li>
+                  <Dialog open={openModal === "datenschutz"} onOpenChange={(open) => setOpenModal(open ? "datenschutz" : null)}>
+                    <DialogTrigger asChild>
+                      <button className="text-sm font-medium text-[#444] hover:text-[#2C5F2E] transition-colors text-left">Datenschutzerklärung</button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+                      <DialogHeader>
+                        <DialogTitle>{legalContent.datenschutz.title}</DialogTitle>
+                      </DialogHeader>
+                      <div className="whitespace-pre-line text-sm text-[#555]">{legalContent.datenschutz.content}</div>
+                    </DialogContent>
+                  </Dialog>
+                </li>
+                <li>
+                  <Dialog open={openModal === "agb"} onOpenChange={(open) => setOpenModal(open ? "agb" : null)}>
+                    <DialogTrigger asChild>
+                      <button className="text-sm font-medium text-[#444] hover:text-[#2C5F2E] transition-colors text-left">AGB</button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+                      <DialogHeader>
+                        <DialogTitle>{legalContent.agb.title}</DialogTitle>
+                      </DialogHeader>
+                      <div className="whitespace-pre-line text-sm text-[#555]">{legalContent.agb.content}</div>
+                    </DialogContent>
+                  </Dialog>
+                </li>
+              </ul>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      {/* ── Bottom copyright bar ── */}
+      <div className="bg-[#F5F5F5] border-t border-[#E0E0E0] py-5">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-[#888]">
+            <span>* Alle Preise inkl. MwSt., zzgl. Versandkosten</span>
+            <span className="font-semibold text-sm text-[#555]">Copyright © 2026 US - Fishing &amp; Huntingshop. Alle Rechte vorbehalten.</span>
+            <span className="flex items-center gap-2">
+              Design:&nbsp;<a href="https://lweb.ch" target="_blank" rel="noopener noreferrer" className="text-[#2C5F2E] font-semibold hover:underline">lweb.ch</a>
+              {onAdminOpen && (
+                <AdminLoginButton onAdminOpen={onAdminOpen} className="text-[#CCC] hover:text-[#888] ml-2" />
+              )}
+            </span>
+          </div>
+        </div>
+      </div>
 
     </footer>
   )

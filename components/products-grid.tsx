@@ -115,6 +115,7 @@ export default function ProductsGridCompact({
   const [currentImageIndex, setCurrentImageIndex] = useState<Record<number, number>>({})
   const [modalImageIndex, setModalImageIndex] = useState<number>(0)
   const [modalQuantity, setModalQuantity] = useState<number>(1)
+  const [visibleCount, setVisibleCount] = useState(20)
   const cartRef = useRef<HTMLDivElement>(null)
 
   // Note: activeCart variables will be defined after the handler functions
@@ -293,8 +294,8 @@ export default function ProductsGridCompact({
   }
 
   const getFilteredProducts = () => {
-    if (activeTab === "all") return products
-    return products.filter((product) => product.category === activeTab)
+    const base = activeTab === "all" ? products : products.filter((p) => p.category === activeTab)
+    return base.filter((p) => (p.stock ?? 1) > 0)
   }
 
   const renderHeatLevel = (level: number, size: "sm" | "lg" = "sm") => {
@@ -760,9 +761,7 @@ export default function ProductsGridCompact({
             )}
 
             <Badge
-              className={`absolute top-2 sm:top-3 left-2 sm:left-3 text-xs sm:text-sm px-2 py-1 sm:px-3 sm:py-1 font-medium shadow-lg ${
-                product.category === "bbq-sauce" ? "bg-[#B8864E] text-white" : "bg-[#2E1F0F] text-white"
-              }`}
+              className="absolute top-2 sm:top-3 left-2 sm:left-3 text-xs sm:text-sm px-2 py-1 sm:px-3 sm:py-1 font-medium shadow-lg bg-[#CC0000] text-white"
             >
               {product.badge}
             </Badge>
@@ -811,7 +810,7 @@ export default function ProductsGridCompact({
 
             <div className="border-t pt-3 sm:pt-4">
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-3 sm:mb-4 gap-2">
-                <div className="text-xl sm:text-2xl font-bold text-[#B8864E]">
+                <div className="text-xl sm:text-2xl font-bold text-[#1A1A1A]">
                   {(product.price * modalCurrentQuantity).toFixed(2)} CHF
                 </div>
                 <div className="text-xs sm:text-sm text-gray-500">Einzelpreis: {product.price.toFixed(2)} CHF</div>
@@ -853,9 +852,7 @@ export default function ProductsGridCompact({
                     ? "bg-green-600 hover:bg-green-700"
                     : (product.stock || 0) === 0
                       ? "bg-gray-500 hover:bg-gray-600"
-                      : product.category === "bbq-sauce"
-                        ? "bg-[#B8864E] hover:bg-[#2E1F0F]"
-                        : "bg-[#2E1F0F] hover:bg-[#B8864E]"
+                      : "bg-[#2C5F2E] hover:bg-[#1A4520]"
                 } disabled:opacity-50 disabled:cursor-not-allowed text-white`}
               >
                 <ShoppingCart className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
@@ -877,7 +874,7 @@ export default function ProductsGridCompact({
     return (
       <Card
         key={product.id}
-        className={`group relative bg-white border border-[#E8E0D5] hover:border-[#B8864E] hover:shadow-lg transition-all duration-500 rounded-xl overflow-hidden ${
+        className={`group relative bg-white border border-[#E0E0E0] hover:border-[#2C5F2E] hover:shadow-md transition-all duration-300 rounded-none overflow-hidden ${
           visibleProducts.has(index) ? "animate-slide-in opacity-100" : "opacity-0 translate-y-4"
         } ${addedItems.has(product.id!) ? "animate-success-glow" : ""} ${
           animatingProducts.has(product.id!) ? "animate-compress" : ""
@@ -949,13 +946,13 @@ export default function ProductsGridCompact({
 
             {/* MEJORADO: Contenido principal con mejor espaciado */}
             <div className="flex-1 min-w-0">
-                   <h4 className="text-lg lg:text-xl xl:text-2xl font-bold text-[#2E1F0F] line-clamp-1 lg:line-clamp-2 group-hover:text-[#B8864E] transition-colors duration-300 flex-1 mr-2">
+                   <h4 className="text-lg lg:text-xl xl:text-2xl font-bold text-[#1A1A1A] line-clamp-1 lg:line-clamp-2 group-hover:text-[#2C5F2E] transition-colors duration-300 flex-1 mr-2">
                   {product.name}
                 </h4>
               {/* MEJORADO: Header con título y precio mejor distribuidos */}
               <div className="flex items-start justify-between mb-2 lg:mb-3">
            
-                <div className="text-lg lg:text-xl xl:text-1xl font-bold text-[#B8864E] flex-shrink-0">{product.price.toFixed(2)} CHF</div>
+                <div className="text-lg lg:text-xl xl:text-1xl font-bold text-[#1A1A1A] flex-shrink-0">{product.price.toFixed(2)} CHF</div>
               </div>
 
               {/* MEJORADO: Descripción visible en pantallas grandes */}
@@ -1079,7 +1076,7 @@ export default function ProductsGridCompact({
     return (
       <section className="py-12 px-4 bg-white min-h-screen">
         <div className="max-w-4xl lg:max-w-7xl mx-auto text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#B8864E] mx-auto"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#2C5F2E] mx-auto"></div>
           <p className="mt-4 text-gray-600">Produkte werden geladen...</p>
         </div>
       </section>
@@ -1103,10 +1100,10 @@ export default function ProductsGridCompact({
   }
 
   const filteredProducts = getFilteredProducts()
+  const paginatedProducts = filteredProducts.slice(0, visibleCount)
 
   return (
     <>
-      <FloatingCart />
       <ShoppingCartComponent
         isOpen={isCartOpen}
         onOpenChange={setIsCartOpen}
@@ -1120,21 +1117,19 @@ export default function ProductsGridCompact({
         {/* MEJORADO: Container más ancho para pantallas grandes */}
         <div className="max-w-4xl lg:max-w-7xl mx-auto">
           {/* MEJORADO: Header con mejor tipografía */}
-          <div className="text-center mb-10 animate-fade-in-up">
-            <h3 className="text-5xl lg:text-6xl font-black tracking-tight mb-2">
-              <span className="text-[#2E1F0F]">UNSERE </span><span className="text-[#B8864E]">KOLLEKTION</span>
-            </h3>
-            <div className="w-16 h-0.5 bg-[#B8864E] mx-auto mt-4"></div>
+          <div className="mb-8 animate-fade-in-up border-b border-[#E0E0E0] pb-4">
+            <h3 className="text-2xl font-bold text-[#1A1A1A]">Empfohlene Produkte</h3>
+            <p className="text-sm text-[#666] mt-1">Für jeden Bedarf das Richtige. <button className="text-[#2C5F2E] hover:underline">Alle anzeigen</button></p>
           </div>
 
           {/* Tabs dinámicos desde la API */}
           <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-8 lg:mb-10">
             <TabsList
-              className="flex overflow-x-auto gap-2 w-full max-w-3xl mx-auto bg-white border border-[#E8E0D5] rounded-2xl p-2 shadow-sm scrollbar-hide"
+              className="flex overflow-x-auto gap-1 w-full bg-white border border-[#E0E0E0] p-1 scrollbar-hide rounded-none"
             >
               <TabsTrigger
                 value="all"
-                className="flex-shrink-0 rounded-xl data-[state=active]:bg-[#2E1F0F] data-[state=active]:text-white data-[state=active]:shadow-md font-semibold transition-all duration-300 text-sm lg:text-base px-5 py-2.5 text-[#9B9189] hover:text-[#2E1F0F] hover:bg-[#F9F7F4]"
+                className="flex-shrink-0 rounded-none data-[state=active]:bg-[#2C5F2E] data-[state=active]:text-white font-medium transition-all duration-200 text-sm px-4 py-2 text-[#555] hover:text-[#2C5F2E] hover:bg-[#F5FAF5]"
               >
                 Alle
               </TabsTrigger>
@@ -1142,7 +1137,7 @@ export default function ProductsGridCompact({
                 <TabsTrigger
                   key={cat.slug}
                   value={cat.slug}
-                  className="flex-shrink-0 rounded-xl data-[state=active]:bg-[#B8864E] data-[state=active]:text-white data-[state=active]:shadow-md font-semibold transition-all duration-300 text-sm lg:text-base px-5 py-2.5 text-[#9B9189] hover:text-[#2E1F0F] hover:bg-[#F9F7F4]"
+                  className="flex-shrink-0 rounded-none data-[state=active]:bg-[#2C5F2E] data-[state=active]:text-white font-medium transition-all duration-200 text-sm px-4 py-2 text-[#555] hover:text-[#2C5F2E] hover:bg-[#F5FAF5]"
                 >
                   {cat.name}
                 </TabsTrigger>
@@ -1156,9 +1151,9 @@ export default function ProductsGridCompact({
                 </p>
               </div>
 
-              {/* MEJORADO: Grid con mejor espaciado pero manteniendo 2 columnas en tablet */}
+              {/* Grid de productos paginado */}
               <div className="grid gap-4 lg:gap-6 xl:gap-8 md:grid-cols-2">
-                {filteredProducts.map((product, index) => renderEnhancedProductCard(product, index))}
+                {paginatedProducts.map((product, index) => renderEnhancedProductCard(product, index))}
               </div>
 
               {filteredProducts.length === 0 && !loading && (
@@ -1166,6 +1161,22 @@ export default function ProductsGridCompact({
                   <p className="text-gray-500 lg:text-lg mb-6">Keine Produkte in dieser Kategorie gefunden</p>
                   <Button onClick={() => setActiveTab("all")} className="mt-4" variant="outline" size="lg">
                     Alle anzeigen
+                  </Button>
+                </div>
+              )}
+
+              {/* Botón cargar más */}
+              {visibleCount < filteredProducts.length && (
+                <div className="text-center mt-8">
+                  <p className="text-sm text-[#666] mb-3">
+                    {paginatedProducts.length} von {filteredProducts.length} Produkten
+                  </p>
+                  <Button
+                    onClick={() => setVisibleCount((prev) => prev + 20)}
+                    variant="outline"
+                    className="border-[#2C5F2E] text-[#2C5F2E] hover:bg-[#2C5F2E] hover:text-white px-8 py-3 rounded-none font-semibold"
+                  >
+                    20 weitere Produkte anzeigen
                   </Button>
                 </div>
               )}

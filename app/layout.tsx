@@ -4,11 +4,11 @@ import { Analytics } from '@vercel/analytics/next';
 
 
 export const metadata: Metadata = {
-  title: 'Salsas.ch',
-  description: 'Die exclusivste Premium-Kollektion scharfer Saucen der Welt',
+  title: 'US - Fishing & Huntingshop',
+  description: 'Ihr Spezialist für Jagd- und Angelausrüstung. Premium Outdoor-Ausrüstung zu fairen Preisen.',
   generator: '9745 Sevelen',
   /** Color del navegador (barra de direcciones, pestañas, etc.) */
-  themeColor: '#000000',
+  themeColor: '#2C5F2E',
   icons: {
     icon: '/favicon.png',
     apple: '/icon-192x192.png',
