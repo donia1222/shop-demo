@@ -202,18 +202,6 @@ export function CategoryPreviewSection() {
             </button>
           </div>
 
-          {/* Thumbnail strip — bottom right */}
-          <div className="absolute bottom-4 right-4 flex gap-2">
-            {[
-              "/images/fischen/488932258_1259588225938735_6410340367577521871_n.jpg",
-              "/images/fischen/502738911_2659264294424381_7610663104337844293_n.jpg",
-              "/images/fischen/589527302_1466241405273415_5787096142363867948_n.jpg",
-            ].map((src, i) => (
-              <div key={i} className="w-[88px] h-[88px] rounded-xl overflow-hidden border-2 border-white/25 shadow-lg">
-                <img src={src} alt="" className="w-full h-full object-cover" />
-              </div>
-            ))}
-          </div>
 
         </div>
 
