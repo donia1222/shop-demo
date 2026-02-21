@@ -41,9 +41,10 @@ try {
         }
         
         // Agregar URLs completas de las imágenes
+        $db_image_url = $product['image_url'] ?? null; // URL guardada desde el Excel
         $image_urls = [];
         $image_fields = ['image', 'image2', 'image3', 'image4'];
-        
+
         foreach ($image_fields as $field) {
             if (!empty($product[$field])) {
                 $image_urls[] = 'https://web.lweb.ch/templettedhop/upload/' . $product[$field];
@@ -51,9 +52,22 @@ try {
                 $image_urls[] = null;
             }
         }
-        
+
         $product['image_urls'] = $image_urls;
-        $product['image_url'] = $image_urls[0]; // Mantener compatibilidad
+        $base_url = $image_urls[0] ?? $db_image_url;
+        $product['image_url'] = $base_url;
+
+        if ($base_url && !preg_match('/\.(jpg|JPG|jpeg|JPEG|png|PNG)$/', $base_url)) {
+            $product['image_url_candidates'] = [
+                $base_url . '.jpg',
+                $base_url . '.JPG',
+                $base_url . '.jpeg',
+                $base_url . '.JPEG',
+                $base_url . '.png',
+            ];
+        } else {
+            $product['image_url_candidates'] = $base_url ? [$base_url] : [];
+        }
         
         // Convertir tipos de datos
         $product['id'] = intval($product['id']);
@@ -112,9 +126,10 @@ try {
         // Procesar cada producto
         foreach ($products as &$product) {
             // Agregar URLs completas de las imágenes
+            $db_image_url = $product['image_url'] ?? null; // URL guardada desde el Excel
             $image_urls = [];
             $image_fields = ['image', 'image2', 'image3', 'image4'];
-            
+
             foreach ($image_fields as $field) {
                 if (!empty($product[$field])) {
                     $image_urls[] = 'https://web.lweb.ch/templettedhop/upload/' . $product[$field];
@@ -122,9 +137,24 @@ try {
                     $image_urls[] = null;
                 }
             }
-            
+
             $product['image_urls'] = $image_urls;
-            $product['image_url'] = $image_urls[0]; // Mantener compatibilidad
+            // Prioridad: imagen subida manualmente → URL del Excel → null
+            $base_url = $image_urls[0] ?? $db_image_url;
+            $product['image_url'] = $base_url;
+
+            // Generar variantes de extensión para que el frontend pruebe en orden
+            if ($base_url && !preg_match('/\.(jpg|JPG|jpeg|JPEG|png|PNG)$/', $base_url)) {
+                $product['image_url_candidates'] = [
+                    $base_url . '.jpg',
+                    $base_url . '.JPG',
+                    $base_url . '.jpeg',
+                    $base_url . '.JPEG',
+                    $base_url . '.png',
+                ];
+            } else {
+                $product['image_url_candidates'] = $base_url ? [$base_url] : [];
+            }
             
             // Convertir tipos de datos
             $product['id'] = intval($product['id']);

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
+import { ProductImage } from "./product-image"
 
 interface Product {
   id: number
@@ -10,6 +11,7 @@ interface Product {
   original_price?: number
   image_url?: string
   image_urls?: (string | null)[]
+  image_url_candidates?: string[]
   badge?: string
   category?: string
   stock?: number
@@ -18,18 +20,33 @@ interface Product {
 export function RecommendedProducts() {
   const router = useRouter()
   const [products, setProducts] = useState<Product[]>([])
+  const [failedIds, setFailedIds] = useState<Set<number>>(new Set())
   const [loading, setLoading] = useState(true)
+
+  const markFailed = (id: number) =>
+    setFailedIds(prev => new Set([...prev, id]))
 
   const API = process.env.NEXT_PUBLIC_API_BASE_URL
 
   useEffect(() => {
-    fetch(`${API}/get_products.php`)
-      .then((r) => r.json())
-      .then((data) => {
-        if (!data.success) return
+    let cancelled = false
+
+    const load = async (retries = 3): Promise<void> => {
+      try {
+        const r = await fetch(`${API}/get_products.php`)
+        if (!r.ok) throw new Error(`${r.status}`)
+        const data = await r.json()
+        if (!data.success || cancelled) return
+
         const allProducts: Product[] = data.products
 
-        const inStock = allProducts.filter((p) => (p.stock ?? 1) > 0)
+        const hasImage = (p: Product) =>
+          !!(p.image_url && /\.(jpg|jpeg|png|webp|gif)$/i.test(p.image_url))
+
+        const inStock = [
+          ...allProducts.filter((p) => (p.stock ?? 1) > 0 && hasImage(p)),
+          ...allProducts.filter((p) => (p.stock ?? 1) > 0 && !hasImage(p)),
+        ]
 
         const byCategory: Record<string, Product[]> = {}
         for (const p of inStock) {
@@ -39,28 +56,35 @@ export function RecommendedProducts() {
         }
 
         const selected: Product[] = []
-        const maxPerCat = 2
         for (const catProducts of Object.values(byCategory)) {
-          selected.push(...catProducts.slice(0, maxPerCat))
-          if (selected.length >= 12) break
+          selected.push(...catProducts.slice(0, 3))
+          if (selected.length >= 24) break
         }
-        if (selected.length < 12) {
-          const selectedIds = new Set(selected.map((p) => p.id))
+        if (selected.length < 24) {
+          const ids = new Set(selected.map((p) => p.id))
           for (const p of inStock) {
-            if (!selectedIds.has(p.id)) {
-              selected.push(p)
-              if (selected.length >= 12) break
-            }
+            if (!ids.has(p.id)) { selected.push(p); if (selected.length >= 24) break }
           }
         }
 
-        setProducts(selected.slice(0, 12))
-      })
-      .catch(() => {})
-      .finally(() => setLoading(false))
+        setProducts(selected.slice(0, 24))
+      } catch {
+        if (!cancelled && retries > 0) {
+          await new Promise(r => setTimeout(r, 1500))
+          return load(retries - 1)
+        }
+      } finally {
+        if (!cancelled) setLoading(false)
+      }
+    }
+
+    load()
+    return () => { cancelled = true }
   }, [])
 
-  if (loading || products.length === 0) return null
+  const visibleProducts = products.filter(p => !failedIds.has(p.id)).slice(0, 12)
+
+  if (loading || visibleProducts.length === 0) return null
 
   return (
     <section className="bg-white border-t border-[#E0E0E0] py-12">
@@ -86,12 +110,7 @@ export function RecommendedProducts() {
 
         {/* Product grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-          {products.map((product) => {
-            const img =
-              product.image_urls?.find((u) => !!u) ||
-              product.image_url ||
-              "/placeholder.svg"
-
+          {visibleProducts.map((product) => {
             const hasDiscount =
               product.original_price && product.original_price > product.price
             const discountPct = hasDiscount
@@ -110,13 +129,12 @@ export function RecommendedProducts() {
               >
                 {/* Image */}
                 <div className="relative bg-[#F8F8F8] rounded-2xl overflow-hidden aspect-square mb-3 border border-[#EFEFEF] group-hover:shadow-lg group-hover:-translate-y-1 transition-all duration-300">
-                  <img
-                    src={img as string}
+                  <ProductImage
+                    src={product.image_url}
+                    candidates={product.image_url_candidates}
                     alt={product.name}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    onError={(e) => {
-                      ;(e.target as HTMLImageElement).src = "/placeholder.svg"
-                    }}
+                    onAllFailed={() => markFailed(product.id)}
                   />
 
                   {/* Badges — top left */}

@@ -35,6 +35,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/hooks/use-toast"
+import { ProductImage } from "@/components/product-image"
 
 // Interfaces für Orders
 interface OrderItem {
@@ -100,6 +101,7 @@ interface Product {
   origin: string
   supplier: string
   image_url: string
+  image_url_candidates?: string[]
   created_at: string
 }
 
@@ -1202,8 +1204,9 @@ export function Admin({ onClose }: AdminProps) {
                 <Card key={product.id} className="rounded-2xl border-[#EBEBEB] shadow-sm hover:shadow-md transition-shadow">
                   <CardContent className="p-6">
                     <div className="flex items-start justify-between mb-4">
-                      <img
-                        src={product.image_url || "/placeholder.svg?height=80&width=80"}
+                      <ProductImage
+                        src={product.image_url}
+                        candidates={product.image_url_candidates}
                         alt={product.name}
                         className="w-20 h-20 object-cover rounded-lg"
                       />
@@ -1366,8 +1369,8 @@ export function Admin({ onClose }: AdminProps) {
                       <Card key={item.product_id}>
                         <CardContent className="p-4">
                           <div className="flex items-center space-x-4">
-                            <img
-                              src={item.product_image || "/placeholder.svg?height=60&width=60"}
+                            <ProductImage
+                              src={item.product_image}
                               alt={item.product_name}
                               className="w-15 h-15 object-cover rounded"
                             />

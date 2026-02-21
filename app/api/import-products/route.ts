@@ -27,6 +27,16 @@ function getCol(row: Record<string, unknown>, ...keys: string[]): unknown {
   return undefined
 }
 
+// Transforma la URL de imagen del formato antiguo al nuevo
+// http://usfh.ch/img/Messer/file.jpg → https://web.lweb.ch/usa/img/messer/file.jpg
+function transformImageUrl(url: string): string {
+  if (!url) return ""
+  return url.replace(
+    /^https?:\/\/usfh\.ch\/img\/([^/]+)\//i,
+    (_, folder) => `https://web.lweb.ch/usa/img/${folder.toLowerCase()}/`
+  )
+}
+
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData()
@@ -52,11 +62,58 @@ export async function POST(request: NextRequest) {
       const categorySlug = toSlug(sheetName)
       const categoryName = sheetName.trim()
 
+      // Construir mapa Artikel-Nr. → URL escaneando celdas raw de cada fila
+      // Detecta cualquier celda con http://usfh.ch/img/ (texto plano o hipervínculo)
+      const artikelToUrl = new Map<string, string>()
+      const sheetRef = ws["!ref"]
+      if (sheetRef) {
+        const range = XLSX.utils.decode_range(sheetRef)
+        // Encontrar columna Artikel-Nr.
+        let artikelCol = -1
+        for (let c = range.s.c; c <= range.e.c; c++) {
+          const h = (ws[XLSX.utils.encode_cell({ r: range.s.r, c })] as any)?.v
+          if (h === "Artikel-Nr.") { artikelCol = c; break }
+        }
+        if (artikelCol >= 0) {
+          // DEBUG: mostrar primeras 3 filas con sus celdas
+          for (let r = range.s.r + 1; r <= Math.min(range.s.r + 4, range.e.r); r++) {
+            const artCell = ws[XLSX.utils.encode_cell({ r, c: artikelCol })] as any
+            const artNr = String(artCell?.v ?? "").trim()
+            const rowCells: string[] = []
+            for (let c = range.s.c; c <= range.e.c; c++) {
+              const cell = ws[XLSX.utils.encode_cell({ r, c })] as any
+              if (cell) {
+                const val = String(cell.v ?? cell.l?.Target ?? cell.f ?? "").trim()
+                if (val) rowCells.push(`col${c}(t=${cell.t})="${val.substring(0,40)}"`)
+              }
+            }
+            console.log(`[DBG] ${sheetName} fila ${r} art="${artNr}":`, rowCells.join(" | "))
+          }
+
+          for (let r = range.s.r + 1; r <= range.e.r; r++) {
+            const artCell = ws[XLSX.utils.encode_cell({ r, c: artikelCol })] as any
+            if (!artCell) continue
+            const artNr = String(artCell.v ?? "").trim()
+            if (!artNr) continue
+            // Escanear todas las celdas de esta fila buscando URL
+            for (let c = range.s.c; c <= range.e.c; c++) {
+              const cell = ws[XLSX.utils.encode_cell({ r, c })] as any
+              if (!cell) continue
+              const val = String(cell.v ?? cell.l?.Target ?? cell.f ?? "").trim()
+              if (val.toLowerCase().includes("usfh.ch/img")) {
+                artikelToUrl.set(artNr, val)
+                break
+              }
+            }
+          }
+        }
+        console.log(`[DBG] ${sheetName}: artikelToUrl size=${artikelToUrl.size}`)
+      }
+
       for (const row of rows) {
         const id = getCol(row, "Artikel-Nr.", "ID", "id")
         const name = getCol(row, "Name", "name")
 
-        // Omitir filas sin ID o nombre
         if (!id || !name) continue
 
         const numId = parseInt(String(id), 10)
@@ -68,6 +125,15 @@ export async function POST(request: NextRequest) {
         const supplier = String(getCol(row, "Lieferant") ?? "").trim()
         const origin = String(getCol(row, "Hersteller") ?? "").trim()
 
+        // Guardar URL sin extensión — frontend prueba .jpg / .JPG / .jpeg
+        const artikelNr = String(id).trim()
+        const rawImage = artikelToUrl.get(artikelNr)
+          || String(getCol(row, "URLs der Bilder", "Bild", "Bild URL", "Image", "image_url", "Foto") ?? "").trim()
+        const folder = categorySlug.split("-")[0]
+        const image_url = rawImage
+          ? transformImageUrl(rawImage).replace(/\.(jpg|JPG|jpeg|JPEG|png|PNG)$/, "")
+          : `https://web.lweb.ch/usa/img/${folder}/${artikelNr}`
+
         allProducts.push({
           id: numId,
           name: String(name).trim(),
@@ -78,6 +144,7 @@ export async function POST(request: NextRequest) {
           origin,
           category: categorySlug,
           category_name: categoryName,
+          image_url,
         })
       }
     }

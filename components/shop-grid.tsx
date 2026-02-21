@@ -10,12 +10,13 @@ import {
 import { ShoppingCartComponent } from "./shopping-cart"
 import { CheckoutPage } from "@/components/checkout-page"
 import { LoginAuth } from "./login-auth"
+import { ProductImage } from "./product-image"
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 interface Product {
   id: number; name: string; description: string; price: number
-  image_url?: string; image_urls?: (string | null)[]
+  image_url?: string; image_urls?: (string | null)[]; image_url_candidates?: string[]
   heat_level: number; rating: number; badge: string
   origin: string; supplier?: string; category?: string; stock?: number
 }
@@ -194,12 +195,21 @@ export default function ShopGrid() {
           className="relative aspect-square bg-[#F8F8F8] overflow-hidden cursor-pointer"
           onClick={() => setSelectedProduct(product)}
         >
-          <img
-            src={images[idx] ?? "/placeholder.svg?height=300&width=300"}
-            alt={product.name}
-            className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-500"
-            onError={e => { (e.target as HTMLImageElement).src = "/placeholder.svg?height=300&width=300" }}
-          />
+          {images.length > 0 ? (
+            <img
+              src={images[idx]}
+              alt={product.name}
+              className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-500"
+              onError={e => { (e.target as HTMLImageElement).src = "/placeholder.svg?height=300&width=300" }}
+            />
+          ) : (
+            <ProductImage
+              src={product.image_url}
+              candidates={product.image_url_candidates}
+              alt={product.name}
+              className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-500"
+            />
+          )}
 
           {images.length > 1 && (
             <>
@@ -295,12 +305,21 @@ export default function ShopGrid() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2">
             <div className="bg-gray-50 p-6 flex flex-col items-center">
-              <img
-                src={images[idx] ?? "/placeholder.svg?height=400&width=400"}
-                alt={product.name}
-                className="w-full max-w-xs aspect-square object-contain"
-                onError={e => { (e.target as HTMLImageElement).src = "/placeholder.svg?height=400&width=400" }}
-              />
+              {images.length > 0 ? (
+                <img
+                  src={images[idx]}
+                  alt={product.name}
+                  className="w-full max-w-xs aspect-square object-contain"
+                  onError={e => { (e.target as HTMLImageElement).src = "/placeholder.svg?height=400&width=400" }}
+                />
+              ) : (
+                <ProductImage
+                  src={product.image_url}
+                  candidates={product.image_url_candidates}
+                  alt={product.name}
+                  className="w-full max-w-xs aspect-square object-contain"
+                />
+              )}
               {images.length > 1 && (
                 <div className="flex gap-2 mt-4">
                   {images.map((url, i) => (

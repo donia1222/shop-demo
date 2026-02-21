@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
+import { ProductImage } from "./product-image"
 
 interface Product {
   id: number
@@ -9,6 +10,7 @@ interface Product {
   price: number
   image_url?: string
   image_urls?: (string | null)[]
+  image_url_candidates?: string[]
   category?: string
   stock?: number
 }
@@ -29,20 +31,39 @@ export function CategoryPreviewSection() {
   const [products, setProducts] = useState<Product[]>([])
   const [categories, setCategories] = useState<Category[]>([])
   const [loading, setLoading] = useState(true)
+  const [failedIds, setFailedIds] = useState<Set<number>>(new Set())
+
+  const markFailed = (id: number) =>
+    setFailedIds(prev => new Set([...prev, id]))
 
   const API = process.env.NEXT_PUBLIC_API_BASE_URL
 
   useEffect(() => {
-    Promise.all([
-      fetch(`${API}/get_products.php`).then((r) => r.json()),
-      fetch(`${API}/get_categories.php`, { method: "POST" }).then((r) => r.json()),
-    ])
-      .then(([prodData, catData]) => {
+    let cancelled = false
+
+    const load = async (retries = 3): Promise<void> => {
+      try {
+        const [r1, r2] = await Promise.all([
+          fetch(`${API}/get_products.php`),
+          fetch(`${API}/get_categories.php`, { method: "POST" }),
+        ])
+        if (!r1.ok || !r2.ok) throw new Error("not ok")
+        const [prodData, catData] = await Promise.all([r1.json(), r2.json()])
+        if (cancelled) return
         if (prodData.success) setProducts(prodData.products)
         if (catData.success) setCategories(catData.categories)
-      })
-      .catch(() => {})
-      .finally(() => setLoading(false))
+      } catch {
+        if (!cancelled && retries > 0) {
+          await new Promise(r => setTimeout(r, 1500))
+          return load(retries - 1)
+        }
+      } finally {
+        if (!cancelled) setLoading(false)
+      }
+    }
+
+    load()
+    return () => { cancelled = true }
   }, [])
 
   if (loading) return null
@@ -55,7 +76,7 @@ export function CategoryPreviewSection() {
 
     const catProducts = products
       .filter((p) => p.category === apiCat.slug && (p.stock ?? 1) > 0)
-      .slice(0, 6)
+      .slice(0, 20)
 
     if (catProducts.length === 0) return []
 
@@ -67,7 +88,10 @@ export function CategoryPreviewSection() {
   return (
     <div className="bg-gradient-to-b from-[#F0F1F3] to-[#FAFAFA] border-t border-[#E0E0E0] py-12">
       <div className="container mx-auto px-4 space-y-6">
-        {sections.map(({ label, cat, products: catProducts }) => (
+        {sections.map(({ label, cat, products: catProducts }) => {
+          const visible = catProducts.filter(p => !failedIds.has(p.id)).slice(0, 6)
+          if (visible.length === 0) return null
+          return (
           <div key={cat} className="bg-white rounded-2xl border border-[#EBEBEB] shadow-sm overflow-hidden">
 
             {/* Header */}
@@ -87,13 +111,9 @@ export function CategoryPreviewSection() {
               </button>
             </div>
 
-            {/* 6 product cards */}
+            {/* 6 product cards con imagen */}
             <div className="p-5 grid grid-cols-3 sm:grid-cols-6 gap-4">
-              {catProducts.map((product) => {
-                const img =
-                  product.image_urls?.find((u) => !!u) ||
-                  product.image_url ||
-                  "/placeholder.svg"
+              {visible.map((product) => {
                 return (
                   <div
                     key={product.id}
@@ -101,13 +121,12 @@ export function CategoryPreviewSection() {
                     className="cursor-pointer group"
                   >
                     <div className="bg-[#F8F8F8] rounded-xl overflow-hidden aspect-square border border-[#EFEFEF] group-hover:shadow-lg group-hover:-translate-y-0.5 transition-all duration-300">
-                      <img
-                        src={img as string}
+                      <ProductImage
+                        src={product.image_url}
+                        candidates={product.image_url_candidates}
                         alt={product.name}
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                        onError={(e) => {
-                          ;(e.target as HTMLImageElement).src = "/placeholder.svg"
-                        }}
+                        onAllFailed={() => markFailed(product.id)}
                       />
                     </div>
                     <p className="text-xs text-center text-[#1A1A1A] font-semibold mt-2 leading-tight line-clamp-2 px-0.5">
@@ -133,78 +152,69 @@ export function CategoryPreviewSection() {
               </button>
             </div>
           </div>
-        ))}
+          )
+        })}
 
         {/* ── Angeln & Fischen Banner ── */}
-        <div className="relative overflow-hidden rounded-2xl" style={{ minHeight: "360px" }}>
-          {/* Deep background */}
-          <div className="absolute inset-0 bg-gradient-to-br from-[#040f1c] via-[#0a1a2e] to-[#0d2340]" />
+        <div className="relative rounded-2xl overflow-hidden h-[420px] group">
 
-          {/* Background image grid */}
-          <div className="absolute inset-0 grid grid-cols-3 grid-rows-2 gap-0.5 opacity-20">
+          {/* Background image */}
+          <img
+            src="/images/fischen/472679633_1183608080203417_7913441867178334031_n.jpg"
+            alt="Angeln & Fischen"
+            className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+          />
+
+          {/* Gradient overlay: dark on left, fade to transparent on right */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#04111f] via-[#04111f]/80 to-[#04111f]/20" />
+          {/* Bottom fade for thumbnails */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#04111f]/70 via-transparent to-transparent" />
+
+          {/* Text content — left side */}
+          <div className="relative h-full flex flex-col justify-center px-10 max-w-lg gap-5">
+            <span className="inline-flex items-center gap-1.5 self-start bg-[#5BC8E8]/20 text-[#5BC8E8] border border-[#5BC8E8]/40 text-[11px] font-bold uppercase tracking-[0.15em] px-3 py-1.5 rounded-full">
+              🎣 Angeln & Fischen
+            </span>
+
+            <h2 className="text-white font-black text-4xl leading-[1.1]" style={{ letterSpacing: "-0.02em" }}>
+              Alles für den<br />
+              <span className="text-[#5BC8E8]">perfekten Angeltag</span>
+            </h2>
+
+            <p className="text-white/65 text-sm leading-relaxed max-w-xs">
+              Ruten, Rollen, Köder und Zubehör — Top-Qualität für Angler aller Niveaus.
+            </p>
+
+            <div className="flex gap-7">
+              {[["500+", "Produkte"], ["Top", "Qualität"], ["Gratis", "Beratung"]].map(([val, lbl]) => (
+                <div key={lbl}>
+                  <p className="text-white font-black text-lg leading-none">{val}</p>
+                  <p className="text-white/45 text-[11px] mt-1">{lbl}</p>
+                </div>
+              ))}
+            </div>
+
+            <button
+              onClick={() => router.push("/shop")}
+              className="self-start bg-[#5BC8E8] text-[#04111f] font-bold px-6 py-3 text-sm hover:bg-white transition-all duration-200 rounded-xl inline-flex items-center gap-2 shadow-xl"
+            >
+              Jetzt entdecken →
+            </button>
+          </div>
+
+          {/* Thumbnail strip — bottom right */}
+          <div className="absolute bottom-4 right-4 flex gap-2">
             {[
-              "/images/fischen/472679633_1183608080203417_7913441867178334031_n.jpg",
               "/images/fischen/488932258_1259588225938735_6410340367577521871_n.jpg",
               "/images/fischen/502738911_2659264294424381_7610663104337844293_n.jpg",
-              "/images/fischen/502954352_2659264274424383_4010680107724982762_n.jpg",
-              "/images/fischen/503264101_2659264021091075_8537894800997994009_n.jpg",
               "/images/fischen/589527302_1466241405273415_5787096142363867948_n.jpg",
             ].map((src, i) => (
-              <img key={i} src={src} alt="" className="w-full h-full object-cover" />
+              <div key={i} className="w-[88px] h-[88px] rounded-xl overflow-hidden border-2 border-white/25 shadow-lg">
+                <img src={src} alt="" className="w-full h-full object-cover" />
+              </div>
             ))}
           </div>
 
-          {/* Gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#040f1c]/98 via-[#0a1a2e]/80 to-transparent" />
-
-          {/* Ambient glow */}
-          <div className="absolute -right-20 -top-20 w-96 h-96 bg-[#1A6B8A]/15 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute right-1/3 bottom-0 w-64 h-32 bg-[#1A6B8A]/10 rounded-full blur-2xl pointer-events-none" />
-
-          {/* Text content */}
-          <div className="relative z-10 flex items-center h-full p-8 md:p-14" style={{ minHeight: "360px" }}>
-            <div className="max-w-lg">
-              <span className="inline-flex items-center gap-2 bg-[#1A6B8A]/25 backdrop-blur-sm text-[#5BC8E8] border border-[#1A6B8A]/40 text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-6">
-                <span className="w-1.5 h-1.5 bg-[#5BC8E8] rounded-full animate-pulse" />
-                Angeln & Fischen
-              </span>
-              <h2
-                className="text-white font-black leading-tight mb-4"
-                style={{ fontSize: "clamp(1.8rem, 3.5vw, 2.9rem)", letterSpacing: "-0.02em" }}
-              >
-                Alles für den<br />
-                <span className="text-[#5BC8E8]">perfekten Angeltag</span>
-              </h2>
-              <p className="text-white/60 text-sm md:text-base mb-8 leading-relaxed">
-                Ruten, Rollen, Köder und Zubehör —<br />
-                Top-Qualität für Angler aller Niveaus.
-              </p>
-              <div className="flex flex-wrap gap-3">
-                <button
-                  onClick={() => router.push("/shop")}
-                  className="bg-white text-[#0a1a2e] font-bold px-7 py-3 text-sm hover:bg-[#e8f4f8] transition-all rounded-full inline-flex items-center gap-2 shadow-lg"
-                >
-                  Jetzt entdecken <span>→</span>
-                </button>
-                <button
-                  onClick={() => router.push("/shop")}
-                  className="border border-white/20 hover:border-white/45 text-white/70 hover:text-white font-medium px-6 py-3 text-sm rounded-full transition-all"
-                >
-                  Alle Angebote
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Right: featured fishing photo — desktop only */}
-          <div className="absolute right-0 top-0 bottom-0 w-1/2 hidden md:block pointer-events-none">
-            <img
-              src="/images/fischen/132081708_1370015766682580_118186262331184813_n.jpg"
-              alt="Angeln & Fischen"
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-l from-transparent via-[#0a1a2e]/15 to-[#040f1c]/92" />
-          </div>
         </div>
 
       </div>

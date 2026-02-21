@@ -11,6 +11,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Flame, Star, ShoppingCart, Minus, Plus, MapPin, Award, Info, ChevronLeft, ChevronRight } from "lucide-react"
 import { ShoppingCartComponent } from "./shopping-cart"
 import { CheckoutPage } from "@/components/checkout-page"
+import { ProductImage } from "./product-image"
 
 // Actualizar la interfaz para incluir category y stock
 interface Product {
@@ -21,6 +22,7 @@ interface Product {
   image?: string
   image_url?: string // Ensure this is properly typed
   image_urls?: (string | null)[] // Array de URLs de imágenes
+  image_url_candidates?: string[]
   heatLevel: number
   rating: number
   badge: string
@@ -40,6 +42,7 @@ interface ApiProduct {
   image?: string
   image_url?: string
   image_urls?: (string | null)[] // Array de URLs de imágenes
+  image_url_candidates?: string[]
   heat_level: number
   rating: number
   badge: string
@@ -275,7 +278,7 @@ export default function ProductsGridCompact({
             heatLevel: product.heat_level || 0,
             stock: product.stock || 0,
             image_url: product.image_url || product.image || "/placeholder.svg",
-            image_urls: product.image_urls || [product.image_url || product.image || "/placeholder.svg"],
+            image_urls: product.image_urls || [],
           }
         })
         setProducts(normalizedProducts)
@@ -350,17 +353,8 @@ export default function ProductsGridCompact({
   }, [])
 
   const getValidImages = (product: Product): string[] => {
-    const validImages = (product.image_urls || [])
+    return (product.image_urls || [])
       .filter((url): url is string => url !== null && url !== undefined && url !== "" && typeof url === 'string')
-    // Debug: Log para verificar las imágenes
-    if (product.id && validImages.length > 0) {
-      console.log(`Producto ${product.name} (ID: ${product.id}):`, {
-        image_urls: product.image_urls,
-        validImages: validImages,
-        count: validImages.length
-      })
-    }
-    return validImages
   }
 
 
@@ -494,8 +488,9 @@ export default function ProductsGridCompact({
         box-shadow: 0 20px 40px rgba(46, 31, 15, 0.4);
         border: 3px solid white;
       ">
-        <img src="${product.image_url || "/placeholder.svg"}" alt="${product.name}"
-             style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;" />
+        <img src="${product.image_url ? product.image_url + '.jpg' : '/placeholder.svg'}" alt="${product.name}"
+             style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;"
+             onerror="var e=['jpg','JPG','jpeg','JPEG','png'];var b=(this.dataset.base||this.src).replace(/\\.(jpg|JPG|jpeg|JPEG|png)$/,'');this.dataset.base=b;var i=e.indexOf(this.src.split('.').pop());if(i+1<e.length){this.src=b+'.'+e[i+1];}else{this.onerror=null;this.src='/placeholder.svg';}" />
         <div style="
           position: absolute;
           top: -8px;
@@ -689,15 +684,24 @@ export default function ProductsGridCompact({
           {/* Galería de imágenes */}
           <div className="relative order-1 lg:order-none">
             <div className="relative overflow-hidden rounded-lg sm:rounded-xl shadow-lg">
-              <img
-                src={validImages[modalCurrentImageIndex] ?? "/placeholder.svg?height=300&width=300"}
-                alt={`${product.name} - Imagen ${modalCurrentImageIndex + 1}`}
-                className="w-full h-48 sm:h-64 md:h-72 lg:h-80 object-cover transition-transform duration-300"
-                onError={(e) => {
-                  const target = e.target as HTMLImageElement
-                  target.src = "/placeholder.svg?height=300&width=300"
-                }}
-              />
+              {validImages.length > 0 ? (
+                <img
+                  src={validImages[modalCurrentImageIndex]}
+                  alt={`${product.name} - Imagen ${modalCurrentImageIndex + 1}`}
+                  className="w-full h-48 sm:h-64 md:h-72 lg:h-80 object-cover transition-transform duration-300"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement
+                    target.src = "/placeholder.svg?height=300&width=300"
+                  }}
+                />
+              ) : (
+                <ProductImage
+                  src={product.image_url}
+                  candidates={product.image_url_candidates}
+                  alt={product.name}
+                  className="w-full h-48 sm:h-64 md:h-72 lg:h-80 object-cover transition-transform duration-300"
+                />
+              )}
               
               {/* Navegación de imágenes */}
               {hasMultipleImages && (
@@ -887,15 +891,24 @@ export default function ProductsGridCompact({
             {/* MEJORADO: Imagen con carousel */}
             <div className="relative w-20 h-20 lg:w-32 lg:h-32 flex-shrink-0">
               <div className="relative w-full h-full rounded-lg overflow-hidden">
-                <img
-                  src={validImages[currentIndex] ?? "/placeholder.svg?height=128&width=128"}
-                  alt={`${product.name} - Imagen ${currentIndex + 1}`}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 shadow-md"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement
-                    target.src = "/placeholder.svg?height=128&width=128"
-                  }}
-                />
+                {validImages.length > 0 ? (
+                  <img
+                    src={validImages[currentIndex]}
+                    alt={`${product.name} - Imagen ${currentIndex + 1}`}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 shadow-md"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement
+                      target.src = "/placeholder.svg?height=128&width=128"
+                    }}
+                  />
+                ) : (
+                  <ProductImage
+                    src={product.image_url}
+                    candidates={product.image_url_candidates}
+                    alt={product.name}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 shadow-md"
+                  />
+                )}
                 
                 {/* Navegación de imágenes solo visible en hover */}
                 {hasMultipleImages && (
