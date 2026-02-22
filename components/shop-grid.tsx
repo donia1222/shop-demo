@@ -178,6 +178,7 @@ export default function ShopGrid() {
 
   const [search, setSearch]                 = useState("")
   const [activeCategory, setActiveCategory] = useState("all")
+  const [activeSupplier, setActiveSupplier] = useState("all")
   const [stockFilter, setStockFilter]       = useState<"all" | "out_of_stock">("all")
   const [sortBy, setSortBy]                 = useState<"default"|"name_asc"|"name_desc"|"price_asc"|"price_desc">("default")
   const [sidebarOpen, setSidebarOpen]       = useState(false)
@@ -197,7 +198,7 @@ export default function ShopGrid() {
   const [showWishlist, setShowWishlist] = useState(false)
 
   useEffect(() => { loadProducts(); loadCategories(); loadCart(); loadWishlist() }, [])
-  useEffect(() => { setVisibleCount(PAGE_SIZE) }, [search, activeCategory, stockFilter, sortBy])
+  useEffect(() => { setVisibleCount(PAGE_SIZE) }, [search, activeCategory, activeSupplier, stockFilter, sortBy])
 
   // Apply category filter from URL param once categories are loaded
   useEffect(() => {
@@ -297,13 +298,18 @@ export default function ShopGrid() {
     setCart([]); setCartCount(0)
     localStorage.removeItem("cantina-cart"); localStorage.removeItem("cantina-cart-count")
   }
+  const suppliers = Array.from(
+    new Set(products.map(p => p.supplier).filter((s): s is string => !!s && s.trim() !== ""))
+  ).sort()
+
   const filtered = products
     .filter(p => {
       if (showWishlist) return wishlist.has(p.id)
       const matchSearch   = !search || p.name.toLowerCase().includes(search.toLowerCase()) || p.description.toLowerCase().includes(search.toLowerCase())
       const matchCategory = activeCategory === "all" || p.category === activeCategory
+      const matchSupplier = activeSupplier === "all" || p.supplier === activeSupplier
       const matchStock    = stockFilter === "out_of_stock" ? (p.stock ?? 0) === 0 : (p.stock ?? 0) > 0
-      return matchSearch && matchCategory && matchStock
+      return matchSearch && matchCategory && matchSupplier && matchStock
     })
     .sort((a, b) => {
       switch (sortBy) {
@@ -620,7 +626,7 @@ export default function ShopGrid() {
 
               {(!showWishlist && (activeCategory !== "all" || stockFilter !== "all" || search)) && (
                 <button
-                  onClick={() => { setActiveCategory("all"); setStockFilter("all"); setSearch("") }}
+                  onClick={() => { setActiveCategory("all"); setActiveSupplier("all"); setStockFilter("all"); setSearch("") }}
                   className="w-full text-xs font-semibold text-[#CC0000]/70 hover:text-[#CC0000] transition-colors text-left flex items-center gap-1.5 pt-1"
                 >
                   <X className="w-3 h-3" /> Filter zurücksetzen
@@ -715,7 +721,38 @@ export default function ShopGrid() {
               </div>
             </div>
 
-            {/* ── Search — mobile only, below pills ── */}
+            {/* ── Supplier badges — scroll horizontal ── */}
+            {suppliers.length > 0 && (
+              <div className="overflow-x-auto mb-4 -mx-1 px-1">
+                <div className="flex gap-2 min-w-max pb-1">
+                  <button
+                    onClick={() => setActiveSupplier("all")}
+                    className={`px-3.5 py-1.5 text-xs font-bold rounded-full transition-all whitespace-nowrap border ${
+                      activeSupplier === "all"
+                        ? "bg-[#1A1A1A] text-white border-[#1A1A1A]"
+                        : "bg-white text-[#555] border-[#E5E5E5] hover:border-[#999] hover:text-[#1A1A1A]"
+                    }`}
+                  >
+                    Alle Marken
+                  </button>
+                  {suppliers.map(supplier => (
+                    <button
+                      key={supplier}
+                      onClick={() => setActiveSupplier(prev => prev === supplier ? "all" : supplier)}
+                      className={`px-3.5 py-1.5 text-xs font-bold rounded-full transition-all whitespace-nowrap border tracking-wide uppercase ${
+                        activeSupplier === supplier
+                          ? "bg-[#2C5F2E] text-white border-[#2C5F2E] shadow-sm"
+                          : "bg-white text-[#555] border-[#E5E5E5] hover:border-[#2C5F2E]/50 hover:text-[#2C5F2E]"
+                      }`}
+                    >
+                      {supplier}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* ── Search — mobile only, below brand badges ── */}
             <div className="sm:hidden relative mb-4">
               <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9CA3AF] pointer-events-none" />
               <input
@@ -765,7 +802,7 @@ export default function ShopGrid() {
                 ) : (
                   <>
                     <p className="text-lg font-bold text-gray-300 mb-3">Keine Produkte gefunden</p>
-                    <button onClick={() => { setSearch(""); setActiveCategory("all"); setStockFilter("all") }} className="text-sm font-semibold text-gray-500 hover:text-gray-900 transition-colors">
+                    <button onClick={() => { setSearch(""); setActiveCategory("all"); setActiveSupplier("all"); setStockFilter("all") }} className="text-sm font-semibold text-gray-500 hover:text-gray-900 transition-colors">
                       Filter zurücksetzen
                     </button>
                   </>
