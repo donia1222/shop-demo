@@ -164,14 +164,6 @@ export function HeroSection() {
                   key={`${copy}-${brand.name}`}
                   className="flex-shrink-0 mx-[5px] px-4 py-2 rounded-full border border-[#EBEBEB] bg-white flex flex-col items-center gap-1 select-none"
                 >
-                  {brand.domain && (
-                    <img
-                      src={`https://logo.clearbit.com/${brand.domain}`}
-                      alt={brand.name}
-                      className="h-5 w-auto object-contain"
-                      onError={(e) => { e.currentTarget.style.display = "none" }}
-                    />
-                  )}
                   <span className={brand.style}>{brand.name}</span>
                 </div>
               ))

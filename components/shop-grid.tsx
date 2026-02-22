@@ -638,6 +638,15 @@ export default function ShopGrid() {
           {/* ── Main ── */}
           <main className="flex-1 min-w-0">
 
+            {/* ── Category section title ── */}
+            <div className="hidden lg:flex items-start gap-3 mb-3">
+              <div className="w-1 self-stretch bg-[#2C5F2E] rounded-full flex-shrink-0" />
+              <div>
+                <p className="font-black text-[#1A1A1A] text-base leading-tight">Unsere Kategorien</p>
+                <p className="text-xs text-[#999] mt-0.5">Jagd, Angeln & Outdoor-Ausrüstung</p>
+              </div>
+            </div>
+
             {/* ── Category image banners — desktop only ── */}
             {(() => {
               const CAT_IMAGES: Record<string, string> = {
@@ -721,19 +730,30 @@ export default function ShopGrid() {
               </div>
             </div>
 
+            {/* ── Supplier section title ── */}
+            {suppliers.length > 0 && (
+              <div className="hidden lg:flex items-start gap-3 mb-3">
+                <div className="w-1 self-stretch bg-[#2C5F2E] rounded-full flex-shrink-0" />
+                <div>
+                  <p className="font-black text-[#1A1A1A] text-base leading-tight">Unsere Lieferanten</p>
+                  <p className="text-xs text-[#999] mt-0.5">Qualitätsmarken aus aller Welt</p>
+                </div>
+              </div>
+            )}
+
             {/* ── Supplier badges — scroll horizontal ── */}
             {suppliers.length > 0 && (
-              <div className="overflow-x-auto mb-4 -mx-1 px-1">
-                <div className="flex gap-2 min-w-max pb-1">
+              <div className="overflow-x-auto mb-3 -mx-1 px-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                <div className="flex items-center gap-1.5 min-w-max pb-1">
                   <button
                     onClick={() => setActiveSupplier("all")}
-                    className={`px-3 py-1 text-[11px] font-black rounded-full transition-all whitespace-nowrap border tracking-wider ${
+                    className={`px-2 py-0.5 transition-all whitespace-nowrap ${
                       activeSupplier === "all"
-                        ? "bg-[#1A1A1A] text-white border-[#1A1A1A] shadow-sm"
-                        : "bg-white text-[#555] border-[#E5E5E5] hover:border-[#999] hover:text-[#1A1A1A]"
+                        ? "underline underline-offset-2"
+                        : "opacity-50 hover:opacity-100"
                     }`}
                   >
-                    ALLE
+                    <span className="text-[10px] sm:text-sm uppercase text-[#555] font-black tracking-wider">ALLE</span>
                   </button>
                   {suppliers.map(supplier => {
                     const isActive = activeSupplier === supplier
@@ -753,18 +773,18 @@ export default function ShopGrid() {
                       "SYTONG":       "text-[#003087] font-black tracking-wider",
                       "WILTEC":       "text-[#555] font-black tracking-wide",
                     }
-                    const textStyle = STYLES[supplier] ?? "text-[#333] font-bold"
+                    const textStyle = STYLES[supplier.toUpperCase()] ?? STYLES[supplier] ?? "text-[#333] font-bold"
                     return (
                       <button
                         key={supplier}
                         onClick={() => setActiveSupplier(prev => prev === supplier ? "all" : supplier)}
-                        className={`px-3 py-1 text-[11px] rounded-full transition-all whitespace-nowrap border uppercase ${
-                          isActive
-                            ? "bg-[#1A1A1A] text-white border-[#1A1A1A] shadow-sm"
-                            : `bg-white border-[#E5E5E5] hover:border-[#AAAAAA] hover:shadow-sm ${textStyle}`
+                        className={`px-2 py-0.5 transition-all whitespace-nowrap ${
+                          isActive ? "underline underline-offset-2" : "opacity-50 hover:opacity-100"
                         }`}
                       >
-                        {supplier}
+                        <span className={`text-[10px] sm:text-sm uppercase ${textStyle}`}>
+                          {supplier}
+                        </span>
                       </button>
                     )
                   })}
