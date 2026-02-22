@@ -172,7 +172,7 @@ export default function ProductPage() {
           <div className="w-px h-6 bg-[#E5E5E5] flex-shrink-0" />
           <p className="text-sm font-semibold text-[#1A1A1A] truncate">{product.name}</p>
           <button
-            onClick={() => router.push("/shop")}
+            onClick={() => router.push("/?checkout=true")}
             className="ml-auto relative flex items-center justify-center w-10 h-10 hover:bg-[#F5F5F5] rounded-xl transition-colors flex-shrink-0"
           >
             <ShoppingCart className="w-5 h-5 text-[#555]" />

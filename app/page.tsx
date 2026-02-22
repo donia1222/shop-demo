@@ -1,6 +1,7 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, Suspense } from "react"
+import { useSearchParams } from "next/navigation"
 import { Header } from "@/components/header"
 import { HeroSection } from "@/components/hero-section"
 import { CategoryPreviewSection } from "@/components/category-preview-section"
@@ -48,13 +49,15 @@ interface CartItem extends Product {
   discount?: number
 }
 
-export default function PremiumHotSauceStore() {
+function PremiumHotSauceStoreInner() {
   const [cart, setCart] = useState<CartItem[]>([])
   const [isCartOpen, setIsCartOpen] = useState(false)
   const [purchasedItems, setPurchasedItems] = useState<Set<number>>(new Set())
   const [purchasedCombos, setPurchasedCombos] = useState<Set<string>>(new Set())
   const [currentPage, setCurrentPage] = useState<"store" | "checkout" | "admin">("store")
   const [isInitialLoad, setIsInitialLoad] = useState(true)
+
+  const searchParams = useSearchParams()
 
   // 💾 Cargar carrito desde localStorage al iniciar
   useEffect(() => {
@@ -67,6 +70,9 @@ export default function PremiumHotSauceStore() {
     } catch {}
     localStorage.removeItem('cart-should-be-cleared')
     setIsInitialLoad(false)
+    if (searchParams.get("checkout") === "true") {
+      setCurrentPage("checkout")
+    }
   }, [])
 
 
@@ -327,5 +333,13 @@ export default function PremiumHotSauceStore() {
 
       <Footer onAdminOpen={goToAdmin} />
     </div>
+  )
+}
+
+export default function PremiumHotSauceStore() {
+  return (
+    <Suspense>
+      <PremiumHotSauceStoreInner />
+    </Suspense>
   )
 }

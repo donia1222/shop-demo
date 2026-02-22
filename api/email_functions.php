@@ -15,14 +15,14 @@ function sendInvoiceConfirmationEmail($data) {
     // Configuración de emails
     $toStore = 'info@lweb.ch';
     $toCustomer = $customerInfo['email'];
-    $fromEmail = 'info@cantinatexmex.ch';
+    $fromEmail = 'info@lweb.ch';
     
     // ===== EMAIL PARA LA TIENDA (Factura) =====
-    $storeSubject = '🧾 NUEVA ORDEN FACTURA - Salsas.ch - ' . $orderNumber;
+    $storeSubject = '🎣 NEUE BESTELLUNG - US Fishing & Huntingshop - ' . $orderNumber;
     $storeEmailContent = generateStoreInvoiceEmail($customerInfo, $billingAddress, $cart, $total, $orderNumber);
-    
+
     // ===== EMAIL PARA EL CLIENTE (Factura) =====
-    $customerSubject = '📄 Bestellbestätigung - Rechnung - Salsas.ch';
+    $customerSubject = '✅ Bestellbestätigung - US Fishing & Huntingshop';
     $customerEmailContent = generateCustomerInvoiceEmail($customerInfo, $billingAddress, $cart, $total, $orderNumber);
     
     // Headers para emails HTML
@@ -52,46 +52,50 @@ function generateStoreInvoiceEmail($customerInfo, $billingAddress, $cart, $total
     foreach ($cart as $item) {
         $subtotal += $item['price'] * $item['quantity'];
     }
-    
+
     $content = "
     <!DOCTYPE html>
     <html>
     <head>
         <meta charset='UTF-8'>
         <style>
-            body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-            .header { background-color: #16a34a; color: white; padding: 20px; text-align: center; }
-            .content { padding: 20px; }
-            .urgent { background-color: #fef3c7; padding: 15px; margin: 15px 0; border-radius: 5px; border-left: 4px solid #f59e0b; }
-            .order-details { background-color: #f8f9fa; padding: 15px; margin: 15px 0; border-radius: 5px; }
-            .customer-info { background-color: #e7f3ff; padding: 15px; margin: 15px 0; border-radius: 5px; }
+            body { font-family: Arial, sans-serif; line-height: 1.6; color: #2d2d2d; background-color: #f5f0e8; }
+            .header { background-color: #3b2a1a; color: white; padding: 24px 20px; text-align: center; }
+            .header img { width: 160px; height: 160px; object-fit: contain; margin-bottom: 10px; }
+            .header h1 { margin: 0; font-size: 22px; letter-spacing: 1px; }
+            .header p { margin: 4px 0 0; color: #d4b896; font-size: 14px; }
+            .content { padding: 24px; max-width: 600px; margin: 0 auto; }
+            .urgent { background-color: #fff8e7; padding: 15px; margin: 15px 0; border-radius: 6px; border-left: 4px solid #c8861a; }
+            .order-details { background-color: #ffffff; padding: 15px; margin: 15px 0; border-radius: 6px; border: 1px solid #ddd; }
+            .customer-info { background-color: #eef4f0; padding: 15px; margin: 15px 0; border-radius: 6px; border: 1px solid #c5d9c8; }
             .product-item { border-bottom: 1px solid #eee; padding: 10px 0; }
-            .total { font-weight: bold; font-size: 18px; color: #16a34a; }
-            .next-steps { background-color: #dcfce7; padding: 15px; margin: 15px 0; border-radius: 5px; }
+            .total { font-weight: bold; font-size: 18px; color: #3b2a1a; }
+            .next-steps { background-color: #eef4f0; padding: 15px; margin: 15px 0; border-radius: 6px; border: 1px solid #c5d9c8; }
+            .footer { text-align: center; margin-top: 24px; padding: 16px; background-color: #3b2a1a; color: #d4b896; font-size: 13px; border-radius: 6px; }
         </style>
     </head>
     <body>
         <div class='header'>
-            <h1>📄 NEUE RECHNUNG - Salsas.ch</h1>
-            <p>Kauf auf Rechnung - Rechnung per Post senden!</p>
+            <img src='https://online-shop-seven-delta.vercel.app/Security_n.png' alt='US - Fishing &amp; Huntingshop' />
+            <h1>🎣 NEUE BESTELLUNG - US Fishing &amp; Huntingshop</h1>
+            <p>Kauf auf Rechnung &amp; Vorkasse — Bitte Kunden kontaktieren!</p>
         </div>
-        
+
         <div class='content'>
             <div class='urgent'>
-                <h2>📄 RECHNUNG ERSTELLEN UND VERSENDEN</h2>
-                <p><strong>Neue Bestellung mit Kauf auf Rechnung</strong></p>
+                <h2>⚠️ AKTION ERFORDERLICH</h2>
+                <p><strong>Neue Bestellung eingegangen — Kunden so bald wie möglich kontaktieren!</strong></p>
                 <p>Bestellnummer: <strong>{$orderNumber}</strong></p>
-                <p><strong>⚠️ WICHTIG: Rechnung per Post an Kunde senden!</strong></p>
+                <p>📧 E-Mail: <strong>{$customerInfo['email']}</strong> &nbsp;|&nbsp; 📞 Telefon: <strong>{$customerInfo['phone']}</strong></p>
+                <p>Bitte nehmen Sie Kontakt auf, um die Bestellung und Zahlung abzuschließen.</p>
             </div>
 
             <div class='order-details'>
                 <h2>💳 Zahlungsdetails</h2>
-                <p><strong>Zahlungsart:</strong> Kauf auf Rechnung</p>
+                <p><strong>Zahlungsart:</strong> Kauf auf Rechnung &amp; Vorkasse</p>
                 <p><strong>Bestellnummer:</strong> {$orderNumber}</p>
                 <p><strong>Datum:</strong> " . date('d.m.Y H:i') . "</p>
-                <p><strong>Status:</strong> 📄 RECHNUNG ERFORDERLICH</p>
                 <p><strong>Betrag:</strong> <span class='total'>{$total} CHF</span></p>
-                <p><strong>Zahlungsziel:</strong> 30 Tage ab Rechnungsdatum</p>
             </div>
 
             <div class='customer-info'>
@@ -104,12 +108,11 @@ function generateStoreInvoiceEmail($customerInfo, $billingAddress, $cart, $total
                 <p>{$customerInfo['address']}</p>
                 <p>{$customerInfo['postalCode']} {$customerInfo['city']}</p>
                 <p><strong>Kanton:</strong> {$customerInfo['canton']}</p>";
-    
-    // Agregar dirección de facturación si es diferente
+
     if ($billingAddress) {
         $content .= "
                 <h3>💳 Rechnungsadresse (ANDERS ALS LIEFERADRESSE):</h3>
-                <p style='background-color: #fef3c7; padding: 10px; border-radius: 5px; border-left: 4px solid #f59e0b;'>
+                <p style='background-color: #fff8e7; padding: 10px; border-radius: 5px; border-left: 4px solid #c8861a;'>
                     <strong>⚠️ WICHTIG: Rechnung an andere Adresse senden!</strong>
                 </p>
                 <p><strong>{$billingAddress['firstName']} {$billingAddress['lastName']}</strong></p>
@@ -121,19 +124,17 @@ function generateStoreInvoiceEmail($customerInfo, $billingAddress, $cart, $total
                 <h3>💳 Rechnungsadresse:</h3>
                 <p><em>Gleich wie Lieferadresse</em></p>";
     }
-    
-    $content .= "";
-    
+
     if (!empty($customerInfo['notes'])) {
         $content .= "<p><strong>⚠️ Besondere Hinweise:</strong> {$customerInfo['notes']}</p>";
     }
-    
+
     $content .= "
             </div>
 
             <div class='order-details'>
-                <h2>🛒 Zu versendende Produkte</h2>";
-    
+                <h2>🛒 Bestellte Produkte</h2>";
+
     foreach ($cart as $item) {
         $itemTotal = $item['price'] * $item['quantity'];
         $content .= "
@@ -143,9 +144,9 @@ function generateStoreInvoiceEmail($customerInfo, $billingAddress, $cart, $total
                     <p><em>{$item['description']}</em></p>
                 </div>";
     }
-    
+
     $content .= "
-                <div style='margin-top: 20px; padding-top: 15px; border-top: 2px solid #16a34a;'>
+                <div style='margin-top: 20px; padding-top: 15px; border-top: 2px solid #3b2a1a;'>
                     <p><strong>Zwischensumme:</strong> {$subtotal} CHF</p>
                     <p><strong>Versand:</strong> Kostenlos</p>
                     <p class='total'>GESAMT: {$total} CHF</p>
@@ -153,20 +154,21 @@ function generateStoreInvoiceEmail($customerInfo, $billingAddress, $cart, $total
             </div>
 
             <div class='next-steps'>
-                <h3>📄 Nächste Schritte - RECHNUNG</h3>
-                <p>📋 1. Bestellung bearbeiten und Versand vorbereiten</p>
-                <p>📄 2. RECHNUNG ERSTELLEN mit 30 Tagen Zahlungsziel</p>
-                <p>📮 3. Rechnung per Post senden an:</p>
-                <p style='margin-left: 20px;'><strong>{$customerInfo['firstName']} {$customerInfo['lastName']}</strong><br>
-                   {$customerInfo['address']}<br>
-                   {$customerInfo['postalCode']} {$customerInfo['city']}</p>
-                <p>📦 4. Ware nach Zahlungseingang oder mit Rechnung versenden</p>
-                <p>📧 5. Tracking-Nummer an Kunde senden: {$customerInfo['email']}</p>
+                <h3>📋 Nächste Schritte</h3>
+                <p>📞 1. Kunden kontaktieren per E-Mail oder Telefon</p>
+                <p>💬 2. Zahlungsmodalitäten mit Kunden abklären (Rechnung / Vorkasse)</p>
+                <p>📦 3. Bestellung vorbereiten und versenden</p>
+                <p>📧 4. Tracking-Nummer an Kunde senden: {$customerInfo['email']}</p>
+            </div>
+
+            <div class='footer'>
+                <p><strong>US - Fishing &amp; Huntingshop</strong></p>
+                <p>info@lweb.ch</p>
             </div>
         </div>
     </body>
     </html>";
-    
+
     return $content;
 }
 
@@ -175,70 +177,70 @@ function generateCustomerInvoiceEmail($customerInfo, $billingAddress, $cart, $to
     foreach ($cart as $item) {
         $subtotal += $item['price'] * $item['quantity'];
     }
-    
+
     $content = "
     <!DOCTYPE html>
     <html>
     <head>
         <meta charset='UTF-8'>
         <style>
-            body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-            .header { background-color: #16a34a; color: white; padding: 20px; text-align: center; }
-            .content { padding: 20px; }
-            .thank-you { background-color: #dcfce7; padding: 20px; margin: 15px 0; border-radius: 5px; text-align: center; }
-            .order-details { background-color: #f8f9fa; padding: 15px; margin: 15px 0; border-radius: 5px; }
-            .product-item { border-bottom: 1px solid #eee; padding: 10px 0; }
-            .total { font-weight: bold; font-size: 18px; color: #16a34a; }
-            .invoice-info { background-color: #fef3c7; padding: 15px; margin: 15px 0; border-radius: 5px; border-left: 4px solid #f59e0b; }
-            .footer { text-align: center; margin-top: 30px; padding: 20px; background-color: #f8f9fa; }
+            body { font-family: Arial, sans-serif; line-height: 1.6; color: #1a1a1a; background-color: #f4f4f4; }
+            .header { background-color: #ffffff; color: #1a1a1a; padding: 24px 20px; text-align: center; border-bottom: 3px solid #2a6496; }
+            .header img { width: 160px; height: 160px; object-fit: contain; margin-bottom: 10px; }
+            .header h1 { margin: 0; font-size: 22px; letter-spacing: 1px; color: #1a1a1a; }
+            .header p { margin: 4px 0 0; color: #555; font-size: 14px; }
+            .content { padding: 24px; max-width: 600px; margin: 0 auto; }
+            .thank-you { background-color: #eef4f0; padding: 20px; margin: 15px 0; border-radius: 6px; text-align: center; border: 1px solid #c5d9c8; }
+            .order-details { background-color: #ffffff; padding: 15px; margin: 15px 0; border-radius: 6px; border: 1px solid #ddd; }
+            .product-item { border-bottom: 1px solid #eee; padding: 8px 0; }
+            .total { font-weight: bold; font-size: 18px; color: #2a6496; }
+            .info-box { background-color: #e8f4fd; padding: 15px; margin: 15px 0; border-radius: 6px; border-left: 4px solid #2a6496; }
+            .footer { text-align: center; margin-top: 24px; padding: 16px; background-color: #ffffff; color: #555; font-size: 13px; border-radius: 6px; border-top: 3px solid #2a6496; }
         </style>
     </head>
     <body>
         <div class='header'>
-            <h1>📄 Salsas.ch</h1>
-            <p>Bestellbestätigung - Kauf auf Rechnung</p>
+            <img src='https://online-shop-seven-delta.vercel.app/Security_n.png' alt='US - Fishing &amp; Huntingshop' />
+            <h1>🎣 US - Fishing &amp; Huntingshop</h1>
+            <p>Bestellbestätigung — Kauf auf Rechnung &amp; Vorkasse</p>
         </div>
-        
+
         <div class='content'>
             <div class='thank-you'>
                 <h2>✅ Bestellung bestätigt!</h2>
                 <p>Liebe/r {$customerInfo['firstName']},</p>
-                <p>Vielen Dank für Ihre Bestellung bei Salsas.ch! Ihre Bestellung wurde erfolgreich aufgenommen.</p>
+                <p>Vielen Dank für Ihre Bestellung bei <strong>US - Fishing &amp; Huntingshop</strong>!<br>
+                Ihre Bestellung wurde erfolgreich aufgenommen.</p>
+            </div>
+
+            <div class='info-box'>
+                <h3>📞 Wie geht es weiter?</h3>
+                <p>Unser Verkäufer wird Sie <strong>so bald wie möglich per E-Mail oder Telefon kontaktieren</strong>, um die Bestellung und die Zahlung gemeinsam mit Ihnen abzuschließen.</p>
             </div>
 
             <div class='order-details'>
                 <h2>📋 Ihre Bestelldetails</h2>
                 <p><strong>Bestellnummer:</strong> {$orderNumber}</p>
                 <p><strong>Datum:</strong> " . date('d.m.Y H:i') . "</p>
-                <p><strong>Zahlungsart:</strong> 📄 Kauf auf Rechnung</p>
-                <p><strong>Status:</strong> ✅ Bestätigt</p>
-            </div>
-
-            <div class='invoice-info'>
-                <h3>📄 Kauf auf Rechnung - Wichtige Informationen</h3>
-                <ul>
-                    <li><strong>Die Rechnung wird Ihnen per Post zugesendet</strong></li>
-                    <li>Zahlungsziel: 30 Tage ab Rechnungsdatum</li>
-                    <li>Zahlung per Überweisung auf unser Bankkonto</li>
-                    <li>Die Ware wird zeitnah nach Ihrer Bestellung versendet</li>
-                </ul>
+                <p><strong>Zahlungsart:</strong> Kauf auf Rechnung &amp; Vorkasse</p>
+                <p><strong>Status:</strong> ✅ Bestätigt — Kontaktaufnahme ausstehend</p>
+                <p><strong>Betrag:</strong> <span class='total'>{$total} CHF</span></p>
             </div>
 
             <div class='order-details'>
                 <h2>🛒 Bestellte Produkte</h2>";
-    
+
     foreach ($cart as $item) {
         $itemTotal = $item['price'] * $item['quantity'];
         $content .= "
                 <div class='product-item'>
                     <p><strong>{$item['name']}</strong></p>
-                    <p>Menge: {$item['quantity']} x {$item['price']} CHF = {$itemTotal} CHF</p>
-                    <p><em>{$item['description']}</em></p>
+                    <p>Menge: {$item['quantity']} x {$item['price']} CHF = <strong>{$itemTotal} CHF</strong></p>
                 </div>";
     }
-    
+
     $content .= "
-                <div style='margin-top: 20px; padding-top: 15px; border-top: 2px solid #16a34a;'>
+                <div style='margin-top: 20px; padding-top: 15px; border-top: 2px solid #2a6496;'>
                     <p><strong>Zwischensumme:</strong> {$subtotal} CHF</p>
                     <p><strong>Versand:</strong> Kostenlos</p>
                     <p class='total'>GESAMT: {$total} CHF</p>
@@ -252,43 +254,28 @@ function generateCustomerInvoiceEmail($customerInfo, $billingAddress, $cart, $to
                 <p>{$customerInfo['postalCode']} {$customerInfo['city']}</p>
                 <p>{$customerInfo['canton']}</p>
             </div>";
-    
-    // Agregar dirección de facturación si es diferente
+
     if ($billingAddress) {
         $content .= "
             <div class='order-details'>
                 <h2>💳 Rechnungsadresse</h2>
-                <div style='background-color: #fef3c7; padding: 15px; margin-bottom: 15px; border-radius: 5px; border-left: 4px solid #f59e0b;'>
-                    <p><strong>Die Rechnung wird an diese abweichende Adresse gesendet:</strong></p>
-                </div>
                 <p><strong>{$billingAddress['firstName']} {$billingAddress['lastName']}</strong></p>
                 <p>{$billingAddress['address']}</p>
                 <p>{$billingAddress['postalCode']} {$billingAddress['city']}</p>
                 <p>{$billingAddress['canton']}</p>
             </div>";
     }
-    
+
     $content .= "
-
-            <div class='invoice-info'>
-                <h3>📦 Was passiert als nächstes?</h3>
-                <p>✅ Ihre Bestellung wurde bestätigt</p>
-                <p>📄 Wir senden Ihnen die Rechnung per Post</p>
-                <p>📦 Ihre Ware wird in 2-3 Werktagen versendet</p>
-                <p>💰 Bezahlen Sie bequem per Überweisung (30 Tage Zeit)</p>
-                <p>📧 Sie erhalten eine Tracking-Nummer per E-Mail</p>
-                <p>📞 Bei Fragen: info@cantinatexmex.ch</p>
-            </div>
-
             <div class='footer'>
-                <p><strong>Vielen Dank für Ihr Vertrauen!</strong></p>
-                <p>📄 Salsas.ch Team</p>
-                <p>info@cantinatexmex.ch</p>
+                <p><strong>US - Fishing &amp; Huntingshop</strong></p>
+                <p>info@lweb.ch</p>
+                <p style='margin-top: 8px; font-size: 12px; color: #b8a080;'>Bei Fragen stehen wir Ihnen gerne zur Verfügung.</p>
             </div>
         </div>
     </body>
     </html>";
-    
+
     return $content;
 }
 
@@ -303,14 +290,14 @@ function sendPayPalConfirmationEmail($data) {
     // Configuración de emails
     $toStore = 'info@lweb.ch';
     $toCustomer = $customerInfo['email'];
-    $fromEmail = 'info@cantinatexmex.ch';
+    $fromEmail = 'info@lweb.ch';
     
     // ===== EMAIL PARA LA TIENDA (PayPal) =====
-    $storeSubject = '🌶️ NEUE BESTELLUNG - Salsas.ch - PayPal ID: ' . $paypalPayerID;
+    $storeSubject = '🎣 NEUE BESTELLUNG - US Fishing & Huntingshop - PayPal ID: ' . $paypalPayerID;
     $storeEmailContent = generateStorePayPalEmail($customerInfo, $billingAddress, $cart, $total, $orderNumber, $paypalPayerID);
     
     // ===== EMAIL PARA EL CLIENTE (PayPal) =====
-    $customerSubject = '🔥 Bestellbestätigung - Salsas.ch';
+    $customerSubject = '✅ Bestellbestätigung - US Fishing & Huntingshop';
     $customerEmailContent = generateCustomerPayPalEmail($customerInfo, $billingAddress, $cart, $total, $orderNumber, $paypalPayerID);
     
     // Headers para emails HTML
@@ -362,7 +349,7 @@ function generateStorePayPalEmail($customerInfo, $billingAddress, $cart, $total,
     </head>
     <body>
         <div class='header'>
-            <h1>🔥 NEUE BESTELLUNG - Salsas.ch</h1>
+            <h1>🎣 NEUE BESTELLUNG - US Fishing &amp; Huntingshop</h1>
             <p>Zahlung erfolgreich über PayPal verarbeitet!</p>
         </div>
         
@@ -479,15 +466,16 @@ function generateCustomerPayPalEmail($customerInfo, $billingAddress, $cart, $tot
     </head>
     <body>
         <div class='header'>
-            <h1>🔥 Salsas.ch</h1>
+            <img src='https://online-shop-seven-delta.vercel.app/Security_n.png' alt='US - Fishing &amp; Huntingshop' style='max-height:60px; margin-bottom:10px;' />
+            <h1>🎣 US - Fishing &amp; Huntingshop</h1>
             <p>Vielen Dank für Ihre Bestellung!</p>
         </div>
-        
+
         <div class='content'>
             <div class='thank-you'>
                 <h2>✅ Bestellung bestätigt!</h2>
                 <p>Liebe/r {$customerInfo['firstName']},</p>
-                <p>Vielen Dank für Ihre Bestellung bei Salsas.ch! Ihre Zahlung wurde erfolgreich verarbeitet.</p>
+                <p>Vielen Dank für Ihre Bestellung bei <strong>US - Fishing &amp; Huntingshop</strong>! Ihre Zahlung wurde erfolgreich verarbeitet.</p>
             </div>
 
             <div class='order-details'>
@@ -550,13 +538,13 @@ function generateCustomerPayPalEmail($customerInfo, $billingAddress, $cart, $tot
                 <p>📦 Wir bereiten Ihre Bestellung vor</p>
                 <p>🚚 Versand in 2-3 Werktagen</p>
                 <p>📧 Sie erhalten eine Tracking-Nummer per E-Mail</p>
-                <p>📞 Bei Fragen: info@cantinatexmex.ch</p>
+                <p>📞 Bei Fragen: info@lweb.ch</p>
             </div>
 
             <div class='footer'>
                 <p><strong>Vielen Dank für Ihr Vertrauen!</strong></p>
-                <p>🔥 Salsas.ch Team</p>
-                <p>info@cantinatexmex.ch</p>
+                <p>🎣 US - Fishing &amp; Huntingshop Team</p>
+                <p>info@lweb.ch</p>
             </div>
         </div>
     </body>

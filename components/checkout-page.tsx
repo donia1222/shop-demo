@@ -108,7 +108,7 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
   const [orderDetails, setOrderDetails] = useState<any>(null)
   const [formErrors, setFormErrors] = useState<Partial<CustomerInfo>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [paymentMethod, setPaymentMethod] = useState<"paypal" | "invoice" | "stripe">("stripe")
+  const [paymentMethod, setPaymentMethod] = useState<"paypal" | "invoice" | "stripe">("invoice")
 
   // Billing address states
   const [useDifferentBillingAddress, setUseDifferentBillingAddress] = useState(false)
@@ -1026,6 +1026,12 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
               {isLoggedIn && <p className="text-green-600">Konto: Gespeichert ✅</p>}
             </div>
 
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4 text-left">
+              <p className="text-sm text-blue-700">
+                Nach Abschluss der Bestellung wird der Verkäufer Sie so bald wie möglich per E-Mail oder Telefon kontaktieren, um die Bestellung abzuschließen.
+              </p>
+            </div>
+
             <div className="space-y-4">
               <p className="text-gray-600">Ihre Bestellung wird innerhalb von 2-3 Werktagen versendet.</p>
               <Button onClick={onBackToStore} className="bg-[#2C5F2E] hover:bg-[#1A4520] rounded-full px-8">
@@ -1762,7 +1768,7 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
               <CardContent>
                 <div className="space-y-4 mb-6">
                   {/* PayPal Option */}
-                  <div 
+                  {/* <div
                     className={`border rounded-xl p-4 cursor-pointer transition-all ${
                       paymentMethod === "paypal"
                         ? "border-blue-500 bg-blue-50"
@@ -1787,10 +1793,10 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
                       </div>
                       <div className="text-xl">💳</div>
                     </div>
-                  </div>
+                  </div> */}
 
                   {/* Stripe Option */}
-                  <div 
+                  {/* <div
                     className={`border rounded-xl p-4 cursor-pointer transition-all ${
                       paymentMethod === "stripe"
                         ? "border-purple-500 bg-purple-50"
@@ -1815,10 +1821,10 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
                       </div>
                       <div className="text-xl">💳</div>
                     </div>
-                  </div>
+                  </div> */}
 
                   {/* Invoice Option */}
-                  <div 
+                  <div
                     className={`border rounded-xl p-4 cursor-pointer transition-all ${
                       paymentMethod === "invoice"
                         ? "border-[#2C5F2E] bg-[#F0F9F0]"
@@ -1835,10 +1841,10 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
                       <div className="flex-1">
                         <div className="flex items-center space-x-2">
                           <Package className="w-5 h-5 text-green-600" />
-                          <span className="font-semibold text-gray-900">Kauf auf Rechnung</span>
+                          <span className="font-semibold text-gray-900">Kauf auf Rechnung & Vorkasse</span>
                         </div>
                         <p className="text-sm text-gray-600 mt-1">
-                          Rechnung wird mit der Lieferung gesendet - 30 Tage Zahlungsziel
+                          Nach Abschluss der Bestellung wird der Verkäufer Sie so bald wie möglich per E-Mail oder Telefon kontaktieren, um die Bestellung abzuschließen.
                         </p>
                       </div>
                       <div className="text-xl">📄</div>
@@ -1847,7 +1853,7 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
                 </div>
 
                 {/* Payment Method Specific Content */}
-                {paymentMethod === "paypal" && (
+                {/* {paymentMethod === "paypal" && (
                   <div className="mb-4">
                     <div className="flex items-center space-x-2 mb-2">
                       <Shield className="w-5 h-5 text-green-600" />
@@ -1857,21 +1863,18 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
                       Sie werden zu PayPal weitergeleitet um die Zahlung abzuschließen.
                     </p>
                   </div>
-                )}
+                )} */}
 
                 {paymentMethod === "invoice" && (
                   <div className="mb-4 bg-green-50 border border-green-200 rounded-lg p-4">
-                    <h4 className="font-semibold text-green-800 mb-2">📄 Kauf auf Rechnung</h4>
-                    <ul className="text-sm text-green-700 space-y-1">
-                      <li>• Rechnung wird mit der Lieferung per Post gesendet</li>
-                      <li>• 30 Tage Zahlungsziel ab Rechnungsdatum</li>
-                      <li>• Überweisung auf unser Bankkonto</li>
-                      <li>• Nur für Lieferadressen in der Schweiz</li>
-                    </ul>
+                    <h4 className="font-semibold text-green-800 mb-2">📄 Kauf auf Rechnung & Vorkasse</h4>
+                    <p className="text-sm text-green-700">
+                      Nach Abschluss der Bestellung wird der Verkäufer Sie so bald wie möglich per E-Mail oder Telefon kontaktieren, um die Bestellung abzuschließen.
+                    </p>
                   </div>
                 )}
 
-                {paymentMethod === "stripe" && (
+                {/* {paymentMethod === "stripe" && (
                   <div className="mb-4">
                     <StripePayment
                       amount={getFinalTotal()}
@@ -1895,78 +1898,27 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
                       </div>
                     )}
                   </div>
-                )}
+                )} */}
 
-                {orderStatus === "processing" && paymentMethod === "paypal" ? (
-                  <div className="text-center py-8 space-y-4">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#2C5F2E] mx-auto mb-4"></div>
-                    <p className="text-gray-600 font-semibold">Warten auf PayPal Zahlung...</p>
-                    <p className="text-sm text-gray-500">Bitte schließen Sie die Zahlung in dem PayPal-Fenster ab</p>
-
-                    <div className="flex gap-4 justify-center mt-6">
-                      <Button
-                        onClick={() => handlePaymentConfirmation(true)}
-                        disabled={isSubmitting}
-                        className="bg-green-600 hover:bg-green-700 text-white"
-                      >
-                        {isSubmitting ? (
-                          <>
-                            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                            Speichere...
-                          </>
-                        ) : (
-                          "✅ Zahlung abgeschlossen"
-                        )}
-                      </Button>
-                      <Button
-                        onClick={() => handlePaymentConfirmation(false)}
-                        disabled={isSubmitting}
-                        variant="outline"
-                        className="border-red-500 text-red-600 hover:bg-red-50"
-                      >
-                        ❌ Zahlung fehlgeschlagen
-                      </Button>
-                    </div>
-
-                    <p className="text-xs text-gray-400 mt-4">
-                      Klicken Sie auf "Zahlung abgeschlossen" nur wenn PayPal die Zahlung bestätigt hat
-                    </p>
-                  </div>
-                ) : (
-                  <div className="space-y-4">
-                    {paymentMethod === "paypal" ? (
-                      <Button
-                        onClick={handlePayPalPayment}
-                        className="w-full h-16 text-xl font-bold bg-gradient-to-r from-yellow-400 to-yellow-600 hover:from-yellow-500 hover:to-yellow-700 text-black shadow-xl hover:shadow-2xl transition-all duration-300"
-                      >
-                        💳 Mit PayPal bezahlen - {getFinalTotal().toFixed(2)} CHF
-                      </Button>
-                    ) : paymentMethod === "stripe" ? (
-                      // Stripe payment is handled by StripePayment component above
-                      <div className="text-center text-sm text-gray-500 py-4">
-                        Füllen Sie das Formular oben aus und klicken Sie auf "Mit Karte bezahlen"
-                      </div>
+                <div className="space-y-4">
+                  <Button
+                    onClick={handleInvoicePayment}
+                    disabled={isSubmitting}
+                    className="w-full h-14 text-base font-bold bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white shadow-xl hover:shadow-2xl transition-all duration-300"
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                        Bestellung wird verarbeitet...
+                      </>
                     ) : (
-                      <Button
-                        onClick={handleInvoicePayment}
-                        disabled={isSubmitting}
-                        className="w-full h-16 text-xl font-bold bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white shadow-xl hover:shadow-2xl transition-all duration-300"
-                      >
-                        {isSubmitting ? (
-                          <>
-                            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                            Bestellung wird verarbeitet...
-                          </>
-                        ) : (
-                          <>📄 Kauf auf Rechnung - {getFinalTotal().toFixed(2)} CHF</>
-                        )}
-                      </Button>
+                      <>📄 Kauf auf Rechnung & Vorkasse - {getFinalTotal().toFixed(2)} CHF</>
                     )}
-                  </div>
-                )}
+                  </Button>
+                </div>
 
                 <p className="text-xs text-gray-500 mt-4 text-center">
-                  Mit dem Klick auf "{paymentMethod === "paypal" ? "Mit PayPal bezahlen" : paymentMethod === "stripe" ? "Mit Karte bezahlen" : "Kauf auf Rechnung"}" akzeptieren Sie unsere AGB und Datenschutzbestimmungen.
+                  Mit dem Klick auf "Kauf auf Rechnung & Vorkasse" akzeptieren Sie unsere AGB und Datenschutzbestimmungen.
                 </p>
               </CardContent>
             </Card>
