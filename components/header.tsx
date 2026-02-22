@@ -81,6 +81,15 @@ export function Header({ onAdminOpen, onCartOpen, cartCount = 0 }: HeaderProps) 
                       {cat.label}
                     </button>
                   ))}
+                  <div className="pt-2 mt-1 border-t border-[#E0E0E0]">
+                    <button
+                      onClick={() => { router.push("/blog"); setIsMenuOpen(false) }}
+                      className="w-full text-left flex items-center gap-2 px-3 py-2.5 text-sm rounded hover:bg-[#F5F5F5] text-[#2C5F2E] font-semibold"
+                    >
+                      <Newspaper className="w-4 h-4" />
+                      Blog
+                    </button>
+                  </div>
                 </nav>
                 {/* Login + Cart in mobile menu */}
                 <div className="p-4 border-t border-[#E0E0E0] space-y-2">
@@ -150,7 +159,7 @@ export function Header({ onAdminOpen, onCartOpen, cartCount = 0 }: HeaderProps) 
       <div className="bg-white border-b border-[#E0E0E0] hidden lg:block sticky top-20 z-40">
         <div className="container mx-auto px-4">
           <nav className="flex items-center justify-center gap-0">
-            {categories.map((cat, i) => (
+            {categories.filter(cat => cat.label !== "Home").map((cat, i) => (
               <button
                 key={i}
                 onClick={() => router.push(cat.href)}

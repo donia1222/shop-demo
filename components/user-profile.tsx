@@ -658,11 +658,11 @@ export function UserProfile({ onClose, onAccountDeleted }: UserProfileProps) {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-orange-50 to-red-50 p-4">
+      <div className="min-h-screen bg-[#F7F7F8] p-4">
         <div className="max-w-4xl mx-auto">
           <div className="flex items-center justify-center min-h-[60vh]">
             <div className="text-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto mb-4"></div>
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#2C5F2E] mx-auto mb-4"></div>
               <p className="text-gray-600">Lade Benutzerprofil...</p>
             </div>
           </div>
@@ -696,11 +696,11 @@ export function UserProfile({ onClose, onAccountDeleted }: UserProfileProps) {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-start justify-center p-2 sm:p-4 overflow-y-auto z-[60]">
       <div className="bg-white rounded-lg shadow-2xl w-full max-w-7xl min-h-[90vh] max-h-[90vh] overflow-hidden flex flex-col my-2 sm:my-4">
         {/* Header */}
-        <div className="bg-white shadow-lg border-b-4 border-orange-500 flex-shrink-0">
+        <div className="bg-white shadow-lg border-b border-[#E0E0E0] flex-shrink-0">
           <div className="px-3 sm:px-6 py-3 sm:py-4">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div className="flex items-center space-x-3 sm:space-x-4">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-[#2C5F2E] rounded-full flex items-center justify-center">
                   <User className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                 </div>
                 <div>
@@ -717,7 +717,7 @@ export function UserProfile({ onClose, onAccountDeleted }: UserProfileProps) {
                       e.stopPropagation();
                       setIsEditing(true);
                     }}
-                    className="bg-orange-500 hover:bg-orange-600 flex-1 sm:flex-none"
+                    className="bg-[#2C5F2E] hover:bg-[#1A4520] flex-1 sm:flex-none"
                     size="sm"
                     type="button"
                   >
@@ -777,7 +777,7 @@ export function UserProfile({ onClose, onAccountDeleted }: UserProfileProps) {
         </div>
 
         {/* Main Content - SCROLLABLE */}
-        <div className="flex-1 overflow-y-auto bg-gradient-to-br from-orange-50 to-red-50" style={{ scrollBehavior: 'smooth' }}>
+        <div className="flex-1 overflow-y-auto bg-[#F7F7F8]" style={{ scrollBehavior: 'smooth' }}>
           <div className="px-3 sm:px-6 py-4 sm:py-8">
             <div className="max-w-6xl mx-auto">
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
@@ -786,7 +786,7 @@ export function UserProfile({ onClose, onAccountDeleted }: UserProfileProps) {
                   <Card>
                     <CardHeader>
                       <CardTitle className="flex items-center">
-                        <User className="w-5 h-5 mr-2 text-orange-600" />
+                        <User className="w-5 h-5 mr-2 text-[#2C5F2E]" />
                         Persönliche Daten
                       </CardTitle>
                     </CardHeader>
@@ -852,7 +852,7 @@ export function UserProfile({ onClose, onAccountDeleted }: UserProfileProps) {
                   <Card>
                     <CardHeader>
                       <CardTitle className="flex items-center">
-                        <MapPin className="w-5 h-5 mr-2 text-orange-600" />
+                        <MapPin className="w-5 h-5 mr-2 text-[#2C5F2E]" />
                         Adresse
                       </CardTitle>
                     </CardHeader>
@@ -940,13 +940,13 @@ export function UserProfile({ onClose, onAccountDeleted }: UserProfileProps) {
                   <Card>
                     <CardHeader>
                       <CardTitle className="flex items-center">
-                        <Eye className="w-5 h-5 mr-2 text-orange-600" />
+                        <Eye className="w-5 h-5 mr-2 text-[#2C5F2E]" />
                         Konto-Übersicht
                       </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
                       <div className="text-center">
-                        <div className="text-2xl font-bold text-orange-600">{totalOrders || 0}</div>
+                        <div className="text-2xl font-bold text-[#2C5F2E]">{totalOrders || 0}</div>
                         <p className="text-sm text-gray-600">Bestellungen</p>
                       </div>
 
@@ -982,19 +982,19 @@ export function UserProfile({ onClose, onAccountDeleted }: UserProfileProps) {
                   </Card>
 
                   {/* Password Change */}
-                  <Card className="border-blue-200 bg-blue-50">
+                  <Card className="border-[#2C5F2E]/20 bg-[#2C5F2E]/5">
                     <CardHeader>
-                      <CardTitle className="flex items-center text-blue-600">
+                      <CardTitle className="flex items-center text-[#2C5F2E]">
                         <Lock className="w-5 h-5 mr-2" />
                         Passwort ändern
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-3">
-                        <p className="text-sm text-blue-700">
+                        <p className="text-sm text-[#2C5F2E]">
                           Ändern Sie Ihr Passwort regelmäßig, um Ihr Konto zu schützen.
                         </p>
-                        <Button onClick={openPasswordDialog} className="bg-blue-600 hover:bg-blue-700 w-full" size="lg">
+                        <Button onClick={openPasswordDialog} className="bg-[#2C5F2E] hover:bg-[#1A4520] w-full" size="lg">
                           <Lock className="w-4 h-4 mr-2" />
                           Passwort ändern
                         </Button>
@@ -1036,7 +1036,7 @@ export function UserProfile({ onClose, onAccountDeleted }: UserProfileProps) {
                     <CardHeader>
                       <div className="flex items-center justify-between">
                         <CardTitle className="flex items-center">
-                          <Package className="w-5 h-5 mr-2 text-orange-600" />
+                          <Package className="w-5 h-5 mr-2 text-[#2C5F2E]" />
                           Meine Bestellungen ({totalOrders})
                         </CardTitle>
                         <Button
@@ -1085,7 +1085,7 @@ export function UserProfile({ onClose, onAccountDeleted }: UserProfileProps) {
                       {/* Orders Loading State */}
                       {ordersLoading && (
                         <div className="text-center py-8">
-                          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500 mx-auto mb-4"></div>
+                          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#2C5F2E] mx-auto mb-4"></div>
                           <p className="text-gray-600">Lade Bestellungen...</p>
                         </div>
                       )}
@@ -1125,7 +1125,7 @@ export function UserProfile({ onClose, onAccountDeleted }: UserProfileProps) {
                              
                                       </div>
                                       <div className="text-left sm:text-right w-full sm:w-auto">
-                                        <p className="font-bold text-lg text-orange-600">
+                                        <p className="font-bold text-lg text-[#2C5F2E]">
                                           {(Number(order.total_amount) || 0).toFixed(2)} CHF
                                         </p>
                                         <p className="text-sm text-gray-500">{order.items_count} Artikel</p>
@@ -1227,7 +1227,7 @@ export function UserProfile({ onClose, onAccountDeleted }: UserProfileProps) {
                                                 </div>
                                               </div>
                                               <div className="text-center sm:text-right w-full sm:w-auto">
-                                                <p className="font-medium text-orange-600">
+                                                <p className="font-medium text-[#2C5F2E]">
                                                   {(Number(item.subtotal) || 0).toFixed(2)} CHF
                                                 </p>
                                                 <p className="text-xs text-gray-500">
@@ -1258,7 +1258,7 @@ export function UserProfile({ onClose, onAccountDeleted }: UserProfileProps) {
                                       <ChevronLeft className="w-4 h-4" />
                                       <span className="hidden sm:inline">Zurück</span>
                                     </Button>
-                                    <span className="px-3 py-1 bg-orange-100 text-orange-700 rounded text-sm font-medium">
+                                    <span className="px-3 py-1 bg-[#2C5F2E]/10 text-[#2C5F2E] rounded text-sm font-medium">
                                       {currentPage}
                                     </span>
                                     <Button
@@ -1374,7 +1374,7 @@ export function UserProfile({ onClose, onAccountDeleted }: UserProfileProps) {
         <Dialog open={showPasswordDialog} onOpenChange={setShowPasswordDialog}>
           <DialogContent className="sm:max-w-md bg-white mx-4 max-w-[calc(100vw-2rem)]">
             <DialogHeader>
-              <DialogTitle className="flex items-center text-blue-600">
+              <DialogTitle className="flex items-center text-[#2C5F2E]">
                 <Lock className="w-5 h-5 mr-2" />
                 Passwort ändern
               </DialogTitle>
@@ -1449,7 +1449,7 @@ export function UserProfile({ onClose, onAccountDeleted }: UserProfileProps) {
                 disabled={
                   isChangingPassword || !passwordData.currentPassword.trim() || !passwordData.newPassword.trim()
                 }
-                className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700"
+                className="w-full sm:w-auto bg-[#2C5F2E] hover:bg-[#1A4520]"
               >
                 <Lock className="w-4 h-4 mr-2" />
                 {isChangingPassword ? "Ändere Passwort..." : "Passwort ändern"}

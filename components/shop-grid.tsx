@@ -1,17 +1,18 @@
 "use client"
 
 import { useState, useEffect, useCallback, memo } from "react"
-import { useSearchParams, useRouter } from "next/navigation"
+import { useSearchParams, useRouter, usePathname } from "next/navigation"
 import {
   ShoppingCart, ChevronLeft, ChevronRight,
   Search, X, Check,
-  ArrowUp, ChevronDown, Heart, Menu
+  ArrowUp, ChevronDown, Heart, Menu, Newspaper
 } from "lucide-react"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { ShoppingCartComponent } from "./shopping-cart"
 import { CheckoutPage } from "@/components/checkout-page"
 import { LoginAuth } from "./login-auth"
 import { ProductImage } from "./product-image"
+import { UserProfile } from "./user-profile"
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -168,6 +169,7 @@ const ProductCard = memo(function ProductCard({ product, addedIds, wishlist, onS
 
 export default function ShopGrid() {
   const router = useRouter()
+  const pathname = usePathname()
   const searchParams = useSearchParams()
   const [products, setProducts]     = useState<Product[]>([])
   const [categories, setCategories] = useState<Category[]>([])
@@ -181,6 +183,7 @@ export default function ShopGrid() {
   const [sidebarOpen, setSidebarOpen]       = useState(false)
   const [showBackTop, setShowBackTop]       = useState(false)
   const [navMenuOpen, setNavMenuOpen]       = useState(false)
+  const [showUserProfile, setShowUserProfile] = useState(false)
 
   const PAGE_SIZE = 20
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE)
@@ -357,6 +360,13 @@ export default function ShopGrid() {
   // ─── Render ───────────────────────────────────────────────────────────────
   return (
     <>
+      {showUserProfile && (
+        <UserProfile
+          onClose={() => setShowUserProfile(false)}
+          onAccountDeleted={() => setShowUserProfile(false)}
+        />
+      )}
+
       <ShoppingCartComponent
         isOpen={cartOpen} onOpenChange={setCartOpen} cart={cart}
         onAddToCart={(p: any) => addToCart(p)} onRemoveFromCart={removeFromCart}
@@ -389,23 +399,23 @@ export default function ShopGrid() {
                   <Menu className="w-5 h-5 text-[#333]" />
                 </button>
               </SheetTrigger>
-              <SheetContent side="left" className="w-72 bg-white p-0">
-                <div className="flex items-center p-4 border-b border-[#E0E0E0]">
+              <SheetContent side="left" className="w-72 bg-white p-0 flex flex-col">
+                <div className="flex items-center p-4 border-b border-[#E0E0E0] flex-shrink-0">
                   <div className="flex items-center gap-2">
                     <img src="/Security_n.png" alt="Logo" className="h-8 w-auto object-contain" />
                     <span className="font-black text-[#1A1A1A] text-sm">US - Fishing &amp; Huntingshop</span>
                   </div>
                 </div>
-                <nav className="p-4 space-y-1">
+                <nav className="p-4 space-y-1 flex-1 overflow-y-auto">
                   <button
                     onClick={() => { router.push("/"); setNavMenuOpen(false) }}
-                    className="w-full text-left px-3 py-2.5 text-sm rounded hover:bg-[#F5F5F5] text-[#333333] font-medium"
+                    className={`w-full text-left px-3 py-2.5 text-sm rounded hover:bg-[#F5F5F5] font-medium ${pathname === "/" ? "bg-[#2C5F2E] text-white" : "text-[#333333]"}`}
                   >
                     Home
                   </button>
                   <button
                     onClick={() => { setActiveCategory("all"); setNavMenuOpen(false) }}
-                    className="w-full text-left px-3 py-2.5 text-sm rounded hover:bg-[#F5F5F5] text-[#333333] font-medium"
+                    className={`w-full text-left px-3 py-2.5 text-sm rounded hover:bg-[#F5F5F5] font-medium ${activeCategory === "all" ? "bg-[#2C5F2E] text-white" : "text-[#333333]"}`}
                   >
                     Alle Produkte
                   </button>
@@ -418,7 +428,33 @@ export default function ShopGrid() {
                       {cat.name.replace(/\s*\d{4}$/, "")}
                     </button>
                   ))}
+                  <div className="pt-2 mt-1 border-t border-[#E0E0E0]">
+                    <button
+                      onClick={() => { router.push("/blog"); setNavMenuOpen(false) }}
+                      className={`w-full text-left flex items-center gap-2 px-3 py-2.5 text-sm rounded hover:bg-[#F5F5F5] font-semibold ${pathname === "/blog" ? "bg-[#2C5F2E] text-white" : "text-[#2C5F2E]"}`}
+                    >
+                      <Newspaper className="w-4 h-4" />
+                      Blog
+                    </button>
+                  </div>
                 </nav>
+                <div className="p-4 border-t border-[#E0E0E0] space-y-2 flex-shrink-0">
+                  <LoginAuth
+                    onLoginSuccess={() => {}}
+                    onLogout={() => {}}
+                    onShowProfile={() => { setShowUserProfile(true); setNavMenuOpen(false) }}
+                    isLightSection={true}
+                    variant="button"
+                    className="w-full !flex-row justify-start gap-3 px-3 py-2.5 rounded hover:bg-[#F5F5F5] min-w-0"
+                  />
+                  <button
+                    onClick={() => { setCartOpen(true); setNavMenuOpen(false) }}
+                    className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-[#333333] rounded hover:bg-[#F5F5F5]"
+                  >
+                    <ShoppingCart className="w-5 h-5 text-[#555]" />
+                    Warenkorb
+                  </button>
+                </div>
               </SheetContent>
             </Sheet>
 
@@ -490,7 +526,7 @@ export default function ShopGrid() {
               <LoginAuth
                 onLoginSuccess={() => {}}
                 onLogout={() => {}}
-                onShowProfile={() => {}}
+                onShowProfile={() => setShowUserProfile(true)}
                 isLightSection={true}
                 variant="button"
               />
