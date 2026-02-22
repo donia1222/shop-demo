@@ -431,7 +431,7 @@ export default function ShopGrid() {
                 </button>
               </SheetTrigger>
               <SheetContent side="left" className="w-72 bg-white p-0 flex flex-col">
-                <div className="flex items-center p-4 border-b border-[#E0E0E0] flex-shrink-0">
+                <div className="flex items-center p-4 pr-12 border-b border-[#E0E0E0] flex-shrink-0">
                   <div className="flex items-center gap-2">
                     <img src="/Security_n.png" alt="Logo" className="h-8 w-auto object-contain" />
                     <span className="font-black text-[#1A1A1A] text-sm">US - Fishing &amp; Huntingshop</span>
@@ -474,25 +474,25 @@ export default function ShopGrid() {
                       <Download className="w-4 h-4" />
                       Digitale Visitenkarte
                     </button>
+                    <div className="flex items-center gap-1 pt-1 px-1 justify-end">
+                      <div className="[&_span]:hidden flex items-center">
+                        <LoginAuth
+                          onLoginSuccess={() => {}}
+                          onLogout={() => {}}
+                          onShowProfile={() => { setShowUserProfile(true); setNavMenuOpen(false) }}
+                          isLightSection={true}
+                          variant="button"
+                        />
+                      </div>
+                      <button
+                        onClick={() => { setCartOpen(true); setNavMenuOpen(false) }}
+                        className="p-2 rounded-xl hover:bg-[#F5F5F5] text-[#555]"
+                      >
+                        <ShoppingCart className="w-5 h-5" />
+                      </button>
+                    </div>
                   </div>
                 </nav>
-                <div className="p-4 border-t border-[#E0E0E0] space-y-2 flex-shrink-0">
-                  <LoginAuth
-                    onLoginSuccess={() => {}}
-                    onLogout={() => {}}
-                    onShowProfile={() => { setShowUserProfile(true); setNavMenuOpen(false) }}
-                    isLightSection={true}
-                    variant="button"
-                    className="w-full !flex-row justify-start gap-3 px-3 py-2.5 rounded hover:bg-[#F5F5F5] min-w-0"
-                  />
-                  <button
-                    onClick={() => { setCartOpen(true); setNavMenuOpen(false) }}
-                    className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-[#333333] rounded hover:bg-[#F5F5F5]"
-                  >
-                    <ShoppingCart className="w-5 h-5 text-[#555]" />
-                    Warenkorb
-                  </button>
-                </div>
               </SheetContent>
             </Sheet>
 

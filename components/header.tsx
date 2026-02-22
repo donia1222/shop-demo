@@ -64,14 +64,14 @@ export function Header({ onAdminOpen, onCartOpen, cartCount = 0 }: HeaderProps) 
                   <Menu className="w-5 h-5 text-[#333]" />
                 </button>
               </SheetTrigger>
-              <SheetContent side="left" className="w-72 bg-white p-0">
-                <div className="flex items-center p-4 border-b border-[#E0E0E0]">
+              <SheetContent side="left" className="w-72 bg-white p-0 flex flex-col h-full">
+                <div className="flex items-center p-4 pr-12 border-b border-[#E0E0E0] flex-shrink-0">
                   <div className="flex items-center gap-2">
                     <img src="/Security_n.png" alt="Logo" className="h-8 w-auto object-contain" />
                     <span className="font-black text-[#1A1A1A] text-sm">US - Fishing &amp; Huntingshop</span>
                   </div>
                 </div>
-                <nav className="p-4 space-y-1">
+                <nav className="p-4 space-y-1 flex-1 overflow-y-auto">
                   {categories.map((cat, i) => (
                     <button
                       key={i}
@@ -120,26 +120,25 @@ export function Header({ onAdminOpen, onCartOpen, cartCount = 0 }: HeaderProps) 
                       <Download className="w-4 h-4" />
                       Digitale Visitenkarte
                     </button>
+                    <div className="flex items-center gap-1 pt-1 px-1 justify-end">
+                      <div className="[&_span]:hidden flex items-center">
+                        <LoginAuth
+                          onLoginSuccess={handleLoginSuccess}
+                          onLogout={handleLogout}
+                          onShowProfile={handleShowProfile}
+                          isLightSection={true}
+                          variant="button"
+                        />
+                      </div>
+                      <button
+                        onClick={() => { onCartOpen?.(); setIsMenuOpen(false) }}
+                        className="p-2 rounded-xl hover:bg-[#F5F5F5] text-[#555]"
+                      >
+                        <ShoppingCart className="w-5 h-5" />
+                      </button>
+                    </div>
                   </div>
                 </nav>
-                {/* Login + Cart in mobile menu */}
-                <div className="p-4 border-t border-[#E0E0E0] space-y-2">
-                  <LoginAuth
-                    onLoginSuccess={handleLoginSuccess}
-                    onLogout={handleLogout}
-                    onShowProfile={handleShowProfile}
-                    isLightSection={true}
-                    variant="button"
-                    className="w-full !flex-row justify-start gap-3 px-3 py-2.5 rounded hover:bg-[#F5F5F5] min-w-0"
-                  />
-                  <button
-                    onClick={() => { onCartOpen?.(); setIsMenuOpen(false) }}
-                    className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-[#333333] rounded hover:bg-[#F5F5F5]"
-                  >
-                    <ShoppingCart className="w-5 h-5 text-[#555]" />
-                    Warenkorb
-                  </button>
-                </div>
               </SheetContent>
             </Sheet>
 
