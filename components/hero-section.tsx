@@ -14,10 +14,10 @@ export function HeroSection() {
           <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-1 text-sm text-[#333333]">
             {[
               "100% Schweizer Shop",
-              "Kauf auf Rechnung",
+              "Schnelle Lieferung",
               "14 Tage Rückgaberecht",
               "500+ Artikel im Sortiment",
-              "Schnelle Lieferung 1–3 Tage",
+    
             ].map((item) => (
               <span key={item} className="flex items-center gap-1.5">
                 <span className="text-[#2C5F2E] font-bold">✓</span>
