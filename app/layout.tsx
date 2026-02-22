@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import './globals.css'
 import { Analytics } from '@vercel/analytics/next';
+import { CookieBanner } from '@/components/cookie-banner'
 
 
 export const metadata: Metadata = {
@@ -26,7 +27,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children} <Analytics /></body>
+      <body>{children} <Analytics /><CookieBanner /></body>
     </html>
   )
 }
