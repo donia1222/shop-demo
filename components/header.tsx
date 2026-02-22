@@ -46,21 +46,8 @@ export function Header({ onAdminOpen }: HeaderProps) {
 
   return (
     <>
-      {/* ── TIER 1: Top info bar ── */}
-      <div className="bg-[#F5F5F5] border-b border-[#E0E0E0] text-xs text-[#555555]">
-        <div className="container mx-auto px-4 flex items-center justify-between h-8">
-          <span className="hidden md:block">Ihr Schweizer Outdoor-Spezialist</span>
-          <div className="flex items-center gap-3 ml-auto">
-            <button
-              onClick={() => router.push("/blog")}
-              className="flex items-center gap-1.5 bg-[#2C5F2E] hover:bg-[#1A4520] text-white text-[11px] font-bold px-3 py-1 rounded-full transition-colors"
-            >
-              <Newspaper className="w-3.5 h-3.5" />
-              Aktuelles
-            </button>
-          </div>
-        </div>
-      </div>
+    
+
 
       {/* ── TIER 2: Logo + Search + Icons ── */}
       <div className="bg-white border-b border-[#E0E0E0] sticky top-0 z-50">
@@ -131,8 +118,8 @@ export function Header({ onAdminOpen }: HeaderProps) {
           </div>
 
           {/* RIGHT: Login + Cart */}
-          <div className="flex items-center gap-2 justify-end">
-            <div className="flex flex-col items-center min-w-[64px]">
+          <div className="flex items-center gap-1 justify-end">
+            <div className="[&_span]:hidden flex items-center justify-center">
               <LoginAuth
                 onLoginSuccess={handleLoginSuccess}
                 onLogout={handleLogout}
@@ -143,10 +130,9 @@ export function Header({ onAdminOpen }: HeaderProps) {
             </div>
             <button
               onClick={() => router.push("/shop")}
-              className="flex flex-col items-center p-2 hover:bg-[#F5F5F5] rounded min-w-[64px]"
+              className="flex items-center justify-center w-11 h-11 hover:bg-[#F5F5F5] rounded-xl transition-colors"
             >
               <ShoppingCart className="w-6 h-6 text-[#555]" />
-              <span className="text-xs text-[#555] mt-0.5 leading-none font-medium">Waren<br/>Korb</span>
             </button>
           </div>
         </div>

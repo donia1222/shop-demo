@@ -5,7 +5,7 @@ import { useSearchParams, useRouter } from "next/navigation"
 import {
   ShoppingCart, ChevronLeft, ChevronRight,
   Search, SlidersHorizontal, X, Check,
-  ArrowUp, ChevronDown
+  ArrowUp, ChevronDown, Heart
 } from "lucide-react"
 import { ShoppingCartComponent } from "./shopping-cart"
 import { CheckoutPage } from "@/components/checkout-page"
@@ -38,15 +38,18 @@ function getImages(p: Product): string[] {
 interface ProductCardProps {
   product: Product
   addedIds: Set<number>
+  wishlist: Set<number>
   onSelect: (p: Product) => void
   onAddToCart: (p: Product) => void
+  onToggleWishlist: (id: number) => void
 }
 
-const ProductCard = memo(function ProductCard({ product, addedIds, onSelect, onAddToCart }: ProductCardProps) {
+const ProductCard = memo(function ProductCard({ product, addedIds, wishlist, onSelect, onAddToCart, onToggleWishlist }: ProductCardProps) {
   const [idx, setIdx] = useState(0)
   const images  = getImages(product)
   const inStock = (product.stock ?? 0) > 0
   const isAdded = addedIds.has(product.id)
+  const isWished = wishlist.has(product.id)
 
   return (
     <div className="group bg-white rounded-2xl overflow-hidden flex flex-col shadow-sm hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 border border-[#EBEBEB] hover:border-[#D5D5D5]">
@@ -111,6 +114,19 @@ const ProductCard = memo(function ProductCard({ product, addedIds, onSelect, onA
             {product.badge}
           </span>
         )}
+
+        {/* Wishlist heart */}
+        <button
+          onClick={e => { e.stopPropagation(); onToggleWishlist(product.id) }}
+          className={`absolute top-2 right-2 rounded-full flex items-center justify-center transition-all duration-200
+            w-6 h-6 sm:w-8 sm:h-8
+            ${isWished
+              ? "bg-red-500 text-white shadow-md"
+              : "bg-white/80 text-[#DDD] shadow-sm hover:text-red-400 hover:scale-110"
+            }`}
+        >
+          <Heart className={`w-4 h-4 ${isWished ? "fill-current" : ""}`} />
+        </button>
       </div>
 
       {/* Details */}
@@ -171,8 +187,10 @@ export default function ShopGrid() {
   const [cartCount, setCartCount] = useState(0)
   const [addedIds, setAddedIds]   = useState<Set<number>>(new Set())
   const [currentView, setCurrentView] = useState<"products"|"checkout">("products")
+  const [wishlist, setWishlist]   = useState<Set<number>>(new Set())
+  const [showWishlist, setShowWishlist] = useState(false)
 
-  useEffect(() => { loadProducts(); loadCategories(); loadCart() }, [])
+  useEffect(() => { loadProducts(); loadCategories(); loadCart(); loadWishlist() }, [])
   useEffect(() => { setVisibleCount(PAGE_SIZE) }, [search, activeCategory, stockFilter, sortBy])
 
   // Apply category filter from URL param once categories are loaded
@@ -219,6 +237,21 @@ export default function ShopGrid() {
       }
     } catch {}
   }
+  const loadWishlist = () => {
+    try {
+      const saved = localStorage.getItem("shop-wishlist")
+      if (saved) setWishlist(new Set(JSON.parse(saved)))
+    } catch {}
+  }
+  const toggleWishlist = useCallback((id: number) => {
+    setWishlist(prev => {
+      const next = new Set(prev)
+      next.has(id) ? next.delete(id) : next.add(id)
+      localStorage.setItem("shop-wishlist", JSON.stringify([...next]))
+      return next
+    })
+  }, [])
+
   const saveCart = (c: CartItem[]) => {
     localStorage.setItem("cantina-cart", JSON.stringify(c))
     localStorage.setItem("cantina-cart-count", c.reduce((s, i) => s + i.quantity, 0).toString())
@@ -258,6 +291,7 @@ export default function ShopGrid() {
   }
   const filtered = products
     .filter(p => {
+      if (showWishlist) return wishlist.has(p.id)
       const matchSearch   = !search || p.name.toLowerCase().includes(search.toLowerCase()) || p.description.toLowerCase().includes(search.toLowerCase())
       const matchCategory = activeCategory === "all" || p.category === activeCategory
       const matchStock    = stockFilter === "out_of_stock" ? (p.stock ?? 0) === 0 : (p.stock ?? 0) > 0
@@ -276,7 +310,7 @@ export default function ShopGrid() {
   const visibleProducts = filtered.slice(0, visibleCount)
   const hasMore = visibleCount < filtered.length
 
-  const handleSelect   = useCallback((p: Product) => router.push(`/product/${p.id}`), [])
+  const handleSelect    = useCallback((p: Product) => router.push(`/product/${p.id}`), [])
   const handleAddToCart = useCallback((p: Product) => addToCart(p), [addedIds, cart]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // ─── Views ────────────────────────────────────────────────────────────────
@@ -364,8 +398,8 @@ export default function ShopGrid() {
 
             <div className="hidden md:block w-px h-6 bg-[#E5E5E5] flex-shrink-0" />
 
-            {/* Search */}
-            <div className="flex-1 max-w-xl relative">
+            {/* Search — desktop only */}
+            <div className="hidden sm:flex flex-1 max-w-lg relative mr-4">
               <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9CA3AF] pointer-events-none" />
               <input
                 type="text"
@@ -393,8 +427,25 @@ export default function ShopGrid() {
               Filter
             </button>
 
-            {/* Login — header style */}
-            <div className="flex flex-col items-center min-w-[56px]">
+            {/* Right group: wishlist + login + cart */}
+            <div className="ml-auto flex items-center gap-1 flex-shrink-0">
+
+            {/* Wishlist icon — mobile only */}
+            <button
+              onClick={() => setShowWishlist(p => !p)}
+              className={`relative flex flex-col items-center p-2 rounded-xl transition-colors ${showWishlist ? "text-red-500 bg-red-50" : "text-[#555] hover:bg-[#F5F5F5]"}`}
+            >
+              <Heart className="w-6 h-6" />
+              <span className="text-[10px] mt-0.5 leading-none hidden sm:block">Wunsch</span>
+              {wishlist.size > 0 && (
+                <span style={{ backgroundColor: "#ef4444" }} className="absolute -top-0.5 -right-0.5 text-white text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center shadow-sm">
+                  {wishlist.size > 9 ? "9+" : wishlist.size}
+                </span>
+              )}
+            </button>
+
+            {/* Login — hide text label on mobile */}
+            <div className="[&_span]:hidden sm:[&_span]:inline-block flex items-center justify-center">
               <LoginAuth
                 onLoginSuccess={() => {}}
                 onLogout={() => {}}
@@ -404,19 +455,21 @@ export default function ShopGrid() {
               />
             </div>
 
-            {/* Cart icon — header style */}
+            {/* Cart icon */}
             <button
               onClick={() => setCartOpen(true)}
-              className="relative flex flex-col items-center p-2 hover:bg-[#F5F5F5] rounded-xl transition-colors flex-shrink-0"
+              className="relative flex flex-col items-center p-2 hover:bg-[#F5F5F5] rounded-xl transition-colors"
             >
-              <ShoppingCart className="w-5 h-5 text-[#555]" />
-              <span className="text-[10px] text-[#555] mt-0.5 leading-none">Warenkorb</span>
+              <ShoppingCart className="w-6 h-6 text-[#555]" />
+              <span className="text-[10px] text-[#555] mt-0.5 leading-none hidden sm:block">Warenkorb</span>
               {cartCount > 0 && (
                 <span className="absolute -top-0.5 -right-0.5 bg-[#CC0000] text-white text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center shadow-sm">
                   {cartCount > 9 ? "9+" : cartCount}
                 </span>
               )}
             </button>
+
+            </div>{/* end right group */}
           </div>
         </div>
 
@@ -435,7 +488,7 @@ export default function ShopGrid() {
                     return (
                       <li key={cat.slug}>
                         <button
-                          onClick={() => setActiveCategory(prev => prev === cat.slug ? "all" : cat.slug)}
+                          onClick={() => { setShowWishlist(false); setActiveCategory(prev => prev === cat.slug ? "all" : cat.slug); setSidebarOpen(false) }}
                           className={`w-full text-left flex items-center justify-between text-sm px-3 py-2 rounded-xl transition-all font-medium ${
                             isActive
                               ? "bg-[#2C5F2E] text-white shadow-sm"
@@ -457,7 +510,7 @@ export default function ShopGrid() {
                   {([["all", "Auf Lager"], ["out_of_stock", "Ausverkauft"]] as const).map(([val, label]) => (
                     <li key={val}>
                       <button
-                        onClick={() => setStockFilter(val)}
+                        onClick={() => { setShowWishlist(false); setStockFilter(val); setSidebarOpen(false) }}
                         className={`w-full text-left text-sm px-3 py-2 rounded-xl transition-all font-medium ${
                           stockFilter === val ? "bg-[#2C5F2E] text-white shadow-sm" : "text-[#555] hover:bg-[#F5F5F5]"
                         }`}
@@ -469,7 +522,26 @@ export default function ShopGrid() {
                 </ul>
               </div>
 
-              {(activeCategory !== "all" || stockFilter !== "all" || search) && (
+              <div className="border-t border-[#F3F3F3] pt-4">
+                <button
+                  onClick={() => { setShowWishlist(p => !p); setActiveCategory("all"); setStockFilter("all"); setSearch(""); setSidebarOpen(false) }}
+                  className={`w-full text-left flex items-center justify-between text-sm px-3 py-2 rounded-xl transition-all font-medium ${
+                    showWishlist ? "bg-rose-100 text-rose-600 shadow-sm" : "text-[#555] hover:bg-rose-50 hover:text-rose-500"
+                  }`}
+                >
+                  <span className="flex items-center gap-2">
+                    <Heart className={`w-3.5 h-3.5 ${showWishlist ? "fill-current" : ""}`} />
+                    Wunschliste
+                  </span>
+                  {wishlist.size > 0 && (
+                    <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${showWishlist ? "bg-rose-200 text-rose-600" : "bg-rose-100 text-rose-400"}`}>
+                      {wishlist.size}
+                    </span>
+                  )}
+                </button>
+              </div>
+
+              {(!showWishlist && (activeCategory !== "all" || stockFilter !== "all" || search)) && (
                 <button
                   onClick={() => { setActiveCategory("all"); setStockFilter("all"); setSearch("") }}
                   className="w-full text-xs font-semibold text-[#CC0000]/70 hover:text-[#CC0000] transition-colors text-left flex items-center gap-1.5 pt-1"
@@ -544,7 +616,7 @@ export default function ShopGrid() {
             })()}
 
             {/* ── Category pills — mobile only ── */}
-            <div className="lg:hidden overflow-x-auto mb-5 -mx-1 px-1">
+            <div className="lg:hidden overflow-x-auto mb-3 -mx-1 px-1">
               <div className="flex gap-2 min-w-max pb-1">
                 {[{ slug: "all", name: "Alle" }, ...categories].map(cat => {
                   const isActive = activeCategory === cat.slug
@@ -564,6 +636,23 @@ export default function ShopGrid() {
                   )
                 })}
               </div>
+            </div>
+
+            {/* ── Search — mobile only, below pills ── */}
+            <div className="sm:hidden relative mb-4">
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9CA3AF] pointer-events-none" />
+              <input
+                type="text"
+                placeholder="Produkte suchen…"
+                value={search}
+                onChange={e => setSearch(e.target.value)}
+                className="w-full pl-10 pr-9 py-2.5 text-sm bg-[#F3F4F6] rounded-full border border-transparent focus:outline-none focus:bg-white focus:border-[#2C5F2E] focus:ring-2 focus:ring-[#2C5F2E]/10 transition-all placeholder-[#9CA3AF]"
+              />
+              {search && (
+                <button onClick={() => setSearch("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#AAA] hover:text-[#555]">
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
             </div>
 
             {/* Sort + count */}
@@ -589,10 +678,21 @@ export default function ShopGrid() {
 
             {filtered.length === 0 ? (
               <div className="text-center py-24">
-                <p className="text-lg font-bold text-gray-300 mb-3">Keine Produkte gefunden</p>
-                <button onClick={() => { setSearch(""); setActiveCategory("all"); setStockFilter("all") }} className="text-sm font-semibold text-gray-500 hover:text-gray-900 transition-colors">
-                  Filter zurücksetzen
-                </button>
+                {showWishlist ? (
+                  <>
+                    <Heart className="w-14 h-14 text-red-200 mx-auto mb-4" />
+                    <p className="text-lg font-bold text-gray-300 mb-2">Wunschliste ist leer</p>
+                    <p className="text-sm text-gray-400 mb-4">Klicke auf das Herz bei einem Produkt, um es hinzuzufügen.</p>
+                    <button onClick={() => setShowWishlist(false)} className="text-sm font-semibold text-[#2C5F2E] hover:underline">Alle Produkte anzeigen</button>
+                  </>
+                ) : (
+                  <>
+                    <p className="text-lg font-bold text-gray-300 mb-3">Keine Produkte gefunden</p>
+                    <button onClick={() => { setSearch(""); setActiveCategory("all"); setStockFilter("all") }} className="text-sm font-semibold text-gray-500 hover:text-gray-900 transition-colors">
+                      Filter zurücksetzen
+                    </button>
+                  </>
+                )}
               </div>
             ) : (
               <>
@@ -602,8 +702,10 @@ export default function ShopGrid() {
                       key={product.id}
                       product={product}
                       addedIds={addedIds}
+                      wishlist={wishlist}
                       onSelect={handleSelect}
                       onAddToCart={handleAddToCart}
+                      onToggleWishlist={toggleWishlist}
                     />
                   ))}
                 </div>
