@@ -727,27 +727,47 @@ export default function ShopGrid() {
                 <div className="flex gap-2 min-w-max pb-1">
                   <button
                     onClick={() => setActiveSupplier("all")}
-                    className={`px-3.5 py-1.5 text-xs font-bold rounded-full transition-all whitespace-nowrap border ${
+                    className={`px-3 py-1 text-[11px] font-black rounded-full transition-all whitespace-nowrap border tracking-wider ${
                       activeSupplier === "all"
-                        ? "bg-[#1A1A1A] text-white border-[#1A1A1A]"
+                        ? "bg-[#1A1A1A] text-white border-[#1A1A1A] shadow-sm"
                         : "bg-white text-[#555] border-[#E5E5E5] hover:border-[#999] hover:text-[#1A1A1A]"
                     }`}
                   >
-                    Alle Marken
+                    ALLE
                   </button>
-                  {suppliers.map(supplier => (
-                    <button
-                      key={supplier}
-                      onClick={() => setActiveSupplier(prev => prev === supplier ? "all" : supplier)}
-                      className={`px-3.5 py-1.5 text-xs font-bold rounded-full transition-all whitespace-nowrap border tracking-wide uppercase ${
-                        activeSupplier === supplier
-                          ? "bg-[#2C5F2E] text-white border-[#2C5F2E] shadow-sm"
-                          : "bg-white text-[#555] border-[#E5E5E5] hover:border-[#2C5F2E]/50 hover:text-[#2C5F2E]"
-                      }`}
-                    >
-                      {supplier}
-                    </button>
-                  ))}
+                  {suppliers.map(supplier => {
+                    const isActive = activeSupplier === supplier
+                    const STYLES: Record<string, string> = {
+                      "AIRSOFT":      "text-[#1A1A1A] font-black tracking-widest",
+                      "BLACK FLASH":  "text-[#333] font-black tracking-wide",
+                      "BLACKFLASH":   "text-[#1A1A1A] font-black tracking-widest",
+                      "BÖKER":        "text-[#8B0000] font-black tracking-wide",
+                      "FISHERMAN'S":  "text-[#1A5276] font-black",
+                      "HALLER":       "text-[#2C5F2E] font-black tracking-wide",
+                      "JENZI":        "text-[#FF6600] font-black",
+                      "LINDER":       "text-[#333] font-black tracking-wide",
+                      "NATURZONE":    "text-[#2C5F2E] font-bold tracking-wide",
+                      "POHLFORCE":    "text-[#CC0000] font-black",
+                      "SMOKI":        "text-[#8B6914] font-black",
+                      "STEAMBOW":     "text-[#1A1A8C] font-black tracking-wider",
+                      "SYTONG":       "text-[#003087] font-black tracking-wider",
+                      "WILTEC":       "text-[#555] font-black tracking-wide",
+                    }
+                    const textStyle = STYLES[supplier] ?? "text-[#333] font-bold"
+                    return (
+                      <button
+                        key={supplier}
+                        onClick={() => setActiveSupplier(prev => prev === supplier ? "all" : supplier)}
+                        className={`px-3 py-1 text-[11px] rounded-full transition-all whitespace-nowrap border uppercase ${
+                          isActive
+                            ? "bg-[#1A1A1A] text-white border-[#1A1A1A] shadow-sm"
+                            : `bg-white border-[#E5E5E5] hover:border-[#AAAAAA] hover:shadow-sm ${textStyle}`
+                        }`}
+                      >
+                        {supplier}
+                      </button>
+                    )
+                  })}
                 </div>
               </div>
             )}
