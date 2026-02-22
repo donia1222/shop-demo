@@ -24,6 +24,9 @@ import {
   Package2,
   Upload,
   FileSpreadsheet,
+  BookOpen,
+  Calendar,
+  ImageIcon,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -176,6 +179,20 @@ export function Admin({ onClose }: AdminProps) {
     error?: string
   } | null>(null)
 
+  // Blog State
+  interface BlogPost { id: number; title: string; content: string; hero_image?: string; hero_image_url?: string; image2_url?: string; image3_url?: string; image4_url?: string; created_at: string }
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([])
+  const [blogLoading, setBlogLoading] = useState(false)
+  const [isBlogModalOpen, setIsBlogModalOpen] = useState(false)
+  const [currentEditingPost, setCurrentEditingPost] = useState<BlogPost | null>(null)
+  const [blogImagePreviews, setBlogImagePreviews] = useState<(string | null)[]>([null, null, null, null])
+  const [blogRemovedImages, setBlogRemovedImages] = useState<boolean[]>([false, false, false, false])
+  const [blogForm, setBlogForm] = useState({ title: "", content: "" })
+  const [blogImageFiles, setBlogImageFiles] = useState<(File | null)[]>([null, null, null, null])
+  const [blogSaving, setBlogSaving] = useState(false)
+  const [deleteBlogId, setDeleteBlogId] = useState<number | null>(null)
+  const [blogImageUrls, setBlogImageUrls] = useState<string[]>(["", "", "", ""])
+
   // Filter Orders
   const [orderFilters, setOrderFilters] = useState({
     search: "",
@@ -199,6 +216,8 @@ export function Admin({ onClose }: AdminProps) {
     } else if (activeTab === "products") {
       loadProducts()
       if (categories.length === 0) loadCategories()
+    } else if (activeTab === "blog") {
+      loadBlogPosts()
     }
   }, [activeTab, currentOrderPage, orderFilters])
 
@@ -207,6 +226,70 @@ export function Admin({ onClose }: AdminProps) {
       filterProducts()
     }
   }, [products, productFilters])
+
+  // Blog Functions
+  const loadBlogPosts = async () => {
+    setBlogLoading(true)
+    try {
+      const res = await fetch("/api/blog")
+      const d = await res.json()
+      if (d.success) setBlogPosts(d.posts)
+    } catch {}
+    finally { setBlogLoading(false) }
+  }
+
+  const openBlogModal = (post?: BlogPost) => {
+    setCurrentEditingPost(post ?? null)
+    setBlogForm({ title: post?.title ?? "", content: post?.content ?? "" })
+    setBlogImagePreviews([post?.hero_image_url ?? null, post?.image2_url ?? null, post?.image3_url ?? null, post?.image4_url ?? null])
+    setBlogRemovedImages([false, false, false, false])
+    setBlogImageFiles([null, null, null, null])
+    setBlogImageUrls(["", "", "", ""])
+    setIsBlogModalOpen(true)
+  }
+
+  const saveBlogPost = async () => {
+    if (!blogForm.title.trim() || !blogForm.content.trim()) {
+      toast({ title: "Fehler", description: "Titel und Inhalt sind erforderlich", variant: "destructive" }); return
+    }
+    setBlogSaving(true)
+    try {
+      const fd = new FormData()
+      const fields = ["hero_image", "image2", "image3", "image4"]
+      if (currentEditingPost) {
+        fd.append("id", String(currentEditingPost.id))
+        blogRemovedImages.forEach((r, i) => { if (r) fd.append("remove_" + fields[i], "1") })
+      }
+      fd.append("title", blogForm.title)
+      fd.append("content", blogForm.content)
+      blogImageFiles.forEach((f, i) => { if (f) fd.append(fields[i], f) })
+      blogImageUrls.forEach((u, i) => { if (u.trim() && !blogImageFiles[i]) fd.append(fields[i] + "_url", u.trim()) })
+      const url = currentEditingPost
+        ? `/api/blog/edit`
+        : `/api/blog/add`
+      const res = await fetch(url, { method: "POST", body: fd })
+      const d = await res.json()
+      if (!d.success) throw new Error(d.error)
+      toast({ title: currentEditingPost ? "Post aktualisiert" : "Post erstellt" })
+      setIsBlogModalOpen(false)
+      await loadBlogPosts()
+    } catch (e: any) {
+      toast({ title: "Fehler", description: e.message, variant: "destructive" })
+    } finally { setBlogSaving(false) }
+  }
+
+  const deleteBlogPost = async (id: number) => {
+    try {
+      const res = await fetch(`/api/blog/edit?id=${id}`, { method: "DELETE" })
+      const d = await res.json()
+      if (!d.success) throw new Error(d.error)
+      toast({ title: "Post gelöscht" })
+      setDeleteBlogId(null)
+      await loadBlogPosts()
+    } catch (e: any) {
+      toast({ title: "Fehler", description: e.message, variant: "destructive" })
+    }
+  }
 
   // Orders Functions
   const loadOrders = async () => {
@@ -686,7 +769,7 @@ export function Admin({ onClose }: AdminProps) {
 
       <div className="max-w-7xl mx-auto px-4 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-2 mb-8 bg-white border border-[#EBEBEB] rounded-2xl p-1 shadow-sm">
+          <TabsList className="grid w-full grid-cols-3 mb-8 bg-white border border-[#EBEBEB] rounded-2xl p-1 shadow-sm">
             <TabsTrigger
               value="orders"
               className="flex items-center gap-2 rounded-xl font-semibold data-[state=active]:bg-[#2C5F2E] data-[state=active]:text-white data-[state=active]:shadow-sm transition-all"
@@ -700,6 +783,13 @@ export function Admin({ onClose }: AdminProps) {
             >
               <Package className="w-4 h-4" />
               <span>Produkte</span>
+            </TabsTrigger>
+            <TabsTrigger
+              value="blog"
+              className="flex items-center gap-2 rounded-xl font-semibold data-[state=active]:bg-[#2C5F2E] data-[state=active]:text-white data-[state=active]:shadow-sm transition-all"
+            >
+              <BookOpen className="w-4 h-4" />
+              <span>Blog</span>
             </TabsTrigger>
           </TabsList>
 
@@ -1284,6 +1374,62 @@ export function Admin({ onClose }: AdminProps) {
               </div>
             )}
           </TabsContent>
+
+          {/* ── Blog Tab ── */}
+          <TabsContent value="blog">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="text-xl font-black text-[#1A1A1A]">Blog</h2>
+                <p className="text-sm text-[#888] mt-0.5">{blogPosts.length} Beiträge</p>
+              </div>
+              <Button onClick={() => openBlogModal()} className="bg-[#2C5F2E] hover:bg-[#1A4520] text-white gap-2 rounded-xl">
+                <Plus className="w-4 h-4" /> Neuer Beitrag
+              </Button>
+            </div>
+
+            {blogLoading && (
+              <div className="space-y-4">
+                {[0,1,2].map(i => <div key={i} className="h-24 bg-gray-100 rounded-2xl animate-pulse" />)}
+              </div>
+            )}
+
+            {!blogLoading && blogPosts.length === 0 && (
+              <div className="text-center py-20">
+                <BookOpen className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                <p className="text-gray-500">Noch keine Beiträge. Erstelle den ersten!</p>
+              </div>
+            )}
+
+            <div className="space-y-4">
+              {blogPosts.map(post => (
+                <div key={post.id} className="bg-white rounded-2xl border border-[#EBEBEB] shadow-sm overflow-hidden flex gap-0">
+                  {post.hero_image_url && (
+                    <div className="w-28 sm:w-40 flex-shrink-0 bg-[#F0F0F0]">
+                      <img src={post.hero_image_url} alt={post.title} className="w-full h-full object-cover" />
+                    </div>
+                  )}
+                  <div className="flex-1 p-4 flex flex-col justify-between min-w-0">
+                    <div>
+                      <div className="flex items-center gap-1.5 text-[11px] text-[#AAA] font-semibold mb-1">
+                        <Calendar className="w-3 h-3" />
+                        {new Date(post.created_at).toLocaleDateString("de-CH")}
+                      </div>
+                      <h3 className="font-black text-[#1A1A1A] truncate">{post.title}</h3>
+                      <p className="text-xs text-[#888] line-clamp-2 mt-1 leading-relaxed">{post.content}</p>
+                    </div>
+                    <div className="flex items-center gap-2 mt-3">
+                      <Button size="sm" variant="outline" onClick={() => openBlogModal(post)} className="gap-1.5 rounded-xl text-xs h-8">
+                        <Edit className="w-3.5 h-3.5" /> Bearbeiten
+                      </Button>
+                      <Button size="sm" variant="outline" onClick={() => setDeleteBlogId(post.id)} className="gap-1.5 rounded-xl text-xs h-8 border-red-200 text-red-500 hover:bg-red-50">
+                        <Trash2 className="w-3.5 h-3.5" /> Löschen
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </TabsContent>
         </Tabs>
 
         {/* Order Detail Modal */}
@@ -1668,6 +1814,100 @@ export function Admin({ onClose }: AdminProps) {
                 <Trash2 className="w-4 h-4 mr-2" />
                 Löschen
               </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* ── Blog Post Modal ── */}
+        <Dialog open={isBlogModalOpen} onOpenChange={open => { setIsBlogModalOpen(open); if (!open) setCurrentEditingPost(null) }}>
+          <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto bg-white">
+            <DialogHeader>
+              <DialogTitle>{currentEditingPost ? "Beitrag bearbeiten" : "Neuer Beitrag"}</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-5 pt-2">
+              <div>
+                <Label className="text-sm font-semibold mb-1.5 block">Titel *</Label>
+                <Input value={blogForm.title} onChange={e => setBlogForm(f => ({ ...f, title: e.target.value }))} placeholder="Beitragstitel..." className="rounded-xl" />
+              </div>
+              <div>
+                <Label className="text-sm font-semibold mb-1.5 block">Inhalt *</Label>
+                <Textarea value={blogForm.content} onChange={e => setBlogForm(f => ({ ...f, content: e.target.value }))} placeholder="Schreibe deinen Beitrag hier..." rows={8} className="rounded-xl resize-none" />
+              </div>
+
+              {/* Images */}
+              {["Hero-Bild", "Bild 2", "Bild 3", "Bild 4"].map((label, i) => (
+                <div key={i}>
+                  <Label className="text-sm font-semibold mb-1.5 flex items-center gap-1.5">
+                    <ImageIcon className="w-3.5 h-3.5" /> {label}
+                  </Label>
+
+                  {/* Current preview */}
+                  {(blogImagePreviews[i] && !blogRemovedImages[i]) ? (
+                    <div className="relative w-full h-36 rounded-xl overflow-hidden border border-[#E5E5E5] mb-2">
+                      <img src={blogImagePreviews[i]!} alt="" className="w-full h-full object-cover" />
+                      <button
+                        onClick={() => {
+                          const r = [...blogRemovedImages]; r[i] = true; setBlogRemovedImages(r)
+                          const p = [...blogImagePreviews]; p[i] = null; setBlogImagePreviews(p)
+                          const f = [...blogImageFiles]; f[i] = null; setBlogImageFiles(f)
+                          const u = [...blogImageUrls]; u[i] = ""; setBlogImageUrls(u)
+                        }}
+                        className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600"
+                      ><X className="w-3.5 h-3.5" /></button>
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-2 gap-2">
+                      {/* Upload file */}
+                      <label className="flex flex-col items-center justify-center h-20 border-2 border-dashed border-[#D5D5D5] rounded-xl cursor-pointer hover:border-[#2C5F2E] hover:bg-[#2C5F2E]/5 transition-colors">
+                        <Upload className="w-4 h-4 text-[#AAA] mb-1" />
+                        <span className="text-[11px] text-[#AAA]">Datei hochladen</span>
+                        <input type="file" accept="image/*" className="hidden" onChange={e => {
+                          const file = e.target.files?.[0]; if (!file) return
+                          const files = [...blogImageFiles]; files[i] = file; setBlogImageFiles(files)
+                          const previews = [...blogImagePreviews]; previews[i] = URL.createObjectURL(file); setBlogImagePreviews(previews)
+                          const r = [...blogRemovedImages]; r[i] = false; setBlogRemovedImages(r)
+                          const u = [...blogImageUrls]; u[i] = ""; setBlogImageUrls(u)
+                        }} />
+                      </label>
+                      {/* URL input */}
+                      <div className="flex flex-col gap-1">
+                        <input
+                          type="url"
+                          placeholder="https://..."
+                          value={blogImageUrls[i]}
+                          onChange={e => {
+                            const u = [...blogImageUrls]; u[i] = e.target.value; setBlogImageUrls(u)
+                            if (e.target.value) {
+                              const p = [...blogImagePreviews]; p[i] = e.target.value; setBlogImagePreviews(p)
+                              const f = [...blogImageFiles]; f[i] = null; setBlogImageFiles(f)
+                            }
+                          }}
+                          className="h-20 text-xs px-3 border border-[#D5D5D5] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2C5F2E]/20 focus:border-[#2C5F2E] placeholder-[#CCC]"
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
+
+              <div className="flex gap-3 pt-2">
+                <Button onClick={saveBlogPost} disabled={blogSaving} className="flex-1 bg-[#2C5F2E] hover:bg-[#1A4520] text-white rounded-xl">
+                  {blogSaving ? "Speichern..." : currentEditingPost ? "Aktualisieren" : "Veröffentlichen"}
+                </Button>
+                <Button variant="outline" onClick={() => setIsBlogModalOpen(false)} className="rounded-xl">Abbrechen</Button>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* ── Blog Delete Confirm ── */}
+        <Dialog open={!!deleteBlogId} onOpenChange={open => { if (!open) setDeleteBlogId(null) }}>
+          <DialogContent className="max-w-sm bg-white">
+            <DialogHeader><DialogTitle>Beitrag löschen?</DialogTitle></DialogHeader>
+            <p className="text-sm text-[#666]">Dieser Beitrag wird dauerhaft gelöscht. Dieser Vorgang kann nicht rückgängig gemacht werden.</p>
+            <div className="flex gap-3 pt-2">
+              <Button variant="destructive" onClick={() => deleteBlogId && deleteBlogPost(deleteBlogId)} className="flex-1 rounded-xl">Löschen</Button>
+              <Button variant="outline" onClick={() => setDeleteBlogId(null)} className="rounded-xl">Abbrechen</Button>
             </div>
           </DialogContent>
         </Dialog>

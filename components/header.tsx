@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { ShoppingCart, ChevronDown, Menu, ArrowUp } from "lucide-react"
+import { ShoppingCart, ChevronDown, Menu, ArrowUp, Newspaper } from "lucide-react"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { LoginAuth } from "./login-auth"
 import { UserProfile } from "./user-profile"
@@ -50,9 +50,14 @@ export function Header({ onAdminOpen }: HeaderProps) {
       <div className="bg-[#F5F5F5] border-b border-[#E0E0E0] text-xs text-[#555555]">
         <div className="container mx-auto px-4 flex items-center justify-between h-8">
           <span className="hidden md:block">Ihr Schweizer Outdoor-Spezialist</span>
-          <div className="flex items-center gap-5 ml-auto">
-            <button className="hover:text-[#2C5F2E]">Kontakt</button>
-            <button className="hover:text-[#2C5F2E]">Blog</button>
+          <div className="flex items-center gap-3 ml-auto">
+            <button
+              onClick={() => router.push("/blog")}
+              className="flex items-center gap-1.5 bg-[#2C5F2E] hover:bg-[#1A4520] text-white text-[11px] font-bold px-3 py-1 rounded-full transition-colors"
+            >
+              <Newspaper className="w-3.5 h-3.5" />
+              Aktuelles
+            </button>
           </div>
         </div>
       </div>

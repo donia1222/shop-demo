@@ -1,15 +1,17 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { AdminLoginButton } from "@/components/admin-auth"
-import { Facebook, Twitter, Instagram } from "lucide-react"
+import { Facebook, Twitter, Instagram, Newspaper, ArrowRight } from "lucide-react"
 
 interface FooterProps {
   onAdminOpen?: () => void
 }
 
 export function Footer({ onAdminOpen }: FooterProps = {}) {
+  const router = useRouter()
   const [openModal, setOpenModal] = useState<string | null>(null)
 
   const legalContent = {
