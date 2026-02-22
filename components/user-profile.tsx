@@ -961,13 +961,8 @@ export function UserProfile({ onClose, onAccountDeleted }: UserProfileProps) {
 
                       <Separator />
 
-                      <div className="space-y-2">
-                        <div className="flex items-center space-x-2">
-                          <Calendar className="w-4 h-4 text-gray-500" />
-                          <span className="text-sm text-gray-600">Mitglied seit</span>
-                        </div>
-                        <p className="text-sm font-medium">{formatDate(userData?.created_at || "")}</p>
-                      </div>
+           
+            
 
                       {orderStats?.last_order_date && (
                         <div className="space-y-2">
@@ -1065,21 +1060,7 @@ export function UserProfile({ onClose, onAccountDeleted }: UserProfileProps) {
                             />
                           </div>
                         </div>
-                        <div className="w-full sm:w-48">
-                          <Select value={statusFilter || "all"} onValueChange={handleStatusFilterChange}>
-                            <SelectTrigger className="bg-white">
-                              <Filter className="w-4 h-4 mr-2" />
-                              <SelectValue placeholder="Status filtern" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="all">Alle Status</SelectItem>
-                              <SelectItem value="completed">Abgeschlossen</SelectItem>
-                              <SelectItem value="processing">In Bearbeitung</SelectItem>
-                              <SelectItem value="pending">Ausstehend</SelectItem>
-                              <SelectItem value="cancelled">Storniert</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
+              
                       </div>
 
                       {/* Orders Loading State */}
@@ -1191,16 +1172,7 @@ export function UserProfile({ onClose, onAccountDeleted }: UserProfileProps) {
                                               key={index}
                                               className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 bg-white p-3 rounded-lg shadow-sm"
                                             >
-                                              <img
-                                                src={
-                                                  item.product_image ||
-                                                  "/placeholder.svg?height=50&width=50&query=product" ||
-                                                  "/placeholder.svg" ||
-                                                  "/placeholder.svg"
-                                                }
-                                                alt={item.product_name}
-                                                className="w-12 h-12 object-cover rounded-lg mx-auto sm:mx-0"
-                                              />
+                                    
                                               <div className="flex-1 text-center sm:text-left">
                                                 <h6 className="font-medium text-sm">{item.product_name}</h6>
                                                 {item.product_description && (
@@ -1209,11 +1181,7 @@ export function UserProfile({ onClose, onAccountDeleted }: UserProfileProps) {
                                                   </p>
                                                 )}
                                                 <div className="flex items-center justify-center sm:justify-start space-x-2 mt-1 flex-wrap gap-1">
-                                                  {item.heat_level > 0 && (
-                                                    <Badge variant="outline" className="text-xs">
-                                                      🌶️ {item.heat_level}/5
-                                                    </Badge>
-                                                  )}
+                                              
                                                   {item.badge && (
                                                     <Badge variant="outline" className="text-xs">
                                                       {item.badge}
