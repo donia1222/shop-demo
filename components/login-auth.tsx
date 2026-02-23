@@ -1,7 +1,8 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { User, Eye, EyeOff, Mail, KeyRound, CheckCircle, AlertCircle, LogOut, UserPlus, Settings } from "lucide-react"
+import { useRouter } from "next/navigation"
+import { User, Eye, EyeOff, Mail, KeyRound, CheckCircle, AlertCircle, LogOut, Settings } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -109,6 +110,7 @@ export function LoginAuth({
   const [resetMessage, setResetMessage] = useState("")
   const [resetErrors, setResetErrors] = useState<any>({})
 
+  const router = useRouter()
   const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL
 
   // Check if user is logged in on component mount
@@ -279,10 +281,11 @@ export function LoginAuth({
           onLoginSuccess(userData)
         }
 
-        // Close modal after success
+        // Navigate to profile after success
         setTimeout(() => {
           setShowAuthModal(false)
           setLoginStatus("idle")
+          router.push("/profile")
         }, 1500)
 
         console.log("✅ Login exitoso")
@@ -566,32 +569,39 @@ export function LoginAuth({
 
       {/* Auth Modal (Login/Register) */}
       <Dialog open={showAuthModal} onOpenChange={setShowAuthModal}>
-        <DialogContent className="sm:max-w-md bg-white text-gray-900">
-          <DialogHeader>
-            <DialogTitle className="flex items-center justify-center">
-              <User className="w-5 h-5 mr-2 text-blue-600" />
-              {authMode === "login" ? "Anmelden" : "Registrieren"}
-            </DialogTitle>
-            <DialogDescription className="text-center">
-              {authMode === "login" ? "Melden Sie sich mit Ihrem Konto an" : "Erstellen Sie ein neues Konto"}
-            </DialogDescription>
-          </DialogHeader>
+        <DialogContent className="p-0 gap-0 sm:max-w-sm bg-[#F7F7F5] border-0 overflow-hidden rounded-2xl">
+          {/* Hidden accessible title */}
+          <DialogTitle className="sr-only">
+            {authMode === "login" ? "Anmelden" : "Registrieren"}
+          </DialogTitle>
+          <DialogDescription className="sr-only">
+            {authMode === "login" ? "Melden Sie sich mit Ihrem Konto an" : "Erstellen Sie ein neues Konto"}
+          </DialogDescription>
 
-          <div className="py-4">
-            {/* Mode Toggle Buttons */}
-            <div className="flex bg-gray-100 rounded-lg p-1 mb-6">
+          {/* Logo area */}
+          <div className="flex flex-col items-center pt-8 pb-6 bg-white border-b border-gray-100">
+            <img src="/Security_n.png" alt="US - Fishing & Huntingshop" className="h-14 w-auto object-contain mb-2" />
+            <span className="font-black text-[#1A1A1A] text-base tracking-tight">US - Fishing &amp; Huntingshop</span>
+            <span className="text-xs text-[#888] tracking-widest uppercase mt-0.5">Jagd · Angeln · Outdoor</span>
+          </div>
+
+          {/* Form card */}
+          <div className="mx-4 my-5 bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+
+            {/* Mode Toggle */}
+            <div className="flex bg-gray-100 rounded-full p-1 mb-5">
               <button
                 onClick={() => setAuthMode("login")}
-                className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all duration-200 ${
-                  authMode === "login" ? "bg-white text-gray-900 text-blue-600 shadow-sm" : "text-gray-600 hover:text-gray-800"
+                className={`flex-1 py-1.5 px-4 rounded-full text-sm font-semibold transition-all duration-200 ${
+                  authMode === "login" ? "bg-white text-[#1A1A1A] shadow-sm" : "text-gray-500 hover:text-gray-700"
                 }`}
               >
                 Anmelden
               </button>
               <button
                 onClick={() => setAuthMode("register")}
-                className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all duration-200 ${
-                  authMode === "register" ? "bg-white text-gray-900 text-blue-600 shadow-sm" : "text-gray-600 hover:text-gray-800"
+                className={`flex-1 py-1.5 px-4 rounded-full text-sm font-semibold transition-all duration-200 ${
+                  authMode === "register" ? "bg-white text-[#1A1A1A] shadow-sm" : "text-gray-500 hover:text-gray-700"
                 }`}
               >
                 Registrieren
@@ -601,94 +611,74 @@ export function LoginAuth({
             {/* Login Form */}
             {authMode === "login" && (
               <div className="space-y-4">
+                <h2 className="text-2xl font-bold text-[#1A1A1A]">Anmelden</h2>
+
                 <div>
-                  <Label htmlFor="loginEmail">E-Mail *</Label>
+                  <p className="text-sm text-gray-600 mb-1">Geben Sie Ihre E-Mail-Adresse ein</p>
                   <Input
                     id="loginEmail"
                     type="email"
                     value={loginData.email}
                     onChange={(e) => setLoginData((prev) => ({ ...prev, email: e.target.value }))}
-                    className={`bg-white text-gray-900 ${loginErrors.email ? "border-red-500" : ""}`}
-                    placeholder="ihre@email.com"
+                    className={`rounded-full bg-white border-gray-200 text-gray-900 h-12 px-5 ${loginErrors.email ? "border-red-500" : ""}`}
+                    placeholder="E-Mail"
                   />
-                  {loginErrors.email && <p className="text-red-500 text-sm mt-1">{loginErrors.email}</p>}
+                  {loginErrors.email && <p className="text-red-500 text-sm mt-1 pl-2">{loginErrors.email}</p>}
                 </div>
 
                 <div>
-                  <div className="flex items-center justify-between">
-                    <Label htmlFor="loginPassword">Passwort *</Label>
-                    <Button
-                      type="button"
-                      variant="link"
-                      size="sm"
-                      onClick={openPasswordReset}
-                      className="text-xs text-blue-600 hover:text-blue-800 p-0 h-auto"
-                    >
-                      Passwort vergessen?
-                    </Button>
-                  </div>
+                  <p className="text-sm text-gray-600 mb-1">Passwort</p>
                   <div className="relative">
                     <Input
                       id="loginPassword"
                       type={showLoginPassword ? "text" : "password"}
                       value={loginData.password}
                       onChange={(e) => setLoginData((prev) => ({ ...prev, password: e.target.value }))}
-                      className={`bg-white text-gray-900 pr-10 ${loginErrors.password ? "border-red-500" : ""}`}
+                      className={`rounded-full bg-white border-gray-200 text-gray-900 h-12 px-5 pr-12 ${loginErrors.password ? "border-red-500" : ""}`}
                       placeholder="Ihr Passwort"
                     />
                     <Button
                       type="button"
                       variant="ghost"
                       size="icon"
-                      className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
+                      className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 hover:bg-transparent"
                       onClick={() => setShowLoginPassword(!showLoginPassword)}
                     >
-                      {showLoginPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      {showLoginPassword ? <EyeOff className="w-4 h-4 text-gray-400" /> : <Eye className="w-4 h-4 text-gray-400" />}
                     </Button>
                   </div>
-                  {loginErrors.password && <p className="text-red-500 text-sm mt-1">{loginErrors.password}</p>}
+                  {loginErrors.password && <p className="text-red-500 text-sm mt-1 pl-2">{loginErrors.password}</p>}
+                  <button
+                    type="button"
+                    onClick={openPasswordReset}
+                    className="text-sm text-[#2C5F2E] underline mt-1.5 pl-1 hover:text-[#1A4520]"
+                  >
+                    Passwort vergessen?
+                  </button>
                 </div>
 
                 <Button
                   onClick={handleLogin}
                   disabled={isLoggingIn || !loginData.email || !loginData.password}
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                  className="w-full h-12 rounded-full bg-[#2C5F2E] hover:bg-[#1A4520] text-white font-semibold text-base"
                 >
                   {isLoggingIn ? (
-                    <>
-                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                      Anmeldung läuft...
-                    </>
+                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white" />
                   ) : (
-                    <>
-                      <User className="w-4 h-4 mr-2" />
-                      Anmelden
-                    </>
+                    <>Anmelden &nbsp;→</>
                   )}
                 </Button>
 
-                {/* Login Status Messages */}
                 {loginStatus === "success" && (
-                  <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                    <div className="flex items-center">
-                      <CheckCircle className="w-5 h-5 text-green-600 mr-2" />
-                      <div>
-                        <p className="text-green-700 font-medium">Erfolgreich angemeldet!</p>
-                        <p className="text-green-600 text-sm mt-1">{loginMessage}</p>
-                      </div>
-                    </div>
+                  <div className="bg-green-50 border border-green-200 rounded-xl p-3 flex items-center gap-2">
+                    <CheckCircle className="w-4 h-4 text-green-600 shrink-0" />
+                    <p className="text-green-700 text-sm">{loginMessage}</p>
                   </div>
                 )}
-
                 {loginStatus === "error" && (
-                  <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-                    <div className="flex items-center">
-                      <AlertCircle className="w-5 h-5 text-red-600 mr-2" />
-                      <div>
-                        <p className="text-red-700 font-medium">Anmeldung fehlgeschlagen</p>
-                        <p className="text-red-600 text-sm mt-1">{loginMessage}</p>
-                      </div>
-                    </div>
+                  <div className="bg-red-50 border border-red-200 rounded-xl p-3 flex items-center gap-2">
+                    <AlertCircle className="w-4 h-4 text-red-600 shrink-0" />
+                    <p className="text-red-700 text-sm">{loginMessage}</p>
                   </div>
                 )}
               </div>
@@ -697,193 +687,161 @@ export function LoginAuth({
             {/* Register Form */}
             {authMode === "register" && (
               <div className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
+                <h2 className="text-2xl font-bold text-[#1A1A1A]">Konto erstellen</h2>
+
+                <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <Label htmlFor="firstName">Vorname *</Label>
+                    <p className="text-sm text-gray-600 mb-1">Vorname</p>
                     <Input
                       id="firstName"
                       value={registerData.firstName}
                       onChange={(e) => setRegisterData((prev) => ({ ...prev, firstName: e.target.value }))}
-                      className={`bg-white text-gray-900 ${registerErrors.firstName ? "border-red-500" : ""}`}
+                      className={`rounded-full bg-white border-gray-200 text-gray-900 h-11 px-4 ${registerErrors.firstName ? "border-red-500" : ""}`}
                       placeholder="Max"
                     />
-                    {registerErrors.firstName && (
-                      <p className="text-red-500 text-sm mt-1">{registerErrors.firstName}</p>
-                    )}
+                    {registerErrors.firstName && <p className="text-red-500 text-xs mt-1 pl-1">{registerErrors.firstName}</p>}
                   </div>
                   <div>
-                    <Label htmlFor="lastName">Nachname *</Label>
+                    <p className="text-sm text-gray-600 mb-1">Nachname</p>
                     <Input
                       id="lastName"
                       value={registerData.lastName}
                       onChange={(e) => setRegisterData((prev) => ({ ...prev, lastName: e.target.value }))}
-                      className={`bg-white text-gray-900 ${registerErrors.lastName ? "border-red-500" : ""}`}
+                      className={`rounded-full bg-white border-gray-200 text-gray-900 h-11 px-4 ${registerErrors.lastName ? "border-red-500" : ""}`}
                       placeholder="Mustermann"
                     />
-                    {registerErrors.lastName && <p className="text-red-500 text-sm mt-1">{registerErrors.lastName}</p>}
+                    {registerErrors.lastName && <p className="text-red-500 text-xs mt-1 pl-1">{registerErrors.lastName}</p>}
                   </div>
                 </div>
 
                 <div>
-                  <Label htmlFor="registerEmail">E-Mail *</Label>
+                  <p className="text-sm text-gray-600 mb-1">E-Mail-Adresse</p>
                   <Input
                     id="registerEmail"
                     type="email"
                     value={registerData.email}
                     onChange={(e) => setRegisterData((prev) => ({ ...prev, email: e.target.value }))}
-                    className={`bg-white text-gray-900 ${registerErrors.email ? "border-red-500" : ""}`}
+                    className={`rounded-full bg-white border-gray-200 text-gray-900 h-12 px-5 ${registerErrors.email ? "border-red-500" : ""}`}
                     placeholder="ihre@email.com"
                   />
-                  {registerErrors.email && <p className="text-red-500 text-sm mt-1">{registerErrors.email}</p>}
+                  {registerErrors.email && <p className="text-red-500 text-sm mt-1 pl-2">{registerErrors.email}</p>}
                 </div>
 
                 <div>
-                  <Label htmlFor="registerPassword">Passwort *</Label>
+                  <p className="text-sm text-gray-600 mb-1">Passwort</p>
                   <div className="relative">
                     <Input
                       id="registerPassword"
                       type={showRegisterPassword ? "text" : "password"}
                       value={registerData.password}
                       onChange={(e) => setRegisterData((prev) => ({ ...prev, password: e.target.value }))}
-                      className={`bg-white text-gray-900 pr-10 ${registerErrors.password ? "border-red-500" : ""}`}
+                      className={`rounded-full bg-white border-gray-200 text-gray-900 h-12 px-5 pr-12 ${registerErrors.password ? "border-red-500" : ""}`}
                       placeholder="Mindestens 6 Zeichen"
                     />
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="icon"
-                      className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
-                      onClick={() => setShowRegisterPassword(!showRegisterPassword)}
-                    >
-                      {showRegisterPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    <Button type="button" variant="ghost" size="icon" className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 hover:bg-transparent" onClick={() => setShowRegisterPassword(!showRegisterPassword)}>
+                      {showRegisterPassword ? <EyeOff className="w-4 h-4 text-gray-400" /> : <Eye className="w-4 h-4 text-gray-400" />}
                     </Button>
                   </div>
-                  {registerErrors.password && <p className="text-red-500 text-sm mt-1">{registerErrors.password}</p>}
+                  {registerErrors.password && <p className="text-red-500 text-sm mt-1 pl-2">{registerErrors.password}</p>}
                 </div>
 
                 <div>
-                  <Label htmlFor="confirmPassword">Passwort bestätigen *</Label>
+                  <p className="text-sm text-gray-600 mb-1">Passwort bestätigen</p>
                   <div className="relative">
                     <Input
                       id="confirmPassword"
                       type={showConfirmPassword ? "text" : "password"}
                       value={registerData.confirmPassword}
                       onChange={(e) => setRegisterData((prev) => ({ ...prev, confirmPassword: e.target.value }))}
-                      className={`bg-white text-gray-900 pr-10 ${registerErrors.confirmPassword ? "border-red-500" : ""}`}
+                      className={`rounded-full bg-white border-gray-200 text-gray-900 h-12 px-5 pr-12 ${registerErrors.confirmPassword ? "border-red-500" : ""}`}
                       placeholder="Passwort wiederholen"
                     />
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="icon"
-                      className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
-                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    >
-                      {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    <Button type="button" variant="ghost" size="icon" className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 hover:bg-transparent" onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
+                      {showConfirmPassword ? <EyeOff className="w-4 h-4 text-gray-400" /> : <Eye className="w-4 h-4 text-gray-400" />}
                     </Button>
                   </div>
-                  {registerErrors.confirmPassword && (
-                    <p className="text-red-500 text-sm mt-1">{registerErrors.confirmPassword}</p>
-                  )}
+                  {registerErrors.confirmPassword && <p className="text-red-500 text-sm mt-1 pl-2">{registerErrors.confirmPassword}</p>}
                 </div>
 
                 <Button
                   onClick={handleRegister}
-                  disabled={
-                    isRegistering ||
-                    !registerData.email ||
-                    !registerData.password ||
-                    !registerData.firstName ||
-                    !registerData.lastName
-                  }
-                  className="w-full bg-green-600 hover:bg-green-700 text-white"
+                  disabled={isRegistering || !registerData.email || !registerData.password || !registerData.firstName || !registerData.lastName}
+                  className="w-full h-12 rounded-full bg-[#2C5F2E] hover:bg-[#1A4520] text-white font-semibold text-base"
                 >
                   {isRegistering ? (
-                    <>
-                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                      Konto wird erstellt...
-                    </>
+                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white" />
                   ) : (
-                    <>
-                      <UserPlus className="w-4 h-4 mr-2" />
-                      Konto erstellen
-                    </>
+                    <>Konto erstellen &nbsp;→</>
                   )}
                 </Button>
 
-                {/* Register Status Messages */}
                 {registerStatus === "success" && (
-                  <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                    <div className="flex items-center">
-                      <CheckCircle className="w-5 h-5 text-green-600 mr-2" />
-                      <div>
-                        <p className="text-green-700 font-medium">Konto erfolgreich erstellt!</p>
-                        <p className="text-green-600 text-sm mt-1">{registerMessage}</p>
-                      </div>
-                    </div>
+                  <div className="bg-green-50 border border-green-200 rounded-xl p-3 flex items-center gap-2">
+                    <CheckCircle className="w-4 h-4 text-green-600 shrink-0" />
+                    <p className="text-green-700 text-sm">{registerMessage}</p>
                   </div>
                 )}
-
                 {registerStatus === "error" && (
-                  <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-                    <div className="flex items-center">
-                      <AlertCircle className="w-5 h-5 text-red-600 mr-2" />
-                      <div>
-                        <p className="text-red-700 font-medium">Registrierung fehlgeschlagen</p>
-                        <p className="text-red-600 text-sm mt-1">{registerMessage}</p>
-                      </div>
-                    </div>
+                  <div className="bg-red-50 border border-red-200 rounded-xl p-3 flex items-center gap-2">
+                    <AlertCircle className="w-4 h-4 text-red-600 shrink-0" />
+                    <p className="text-red-700 text-sm">{registerMessage}</p>
                   </div>
                 )}
               </div>
             )}
           </div>
+
+          {/* Bottom tagline */}
+          <p className="text-center text-sm text-gray-500 pb-6 px-4">
+            Jagd · Angeln · <span className="text-[#2C5F2E] font-semibold">Outdoor</span> · Schweiz
+          </p>
         </DialogContent>
       </Dialog>
 
       {/* User Menu Modal */}
       <Dialog open={showUserMenu} onOpenChange={setShowUserMenu}>
-        <DialogContent className="sm:max-w-sm bg-white text-gray-900">
-          <DialogHeader>
-            <DialogTitle className="flex items-center justify-center">
-              <User className="w-5 h-5 mr-2 text-blue-600" />
-              Mein Konto
-            </DialogTitle>
-            <DialogDescription className="text-center">
-              Angemeldet als{" "}
-              <strong>
-                {currentUser?.firstName} {currentUser?.lastName}
-              </strong>
-            </DialogDescription>
-          </DialogHeader>
+        <DialogContent className="p-0 gap-0 sm:max-w-sm bg-[#F7F7F5] border-0 overflow-hidden rounded-2xl">
+          <DialogTitle className="sr-only">Mein Konto</DialogTitle>
+          <DialogDescription className="sr-only">Angemeldet als {currentUser?.firstName} {currentUser?.lastName}</DialogDescription>
 
-          <div className="py-4 space-y-3">
+          {/* Logo area */}
+          <div className="flex flex-col items-center pt-8 pb-6 bg-white border-b border-gray-100">
+            <img src="/Security_n.png" alt="US - Fishing & Huntingshop" className="h-14 w-auto object-contain mb-2" />
+            <span className="font-black text-[#1A1A1A] text-base tracking-tight">US - Fishing &amp; Huntingshop</span>
+            <span className="text-xs text-[#888] tracking-widest uppercase mt-0.5">Jagd · Angeln · Outdoor</span>
+          </div>
+
+          {/* Card */}
+          <div className="mx-4 my-5 bg-white rounded-2xl shadow-sm border border-gray-100 p-6 space-y-4">
+            <div className="text-center">
+              <div className="w-12 h-12 rounded-full bg-[#2C5F2E]/10 flex items-center justify-center mx-auto mb-2">
+                <User className="w-6 h-6 text-[#2C5F2E]" />
+              </div>
+              <p className="font-bold text-[#1A1A1A] text-lg">{currentUser?.firstName} {currentUser?.lastName}</p>
+              <p className="text-sm text-gray-500">{currentUser?.email}</p>
+            </div>
+
             <Button
               onClick={handleShowProfile}
-              variant="outline"
-              className="w-full justify-start h-12 bg-blue-50 hover:bg-blue-100 border-blue-200 text-blue-700"
+              className="w-full h-12 rounded-full bg-[#2C5F2E] hover:bg-[#1A4520] text-white font-semibold text-base"
             >
-              <Settings className="w-5 h-5 mr-3" />
-              <div className="text-left">
-                <div className="font-medium">Profil anzeigen</div>
-                <div className="text-xs text-blue-600">Daten bearbeiten</div>
-              </div>
+              <Settings className="w-4 h-4 mr-2" />
+              Profil anzeigen &nbsp;→
             </Button>
-
-            <Separator />
 
             <Button
               onClick={handleLogout}
               variant="outline"
-              className="w-full justify-start h-12 bg-red-50 hover:bg-red-100 border-red-200 text-red-700"
+              className="w-full h-12 rounded-full border-gray-200 text-gray-600 hover:bg-gray-50 font-semibold"
             >
-              <LogOut className="w-5 h-5 mr-3" />
-              <div className="text-left">
-                <div className="font-medium">Abmelden</div>
-                <div className="text-xs text-red-600">Sitzung beenden</div>
-              </div>
+              <LogOut className="w-4 h-4 mr-2" />
+              Abmelden
             </Button>
           </div>
+
+          <p className="text-center text-sm text-gray-500 pb-6 px-4">
+            Jagd · Angeln · <span className="text-[#2C5F2E] font-semibold">Outdoor</span> · Schweiz
+          </p>
         </DialogContent>
       </Dialog>
 

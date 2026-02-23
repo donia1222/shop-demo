@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useMemo } from "react"
+import { useRouter } from "next/navigation"
 import {
   ArrowLeft,
   Package,
@@ -134,6 +135,7 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
   const [accountErrors, setAccountErrors] = useState<any>({})
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [currentUser, setCurrentUser] = useState<UserData | null>(null)
+  const router = useRouter()
   const [showUserProfile, setShowUserProfile] = useState(false)
 
   const [isCreatingAccount, setIsCreatingAccount] = useState(false)
@@ -1102,7 +1104,7 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
               </div>
               <div className="flex flex-col space-y-2">
                 <Button
-                  onClick={() => setShowUserProfile(true)}
+                  onClick={() => router.push("/profile")}
                   variant="outline"
                   size="sm"
                   className="bg-[#F0F9F0] hover:bg-[#E8F5E9] border-[#2C5F2E]/30 text-[#2C5F2E]"
@@ -1904,7 +1906,7 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
                   <Button
                     onClick={handleInvoicePayment}
                     disabled={isSubmitting}
-                    className="w-full h-14 text-base font-bold bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white shadow-xl hover:shadow-2xl transition-all duration-300"
+                    className="w-full min-h-14 h-auto py-3 text-base font-bold bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white shadow-xl hover:shadow-2xl transition-all duration-300 whitespace-normal leading-snug"
                   >
                     {isSubmitting ? (
                       <>
@@ -1912,7 +1914,7 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
                         Bestellung wird verarbeitet...
                       </>
                     ) : (
-                      <>📄 Kauf auf Rechnung & Vorkasse - {getFinalTotal().toFixed(2)} CHF</>
+                      <span className="text-center">📄 Kauf auf Rechnung & Vorkasse<br/>{getFinalTotal().toFixed(2)} CHF</span>
                     )}
                   </Button>
                 </div>
