@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation"
 import { ShoppingCart, ChevronDown, Menu, ArrowUp, Newspaper, Download } from "lucide-react"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { LoginAuth } from "./login-auth"
-import { UserProfile } from "./user-profile"
 
 interface HeaderProps {
   onAdminOpen: () => void
@@ -16,7 +15,6 @@ interface HeaderProps {
 export function Header({ onAdminOpen, onCartOpen, cartCount = 0 }: HeaderProps) {
   const router = useRouter()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [showUserProfile, setShowUserProfile] = useState(false)
   const [isLightSection] = useState(true)
   const [showScrollTop, setShowScrollTop] = useState(false)
 
@@ -42,10 +40,9 @@ export function Header({ onAdminOpen, onCartOpen, cartCount = 0 }: HeaderProps) 
   const handleLoginSuccess = (_user: any) => {}
   const handleLogout = () => {}
   const handleShowProfile = () => {
-    setShowUserProfile(true)
+    router.push("/profile")
     setIsMenuOpen(false)
   }
-  const handleProfileClose = () => setShowUserProfile(false)
 
   return (
     <>
@@ -206,13 +203,6 @@ export function Header({ onAdminOpen, onCartOpen, cartCount = 0 }: HeaderProps) 
           </nav>
         </div>
       </div>
-
-      {showUserProfile && (
-        <UserProfile
-          onClose={handleProfileClose}
-          onAccountDeleted={() => setShowUserProfile(false)}
-        />
-      )}
 
       {/* Scroll to top */}
       {showScrollTop && (

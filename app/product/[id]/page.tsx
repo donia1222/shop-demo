@@ -366,6 +366,28 @@ export default function ProductPage() {
         )
       })()}
 
+      {/* Trust badges */}
+      <div className="max-w-5xl mx-auto px-4 pb-12">
+        <div className="flex flex-wrap justify-center gap-3">
+          {[
+            "100% Schweizer Shop",
+            "Schnelle Lieferung",
+            "14 Tage Rückgaberecht",
+            "500+ Artikel im Sortiment",
+          ].map((feat) => (
+            <div
+              key={feat}
+              className="flex items-center gap-2 bg-white border border-[#E8E8E8] rounded-full px-4 py-2 shadow-sm"
+            >
+              <span className="w-5 h-5 rounded-full bg-[#2C5F2E] flex items-center justify-center flex-shrink-0">
+                <Check className="w-3 h-3 text-white stroke-[3]" />
+              </span>
+              <span className="text-xs font-semibold text-[#333]">{feat}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
     </div>
   )
 }

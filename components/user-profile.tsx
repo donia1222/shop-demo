@@ -841,13 +841,24 @@ export function UserProfile({ onClose, onAccountDeleted }: UserProfileProps) {
   }
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-start justify-center p-2 sm:p-4 overflow-y-auto z-[60]">
-      <div className="bg-white rounded-lg shadow-2xl w-full max-w-7xl min-h-[90vh] max-h-[90vh] overflow-hidden flex flex-col my-2 sm:my-4">
+    <div className="min-h-screen bg-[#F7F7F8]">
+      <div className="bg-white flex flex-col">
         {/* Header */}
-        <div className="bg-white shadow-lg border-b border-[#E0E0E0] flex-shrink-0">
+        <div className="bg-white shadow-sm border-b border-[#E0E0E0] sticky top-0 z-30 flex-shrink-0">
           <div className="px-3 sm:px-6 py-3 sm:py-4">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div className="flex items-center space-x-3 sm:space-x-4">
+                <button
+                  onClick={onClose}
+                  className="flex items-center gap-2 text-[#555] hover:text-[#2C5F2E] transition-colors group flex-shrink-0"
+                  type="button"
+                >
+                  <div className="w-8 h-8 rounded-full border border-[#E5E5E5] group-hover:border-[#2C5F2E]/60 group-hover:bg-[#2C5F2E]/5 flex items-center justify-center transition-all">
+                    <ChevronLeft className="w-4 h-4" />
+                  </div>
+                  <span className="text-sm font-bold hidden sm:block">Zurück</span>
+                </button>
+                <div className="w-px h-6 bg-[#E5E5E5] flex-shrink-0" />
                 <div className="w-10 h-10 sm:w-12 sm:h-12 bg-[#2C5F2E] rounded-full flex items-center justify-center">
                   <User className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                 </div>
@@ -905,27 +916,13 @@ export function UserProfile({ onClose, onAccountDeleted }: UserProfileProps) {
                   </div>
                 )}
 
-                <Button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    onClose();
-                  }}
-                  variant="outline"
-                  className="bg-red-500 hover:bg-red-600 text-white"
-                  size="sm"
-                  type="button"
-                >
-                  <X className="w-4 h-4 mr-1 sm:mr-2" />
-                  <span className="hidden sm:inline">Schließen</span>
-                </Button>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Main Content - SCROLLABLE */}
-        <div className="flex-1 overflow-y-auto bg-[#F7F7F8]" style={{ scrollBehavior: 'smooth' }}>
+        {/* Main Content */}
+        <div className="bg-[#F7F7F8]">
           <div className="px-3 sm:px-6 py-4 sm:py-8">
             <div className="max-w-6xl mx-auto">
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
