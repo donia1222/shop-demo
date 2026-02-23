@@ -926,6 +926,32 @@ export default function ShopGrid() {
           </main>
         </div>
       </div>
+
+      {/* Payment methods */}
+      <div className="border-t border-[#E0E0E0] py-5 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            <div className="flex items-center gap-1.5 pr-4 border-r border-[#E0E0E0]">
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-[#2C5F2E]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              <span className="text-[11px] font-semibold text-[#555] tracking-widest uppercase">Sichere Zahlung</span>
+            </div>
+            <div className="h-8 px-3 rounded-lg bg-black flex items-center shadow-sm">
+              <img src="/twint-logo.svg" alt="TWINT" className="h-5 w-auto" />
+            </div>
+            <div className="h-8 px-3 rounded-lg bg-[#FFCC00] flex items-center shadow-sm">
+              <span className="font-black text-black text-xs tracking-tight">Post<span className="font-normal">Finance</span></span>
+            </div>
+            <div className="h-8 px-4 rounded-lg bg-[#1A1F71] flex items-center shadow-sm">
+              <span className="font-black text-white text-base italic tracking-tight">VISA</span>
+            </div>
+            <div className="h-8 px-3 rounded-lg bg-white border border-[#E0E0E0] flex items-center gap-1 shadow-sm">
+              <div className="w-4 h-4 rounded-full bg-[#EB001B]" />
+              <div className="w-4 h-4 rounded-full bg-[#F79E1B] -ml-2" />
+              <span className="text-[11px] font-bold text-[#333] ml-1.5">Mastercard</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </>
   )
 }
