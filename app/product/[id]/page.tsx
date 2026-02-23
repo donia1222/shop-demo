@@ -246,28 +246,38 @@ export default function ProductPage() {
             <div className="p-6 md:p-8 flex flex-col gap-4">
 
               {(product.supplier || product.origin) && (() => {
-                const BRAND_COLORS: Record<string, string> = {
-                  "AIRSOFT":      "text-[#1A1A1A]",
-                  "BLACK FLASH":  "text-[#333]",
-                  "BLACKFLASH":   "text-[#1A1A1A]",
-                  "BÖKER":        "text-[#8B0000]",
-                  "FISHERMAN'S":  "text-[#1A5276]",
-                  "HALLER":       "text-[#2C5F2E]",
-                  "JENZI":        "text-[#FF6600]",
-                  "LINDER":       "text-[#333]",
-                  "NATURZONE":    "text-[#2C5F2E]",
-                  "POHLFORCE":    "text-[#CC0000]",
-                  "SMOKI":        "text-[#8B6914]",
-                  "STEAMBOW":     "text-[#1A1A8C]",
-                  "SYTONG":       "text-[#003087]",
-                  "WILTEC":       "text-[#555]",
+                const BRANDS: Record<string, { color: string; domain: string }> = {
+                  "AIRSOFT":      { color: "text-[#1A1A1A]", domain: "airsoft.ch" },
+                  "BLACK FLASH":  { color: "text-[#333]",    domain: "black-flash-archery.com" },
+                  "BLACKFLASH":   { color: "text-[#1A1A1A]", domain: "black-flash-archery.com" },
+                  "BÖKER":        { color: "text-[#8B0000]", domain: "boker.de" },
+                  "FISHERMAN'S":  { color: "text-[#1A5276]", domain: "fishermans-partner.eu" },
+                  "HALLER":       { color: "text-[#2C5F2E]", domain: "haller-stahlwaren.de" },
+                  "JENZI":        { color: "text-[#FF6600]", domain: "jenzi.com" },
+                  "LINDER":       { color: "text-[#333]",    domain: "linder.de" },
+                  "NATURZONE":    { color: "text-[#2C5F2E]", domain: "naturzone.ch" },
+                  "POHLFORCE":    { color: "text-[#CC0000]", domain: "pohlforce.de" },
+                  "SMOKI":        { color: "text-[#8B6914]", domain: "smoki-raeuchertechnik.de" },
+                  "STEAMBOW":     { color: "text-[#1A1A8C]", domain: "steambow.at" },
+                  "SYTONG":       { color: "text-[#003087]", domain: "sytong.global" },
+                  "WILTEC":       { color: "text-[#555]",    domain: "wiltec.de" },
                 }
                 const label = (product.supplier || product.origin || "").toUpperCase()
-                const color = BRAND_COLORS[label] ?? "text-[#888]"
+                const brand = BRANDS[label]
                 return (
-                  <p className={`text-sm font-black uppercase tracking-widest ${color}`}>
-                    {label}
-                  </p>
+                  <div className="flex items-center gap-2">
+                    {brand && (
+                      <img
+                        src={`https://www.google.com/s2/favicons?domain=${brand.domain}&sz=64`}
+                        alt={label}
+                        className="h-5 w-auto object-contain"
+                        onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none" }}
+                      />
+                    )}
+                    <p className={`text-sm font-black uppercase tracking-widest ${brand?.color ?? "text-[#888]"}`}>
+                      {label}
+                    </p>
+                  </div>
                 )
               })()}
 

@@ -162,8 +162,14 @@ export function HeroSection() {
               ].map((brand) => (
                 <div
                   key={`${copy}-${brand.name}`}
-                  className="flex-shrink-0 mx-[5px] px-4 py-2 rounded-full border border-[#EBEBEB] bg-white flex flex-col items-center gap-1 select-none"
+                  className="flex-shrink-0 mx-[5px] px-4 py-2 rounded-full border border-[#EBEBEB] bg-white flex items-center gap-2.5 select-none"
                 >
+                  <img
+                    src={`https://www.google.com/s2/favicons?domain=${brand.domain}&sz=64`}
+                    alt={brand.name}
+                    className="h-5 w-auto object-contain flex-shrink-0"
+                    onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none" }}
+                  />
                   <span className={brand.style}>{brand.name}</span>
                 </div>
               ))
