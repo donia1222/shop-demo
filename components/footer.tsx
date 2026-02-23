@@ -348,20 +348,46 @@ Falls Sie eine beschädigte oder falsche Ware erhalten haben, wenden Sie sich bi
                 </a>
               </div>
 
-              {/* Opening hours card */}
-              <div className="bg-[#F8FAF8] border border-[#E4EDE4] rounded-2xl p-4 max-w-xs">
-                <p className="text-xs font-black text-[#2C5F2E] uppercase tracking-widest mb-3">Öffnungszeiten</p>
-                <div className="space-y-1.5">
-                  {[
-                    { day: "Mo – Fr", hours: "13:30 – 18:30", open: true },
-                    { day: "Sa", hours: "10:00 – 16:00", open: true },
-                    { day: "So", hours: "Geschlossen", open: false },
-                  ].map(({ day, hours, open }) => (
-                    <div key={day} className="flex items-center justify-between gap-6">
-                      <span className={`text-sm font-medium ${open ? "text-[#333]" : "text-[#AAA]"}`}>{day}</span>
-                      <span className={`text-sm ${open ? "text-[#1A1A1A] font-semibold" : "text-[#AAA]"}`}>{hours}</span>
-                    </div>
-                  ))}
+              {/* Map + Opening hours */}
+              <div className="flex flex-wrap gap-3">
+                {/* Map */}
+                <a
+                  href="https://maps.google.com/?q=Bahnhofstrasse+2,+9475+Sevelen"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="rounded-2xl overflow-hidden border border-[#E4EDE4] block relative group"
+                  style={{ width: "290px", minHeight: "100px", flexShrink: 0 }}
+                >
+                  <iframe
+                    title="Standort"
+                    src="https://maps.google.com/maps?q=Bahnhofstrasse+2,+9475+Sevelen&output=embed&z=15"
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0, minHeight: "100px", pointerEvents: "none" }}
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                  />
+                  <div className="absolute inset-0 bg-[#2C5F2E]/0 group-hover:bg-[#2C5F2E]/10 transition-colors flex items-end p-2">
+                    <span className="bg-white/90 text-[#2C5F2E] text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm">
+                      Auf Karte öffnen ↗
+                    </span>
+                  </div>
+                </a>
+
+                <div className="bg-[#F8FAF8] border border-[#E4EDE4] rounded-2xl p-4" style={{ width: "260px", flexShrink: 0 }}>
+                  <p className="text-xs font-black text-[#2C5F2E] uppercase tracking-widest mb-3">Öffnungszeiten</p>
+                  <div className="space-y-1.5">
+                    {[
+                      { day: "Mo – Fr", hours: "13:30 – 18:30", open: true },
+                      { day: "Sa", hours: "10:00 – 16:00", open: true },
+                      { day: "So", hours: "Geschlossen", open: false },
+                    ].map(({ day, hours, open }) => (
+                      <div key={day} className="flex items-center justify-between gap-6">
+                        <span className={`text-sm font-medium ${open ? "text-[#333]" : "text-[#AAA]"}`}>{day}</span>
+                        <span className={`text-sm ${open ? "text-[#1A1A1A] font-semibold" : "text-[#AAA]"}`}>{hours}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
