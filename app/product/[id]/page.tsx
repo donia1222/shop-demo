@@ -1,8 +1,8 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { useRouter, useParams, useSearchParams } from "next/navigation"
-import { ChevronLeft, ShoppingCart, Check, MapPin } from "lucide-react"
+import { ChevronLeft, ChevronRight, ShoppingCart, Check, MapPin, X, ZoomIn } from "lucide-react"
 import { ProductImage } from "@/components/product-image"
 
 interface Product {
@@ -45,6 +45,9 @@ export default function ProductPage() {
   const [imgIdx, setImgIdx] = useState(0)
   const [added, setAdded] = useState(false)
   const [cartCount, setCartCount] = useState(0)
+  const [lightbox, setLightbox] = useState(false)
+  const [zoom, setZoom] = useState({ x: 50, y: 50, active: false })
+  const lightboxImgRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     try {
@@ -117,6 +120,33 @@ export default function ProductPage() {
       setAdded(true)
       setTimeout(() => setAdded(false), 2000)
     } catch {}
+  }
+
+  const handleLightboxMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = lightboxImgRef.current?.getBoundingClientRect()
+    if (!rect) return
+    const x = ((e.clientX - rect.left) / rect.width) * 100
+    const y = ((e.clientY - rect.top) / rect.height) * 100
+    setZoom({ x, y, active: true })
+  }
+
+  const handleLightboxTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    const touch = e.touches[0]
+    const rect = lightboxImgRef.current?.getBoundingClientRect()
+    if (!rect || !touch) return
+    const x = ((touch.clientX - rect.left) / rect.width) * 100
+    const y = ((touch.clientY - rect.top) / rect.height) * 100
+    setZoom({ x, y, active: true })
+  }
+
+  const handleLightboxTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+    e.preventDefault()
+    const touch = e.touches[0]
+    const rect = lightboxImgRef.current?.getBoundingClientRect()
+    if (!rect || !touch) return
+    const x = ((touch.clientX - rect.left) / rect.width) * 100
+    const y = ((touch.clientY - rect.top) / rect.height) * 100
+    setZoom({ x, y, active: true })
   }
 
   if (loading) return (
@@ -192,7 +222,11 @@ export default function ProductPage() {
 
             {/* Image side */}
             <div className="bg-[#F8F8F8] p-6 flex flex-col items-center gap-4 border-b md:border-b-0 md:border-r border-[#F0F0F0]">
-              <div className="relative w-full max-w-sm aspect-square rounded-2xl overflow-hidden bg-white shadow-sm">
+              <div
+                className="relative w-full max-w-sm aspect-square rounded-2xl overflow-hidden bg-white shadow-sm cursor-zoom-in"
+                onClick={() => setLightbox(true)}
+                title="Klicken zum Vergrößern"
+              >
                 {images.length > 0 ? (
                   <img
                     src={images[imgIdx]}
@@ -418,6 +452,84 @@ export default function ProductPage() {
           ))}
         </div>
       </div>
+
+      {/* Lightbox */}
+      {lightbox && (
+        <div
+          className="fixed inset-0 z-[100] bg-black/90 flex items-center justify-center"
+          onClick={() => { setLightbox(false); setZoom({ x: 50, y: 50, active: false }) }}
+        >
+          <button
+            className="absolute top-4 right-4 text-white bg-white/10 hover:bg-white/20 rounded-full p-2 transition-colors"
+            onClick={() => { setLightbox(false); setZoom({ x: 50, y: 50, active: false }) }}
+          >
+            <X className="w-6 h-6" />
+          </button>
+          <div
+            ref={lightboxImgRef}
+            className="relative overflow-hidden rounded-xl cursor-crosshair select-none bg-[#111]"
+            style={{ maxWidth: "90vw", maxHeight: "90vh", width: "auto", height: "auto" }}
+            onClick={e => e.stopPropagation()}
+            onMouseMove={handleLightboxMouseMove}
+            onMouseLeave={() => setZoom(z => ({ ...z, active: false }))}
+            onTouchStart={handleLightboxTouchStart}
+            onTouchMove={handleLightboxTouchMove}
+            onTouchEnd={() => setZoom(z => ({ ...z, active: false }))}
+          >
+            <div
+              className="w-full h-full transition-transform duration-75"
+              style={zoom.active ? {
+                transform: `scale(2.5)`,
+                transformOrigin: `${zoom.x}% ${zoom.y}%`,
+              } : { transform: "scale(1)", transformOrigin: "center" }}
+            >
+              {images.length > 0 ? (
+                <img
+                  src={images[imgIdx]}
+                  alt={product.name}
+                  className="block max-w-[90vw] max-h-[90vh] w-auto h-auto bg-white"
+                  draggable={false}
+                  onError={e => { (e.target as HTMLImageElement).src = "/placeholder.svg?height=800&width=800" }}
+                />
+              ) : (
+                <ProductImage
+                  src={product.image_url}
+                  candidates={product.image_url_candidates}
+                  alt={product.name}
+                  className="w-full h-full object-contain bg-white"
+                />
+              )}
+            </div>
+          </div>
+          {images.length > 1 && (
+            <>
+              <button
+                className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/15 hover:bg-white/30 text-white rounded-full p-2 transition-colors backdrop-blur-sm"
+                onClick={e => { e.stopPropagation(); setImgIdx(i => (i - 1 + images.length) % images.length); setZoom({ x: 50, y: 50, active: false }) }}
+              >
+                <ChevronLeft className="w-6 h-6" />
+              </button>
+              <button
+                className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/15 hover:bg-white/30 text-white rounded-full p-2 transition-colors backdrop-blur-sm"
+                onClick={e => { e.stopPropagation(); setImgIdx(i => (i + 1) % images.length); setZoom({ x: 50, y: 50, active: false }) }}
+              >
+                <ChevronRight className="w-6 h-6" />
+              </button>
+            </>
+          )}
+          {images.length > 1 && (
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
+              {images.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={e => { e.stopPropagation(); setImgIdx(i) }}
+                  className={`w-2.5 h-2.5 rounded-full transition-all ${i === imgIdx ? "bg-white scale-125" : "bg-white/40"}`}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Payment methods */}
       <div className="max-w-5xl mx-auto px-4 pb-12">
