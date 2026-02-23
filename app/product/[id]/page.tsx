@@ -245,11 +245,31 @@ export default function ProductPage() {
             {/* Info side */}
             <div className="p-6 md:p-8 flex flex-col gap-4">
 
-              {(product.supplier || product.origin) && (
-                <p className="text-[11px] font-bold text-[#BBBBBB] uppercase tracking-widest">
-                  {product.supplier || product.origin}
-                </p>
-              )}
+              {(product.supplier || product.origin) && (() => {
+                const BRAND_COLORS: Record<string, string> = {
+                  "AIRSOFT":      "text-[#1A1A1A]",
+                  "BLACK FLASH":  "text-[#333]",
+                  "BLACKFLASH":   "text-[#1A1A1A]",
+                  "BÖKER":        "text-[#8B0000]",
+                  "FISHERMAN'S":  "text-[#1A5276]",
+                  "HALLER":       "text-[#2C5F2E]",
+                  "JENZI":        "text-[#FF6600]",
+                  "LINDER":       "text-[#333]",
+                  "NATURZONE":    "text-[#2C5F2E]",
+                  "POHLFORCE":    "text-[#CC0000]",
+                  "SMOKI":        "text-[#8B6914]",
+                  "STEAMBOW":     "text-[#1A1A8C]",
+                  "SYTONG":       "text-[#003087]",
+                  "WILTEC":       "text-[#555]",
+                }
+                const label = (product.supplier || product.origin || "").toUpperCase()
+                const color = BRAND_COLORS[label] ?? "text-[#888]"
+                return (
+                  <p className={`text-sm font-black uppercase tracking-widest ${color}`}>
+                    {label}
+                  </p>
+                )
+              })()}
 
               <h1 className="text-2xl md:text-3xl font-black text-[#1A1A1A] leading-tight tracking-tight">
                 {product.name}

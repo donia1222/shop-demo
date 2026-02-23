@@ -324,8 +324,20 @@ export default function ShopGrid() {
     localStorage.removeItem("cantina-cart"); localStorage.removeItem("cantina-cart-count")
   }
   const suppliers = Array.from(
-    new Set(products.map(p => p.supplier).filter((s): s is string => !!s && s.trim() !== ""))
+    new Set(
+      products
+        .filter(p => activeCategory === "all" || p.category === activeCategory)
+        .map(p => p.supplier)
+        .filter((s): s is string => !!s && s.trim() !== "")
+    )
   ).sort()
+
+  // Reset supplier when it's not available in the current category
+  useEffect(() => {
+    if (activeSupplier !== "all" && !suppliers.includes(activeSupplier)) {
+      setActiveSupplier("all")
+    }
+  }, [activeCategory])
 
   const filtered = products
     .filter(p => {
