@@ -9,6 +9,7 @@ import { RecommendedProducts } from "@/components/recommended-products"
 import ProductsGridCombined from "@/components/products-grid"
 import { ReviewsSection } from "@/components/reviews-section"
 import { BlogBanner } from "@/components/blog-banner"
+import { GalleryBanner } from "@/components/gallery-banner"
 import { ShoppingCartComponent } from "@/components/shopping-cart"
 import { CheckoutPage } from "@/components/checkout-page"
 import { Footer } from "@/components/footer"
@@ -314,13 +315,10 @@ function PremiumHotSauceStoreInner() {
       <CategoryPreviewSection />
 
       <RecommendedProducts />
-
-
+      <BlogBanner />
+      <GalleryBanner />
 
       <ReviewsSection />
-
-      <BlogBanner />
-
       <ShoppingCartComponent
         isOpen={isCartOpen}
         onOpenChange={setIsCartOpen}

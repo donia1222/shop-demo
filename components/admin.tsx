@@ -28,6 +28,7 @@ import {
   Calendar,
   ImageIcon,
   Download,
+  Images,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -228,6 +229,17 @@ export function Admin({ onClose }: AdminProps) {
   const [deleteBlogId, setDeleteBlogId] = useState<number | null>(null)
   const [blogImageUrls, setBlogImageUrls] = useState<string[]>(["", "", "", ""])
 
+  // Gallery State
+  interface GalleryImage { id: number; title: string | null; image: string; image_url: string; created_at: string }
+  const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([])
+  const [galleryLoading, setGalleryLoading] = useState(false)
+  const [isGalleryModalOpen, setIsGalleryModalOpen] = useState(false)
+  const [galleryTitle, setGalleryTitle] = useState("")
+  const [galleryFile, setGalleryFile] = useState<File | null>(null)
+  const [galleryPreview, setGalleryPreview] = useState<string | null>(null)
+  const [gallerySaving, setGallerySaving] = useState(false)
+  const [deleteGalleryId, setDeleteGalleryId] = useState<number | null>(null)
+
   // Filter Orders
   const [orderFilters, setOrderFilters] = useState({
     search: "",
@@ -264,6 +276,8 @@ export function Admin({ onClose }: AdminProps) {
       if (categories.length === 0) loadCategories()
     } else if (activeTab === "blog") {
       loadBlogPosts()
+    } else if (activeTab === "gallery") {
+      loadGalleryImages()
     }
   }, [activeTab, currentOrderPage, orderFilters])
 
@@ -332,6 +346,57 @@ export function Admin({ onClose }: AdminProps) {
       toast({ title: "Post gelöscht" })
       setDeleteBlogId(null)
       await loadBlogPosts()
+    } catch (e: any) {
+      toast({ title: "Fehler", description: e.message, variant: "destructive" })
+    }
+  }
+
+  // Gallery Functions
+  const loadGalleryImages = async () => {
+    setGalleryLoading(true)
+    try {
+      const res = await fetch("/api/gallery")
+      const d = await res.json()
+      if (d.success) setGalleryImages(d.images)
+    } catch {}
+    finally { setGalleryLoading(false) }
+  }
+
+  const openGalleryModal = () => {
+    setGalleryTitle("")
+    setGalleryFile(null)
+    setGalleryPreview(null)
+    setIsGalleryModalOpen(true)
+  }
+
+  const saveGalleryImage = async () => {
+    if (!galleryFile) {
+      toast({ title: "Fehler", description: "Bitte ein Bild auswählen", variant: "destructive" }); return
+    }
+    setGallerySaving(true)
+    try {
+      const fd = new FormData()
+      fd.append("image", galleryFile)
+      if (galleryTitle.trim()) fd.append("title", galleryTitle.trim())
+      const res = await fetch("/api/gallery/add", { method: "POST", body: fd })
+      const d = await res.json()
+      if (!d.success) throw new Error(d.error)
+      toast({ title: "Bild hochgeladen" })
+      setIsGalleryModalOpen(false)
+      await loadGalleryImages()
+    } catch (e: any) {
+      toast({ title: "Fehler", description: e.message, variant: "destructive" })
+    } finally { setGallerySaving(false) }
+  }
+
+  const deleteGalleryImage = async (id: number) => {
+    try {
+      const res = await fetch(`/api/gallery/delete?id=${id}`, { method: "DELETE" })
+      const d = await res.json()
+      if (!d.success) throw new Error(d.error)
+      toast({ title: "Bild gelöscht" })
+      setDeleteGalleryId(null)
+      await loadGalleryImages()
     } catch (e: any) {
       toast({ title: "Fehler", description: e.message, variant: "destructive" })
     }
@@ -1049,7 +1114,7 @@ export function Admin({ onClose }: AdminProps) {
 
       <div className="max-w-7xl mx-auto px-4 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-3 mb-8 bg-white border border-[#EBEBEB] rounded-2xl p-1 shadow-sm">
+          <TabsList className="grid w-full grid-cols-4 mb-8 bg-white border border-[#EBEBEB] rounded-2xl p-1 shadow-sm">
             <TabsTrigger
               value="orders"
               className="flex items-center gap-2 rounded-xl font-semibold data-[state=active]:bg-[#2C5F2E] data-[state=active]:text-white data-[state=active]:shadow-sm transition-all"
@@ -1070,6 +1135,13 @@ export function Admin({ onClose }: AdminProps) {
             >
               <BookOpen className="w-4 h-4" />
               <span>Blog</span>
+            </TabsTrigger>
+            <TabsTrigger
+              value="gallery"
+              className="flex items-center gap-2 rounded-xl font-semibold data-[state=active]:bg-[#2C5F2E] data-[state=active]:text-white data-[state=active]:shadow-sm transition-all"
+            >
+              <Images className="w-4 h-4" />
+              <span>Galerie</span>
             </TabsTrigger>
           </TabsList>
 
@@ -1871,6 +1943,54 @@ export function Admin({ onClose }: AdminProps) {
               ))}
             </div>
           </TabsContent>
+
+          {/* ── Gallery Tab ── */}
+          <TabsContent value="gallery">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="text-xl font-black text-[#1A1A1A]">Galerie</h2>
+                <p className="text-sm text-[#888] mt-0.5">{galleryImages.length} Bilder</p>
+              </div>
+              <Button onClick={openGalleryModal} className="bg-[#2C5F2E] hover:bg-[#1A4520] text-white gap-2 rounded-xl">
+                <Plus className="w-4 h-4" /> Bild hochladen
+              </Button>
+            </div>
+
+            {galleryLoading && (
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                {[0,1,2,3].map(i => <div key={i} className="aspect-square bg-gray-100 rounded-2xl animate-pulse" />)}
+              </div>
+            )}
+
+            {!galleryLoading && galleryImages.length === 0 && (
+              <div className="text-center py-20">
+                <Images className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                <p className="text-gray-500">Noch keine Bilder. Lade das erste Bild hoch!</p>
+              </div>
+            )}
+
+            {!galleryLoading && galleryImages.length > 0 && (
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                {galleryImages.map(img => (
+                  <div key={img.id} className="bg-white rounded-2xl border border-[#EBEBEB] shadow-sm overflow-hidden group">
+                    <div className="aspect-square overflow-hidden bg-[#F0F0F0]">
+                      <img src={img.image_url} alt={img.title ?? ""} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                    </div>
+                    <div className="p-3">
+                      {img.title && <p className="text-xs font-semibold text-[#444] truncate mb-2">{img.title}</p>}
+                      <div className="flex items-center gap-1.5 text-[10px] text-[#AAA] font-semibold mb-2">
+                        <Calendar className="w-3 h-3" />
+                        {new Date(img.created_at).toLocaleDateString("de-CH")}
+                      </div>
+                      <Button size="sm" variant="outline" onClick={() => setDeleteGalleryId(img.id)} className="w-full gap-1.5 rounded-xl text-xs h-8 border-red-200 text-red-500 hover:bg-red-50">
+                        <Trash2 className="w-3.5 h-3.5" /> Löschen
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </TabsContent>
         </Tabs>
 
         {/* Order Detail Modal */}
@@ -2361,6 +2481,66 @@ export function Admin({ onClose }: AdminProps) {
             <div className="flex gap-3 pt-2">
               <Button variant="destructive" onClick={() => deleteBlogId && deleteBlogPost(deleteBlogId)} className="flex-1 rounded-xl">Löschen</Button>
               <Button variant="outline" onClick={() => setDeleteBlogId(null)} className="rounded-xl">Abbrechen</Button>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* ── Gallery Upload Modal ── */}
+        <Dialog open={isGalleryModalOpen} onOpenChange={open => { setIsGalleryModalOpen(open); if (!open) { setGalleryFile(null); setGalleryPreview(null); setGalleryTitle("") } }}>
+          <DialogContent className="max-w-md bg-white">
+            <DialogHeader>
+              <DialogTitle>Bild hochladen</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-5 pt-2">
+              <div>
+                <Label className="text-sm font-semibold mb-1.5 block">Titel (optional)</Label>
+                <Input value={galleryTitle} onChange={e => setGalleryTitle(e.target.value)} placeholder="Bildbeschreibung..." className="rounded-xl" />
+              </div>
+
+              <div>
+                <Label className="text-sm font-semibold mb-1.5 flex items-center gap-1.5 block">
+                  <ImageIcon className="w-3.5 h-3.5" /> Bild *
+                </Label>
+                {galleryPreview ? (
+                  <div className="relative w-full h-48 rounded-xl overflow-hidden border border-[#E5E5E5]">
+                    <img src={galleryPreview} alt="" className="w-full h-full object-cover" />
+                    <button
+                      onClick={() => { setGalleryFile(null); setGalleryPreview(null) }}
+                      className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600"
+                    ><X className="w-3.5 h-3.5" /></button>
+                  </div>
+                ) : (
+                  <label className="flex flex-col items-center justify-center h-36 border-2 border-dashed border-[#D5D5D5] rounded-xl cursor-pointer hover:border-[#2C5F2E] hover:bg-[#2C5F2E]/5 transition-colors">
+                    <Upload className="w-6 h-6 text-[#AAA] mb-2" />
+                    <span className="text-sm text-[#AAA] font-medium">Datei auswählen</span>
+                    <span className="text-[11px] text-[#CCC] mt-1">JPG, PNG, GIF, WebP — max. 8MB</span>
+                    <input type="file" accept="image/*" className="hidden" onChange={e => {
+                      const file = e.target.files?.[0]; if (!file) return
+                      setGalleryFile(file)
+                      setGalleryPreview(URL.createObjectURL(file))
+                    }} />
+                  </label>
+                )}
+              </div>
+
+              <div className="flex gap-3 pt-1">
+                <Button onClick={saveGalleryImage} disabled={gallerySaving || !galleryFile} className="flex-1 bg-[#2C5F2E] hover:bg-[#1A4520] text-white rounded-xl">
+                  {gallerySaving ? "Hochladen..." : "Hochladen"}
+                </Button>
+                <Button variant="outline" onClick={() => setIsGalleryModalOpen(false)} className="rounded-xl">Abbrechen</Button>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* ── Gallery Delete Confirm ── */}
+        <Dialog open={!!deleteGalleryId} onOpenChange={open => { if (!open) setDeleteGalleryId(null) }}>
+          <DialogContent className="max-w-sm bg-white">
+            <DialogHeader><DialogTitle>Bild löschen?</DialogTitle></DialogHeader>
+            <p className="text-sm text-[#666]">Dieses Bild wird dauerhaft gelöscht. Dieser Vorgang kann nicht rückgängig gemacht werden.</p>
+            <div className="flex gap-3 pt-2">
+              <Button variant="destructive" onClick={() => deleteGalleryId && deleteGalleryImage(deleteGalleryId)} className="flex-1 rounded-xl">Löschen</Button>
+              <Button variant="outline" onClick={() => setDeleteGalleryId(null)} className="rounded-xl">Abbrechen</Button>
             </div>
           </DialogContent>
         </Dialog>
