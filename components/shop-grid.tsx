@@ -148,7 +148,7 @@ const ProductCard = memo(function ProductCard({ product, addedIds, wishlist, onS
           <button
             onClick={() => onAddToCart(product)}
             disabled={!inStock}
-            className={`flex items-center gap-1.5 text-xs font-bold px-3.5 py-2 rounded-full transition-all duration-200 ${
+            className={`flex items-center justify-center w-9 h-9 rounded-full transition-all duration-200 ${
               isAdded
                 ? "bg-emerald-500 text-white"
                 : inStock
@@ -156,8 +156,7 @@ const ProductCard = memo(function ProductCard({ product, addedIds, wishlist, onS
                   : "bg-[#F0F0F0] text-[#CCC] cursor-not-allowed"
             }`}
           >
-            {isAdded ? <Check className="w-3.5 h-3.5" /> : <ShoppingCart className="w-3.5 h-3.5" />}
-            {isAdded ? "✓" : "Kaufen"}
+            {isAdded ? <Check className="w-4 h-4" /> : <ShoppingCart className="w-4 h-4" />}
           </button>
         </div>
       </div>
