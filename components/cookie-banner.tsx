@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 
 export function CookieBanner() {
   const [visible, setVisible] = useState(false)
+  
 
   useEffect(() => {
     const accepted = localStorage.getItem("cookie-consent")
