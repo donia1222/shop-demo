@@ -335,58 +335,56 @@ export function AdminAuth({ onAdminOpen, isLightSection = false }: AdminAuthProp
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent
-            className="w-64 bg-white border border-gray-200 shadow-2xl"
+            className="w-72 bg-[#F7F7F5] border-0 shadow-2xl rounded-2xl overflow-hidden p-0"
             align="end"
-            sideOffset={5}
+            sideOffset={8}
           >
-            {/* Header del menú */}
-            <div className="px-4 py-3 border-b border-gray-200/50">
-              <div className="flex items-center space-x-3">
-                <div className="p-2 bg-gradient-to-br from-green-500 to-green-600 rounded-lg">
-                  <Shield className="w-4 h-4 text-white" />
-                </div>
-                <div>
-                  <p className="font-semibold text-gray-800">Administrator</p>
-                  <p className="text-xs text-gray-500 truncate max-w-40">{adminProfile.email}</p>
-                </div>
+            {/* Header */}
+            <div className="flex flex-col items-center pt-5 pb-4 bg-white border-b border-gray-100">
+              <div className="w-11 h-11 rounded-full bg-[#2C5F2E]/10 flex items-center justify-center mb-2">
+                <Shield className="w-5 h-5 text-[#2C5F2E]" />
               </div>
+              <p className="font-bold text-[#1A1A1A] text-sm">Administrator</p>
+              <p className="text-xs text-gray-500 truncate max-w-48">{adminProfile.email}</p>
             </div>
 
-            {/* Opciones del menú */}
-            <DropdownMenuItem
-              onClick={handleViewProfile}
-              className="px-4 py-3 cursor-pointer hover:bg-gray-50/80 transition-colors focus:bg-gray-50/80"
-            >
-              <User className="w-4 h-4 mr-3 text-blue-500" />
-              <div className="flex-1">
-                <p className="font-medium text-gray-800">Profil anzeigen</p>
-                <p className="text-xs text-gray-500">Sitzungsinformationen</p>
-              </div>
-            </DropdownMenuItem>
+            {/* Items */}
+            <div className="p-2 space-y-1">
+              <DropdownMenuItem
+                onClick={handleViewProfile}
+                className="rounded-xl px-3 py-2.5 cursor-pointer hover:bg-white focus:bg-white transition-colors"
+              >
+                <User className="w-4 h-4 mr-3 text-[#2C5F2E] shrink-0" />
+                <div>
+                  <p className="font-medium text-[#1A1A1A] text-sm">Profil anzeigen</p>
+                  <p className="text-xs text-gray-400">Sitzungsinformationen</p>
+                </div>
+              </DropdownMenuItem>
 
-            <DropdownMenuItem
-              onClick={onAdminOpen}
-              className="px-4 py-3 cursor-pointer hover:bg-gray-50/80 transition-colors focus:bg-gray-50/80"
-            >
-              <Settings className="w-4 h-4 mr-3 text-[#2C5F2E]" />
-              <div className="flex-1">
-                <p className="font-medium text-gray-800">Admin-Panel</p>
-                <p className="text-xs text-gray-500">Websiteverwaltung</p>
-              </div>
-            </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={onAdminOpen}
+                className="rounded-xl px-3 py-2.5 cursor-pointer hover:bg-white focus:bg-white transition-colors"
+              >
+                <Settings className="w-4 h-4 mr-3 text-[#2C5F2E] shrink-0" />
+                <div>
+                  <p className="font-medium text-[#1A1A1A] text-sm">Admin-Panel</p>
+                  <p className="text-xs text-gray-400">Websiteverwaltung</p>
+                </div>
+              </DropdownMenuItem>
 
-            <DropdownMenuSeparator className="bg-gray-200/50" />
-
-            <DropdownMenuItem
-              onClick={handleLogout}
-              className="px-4 py-3 cursor-pointer hover:bg-red-50/80 transition-colors focus:bg-red-50/80"
-            >
-              <LogOut className="w-4 h-4 mr-3 text-red-500" />
-              <div className="flex-1">
-                <p className="font-medium text-red-600">Abmelden</p>
-                <p className="text-xs text-red-400">Admin-Panel verlassen</p>
+              <div className="pt-1 border-t border-gray-200/60">
+                <DropdownMenuItem
+                  onClick={handleLogout}
+                  className="rounded-xl px-3 py-2.5 cursor-pointer hover:bg-red-50 focus:bg-red-50 transition-colors mt-1"
+                >
+                  <LogOut className="w-4 h-4 mr-3 text-red-500 shrink-0" />
+                  <div>
+                    <p className="font-medium text-red-600 text-sm">Abmelden</p>
+                    <p className="text-xs text-red-400">Sitzung beenden</p>
+                  </div>
+                </DropdownMenuItem>
               </div>
-            </DropdownMenuItem>
+            </div>
           </DropdownMenuContent>
         </DropdownMenu>
       ) : (
@@ -406,113 +404,106 @@ export function AdminAuth({ onAdminOpen, isLightSection = false }: AdminAuthProp
               <Shield className="w-4 h-4" />
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-md">
-            <DialogHeader>
-              <DialogTitle className="flex items-center space-x-2">
-                <Shield className="w-5 h-5 text-[#2C5F2E]" />
-                <h2 className="text-3xl font-black text-[#1A1A1A] tracking-tight leading-none">
-                  Admin-Anmeldung
-                </h2>
-              </DialogTitle>
-            </DialogHeader>
+          <DialogContent className="p-0 gap-0 sm:max-w-sm bg-[#F7F7F5] border-0 overflow-hidden rounded-2xl">
+            <DialogTitle className="sr-only">Admin-Anmeldung</DialogTitle>
 
-            {/* Panel de Debug INFO - Solo visible cuando hay problemas */}
-            {(!debugInfo.envEmailExists || !debugInfo.envPasswordExists) && (
-              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
-                <h4 className="text-yellow-800 font-medium mb-2">⚠️ Info de Debug:</h4>
-                <div className="text-sm space-y-1">
-                  <p className="text-yellow-700">
-                    Variables de entorno: {debugInfo.envEmailExists && debugInfo.envPasswordExists ? "✅" : "❌"}
-                  </p>
-                  <p className="text-yellow-700">localStorage: {debugInfo.localStorageWorks ? "✅" : "❌"}</p>
-                  <p className="text-yellow-700">Sesión guardada: {debugInfo.savedSessionExists ? "✅" : "❌"}</p>
-                  {(!debugInfo.envEmailExists || !debugInfo.envPasswordExists) && (
-                    <div className="mt-2 p-2 bg-blue-50 rounded border border-blue-200">
-                      <p className="text-blue-800 text-xs font-medium">Credenciales de prueba:</p>
-                      <p className="text-blue-600 text-xs">Email: admin@hotbbq.com</p>
-                      <p className="text-blue-600 text-xs">Password: admin123</p>
-                    </div>
-                  )}
+            {/* Logo area */}
+            <div className="flex flex-col items-center pt-8 pb-6 bg-white border-b border-gray-100">
+              <img src="/Security_n.png" alt="US - Fishing & Huntingshop" className="h-14 w-auto object-contain mb-2" />
+              <span className="font-black text-[#1A1A1A] text-base tracking-tight">US - Fishing &amp; Huntingshop</span>
+              <span className="text-xs text-[#888] tracking-widest uppercase mt-0.5">Admin-Bereich</span>
+            </div>
+
+            {/* Form card */}
+            <div className="mx-4 my-5 bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+              <div className="flex items-center gap-2 mb-5">
+                <div className="w-8 h-8 rounded-full bg-[#2C5F2E]/10 flex items-center justify-center">
+                  <Shield className="w-4 h-4 text-[#2C5F2E]" />
                 </div>
-              </div>
-            )}
-
-            <form onSubmit={handleLogin} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={loginData.email}
-                  onChange={(e) => setLoginData((prev) => ({ ...prev, email: e.target.value }))}
-                  placeholder={debugInfo.envEmailExists ? "Tu email de admin" : "admin@hotbbq.com"}
-                  required
-                  className="bg-white"
-                />
+                <h2 className="text-2xl font-bold text-[#1A1A1A]">Anmelden</h2>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="password">Passwort</Label>
-                <div className="relative">
-                  <Input
-                    id="password"
-                    type={showPassword ? "text" : "password"}
-                    value={loginData.password}
-                    onChange={(e) => setLoginData((prev) => ({ ...prev, password: e.target.value }))}
-                    placeholder="••••••••"
-                    required
-                    className="bg-white pr-10"
-                  />
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
-                    onClick={() => setShowPassword(!showPassword)}
-                  >
-                    {showPassword ? (
-                      <EyeOff className="w-4 h-4 text-gray-500" />
-                    ) : (
-                      <Eye className="w-4 h-4 text-gray-500" />
-                    )}
-                  </Button>
-                </div>
-              </div>
-
-              <div className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
-                  id="rememberMe"
-                  checked={rememberMe}
-                  onChange={(e) => setRememberMe(e.target.checked)}
-                  className="rounded border-gray-300 text-[#2C5F2E] focus:ring-orange-500"
-                />
-                <Label htmlFor="rememberMe" className="text-sm text-gray-600">
-                  7 Tage angemeldet bleiben
-                </Label>
-              </div>
-
-              {loginError && (
-                <div className="bg-red-50 border border-red-200 rounded-lg p-3">
-                  <p className="text-red-600 text-sm">{loginError}</p>
+              {/* Debug info */}
+              {(!debugInfo.envEmailExists || !debugInfo.envPasswordExists) && (
+                <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-3 mb-4 text-xs text-yellow-700">
+                  <p className="font-medium mb-1">⚠️ Fallback-Zugangsdaten:</p>
+                  <p>Email: admin@hotbbq.com</p>
+                  <p>Passwort: admin123</p>
                 </div>
               )}
 
-              <Button
-                type="submit"
-                disabled={isLoggingIn}
-                className="w-full bg-[#2C5F2E] hover:bg-[#1A4520]"
-              >
-                {isLoggingIn ? (
-                  <>
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                    Iniciando sesión...
-                  </>
-                ) : (
-                  "Iniciar Sesión"
+              <form onSubmit={handleLogin} className="space-y-4">
+                <div>
+                  <p className="text-sm text-gray-600 mb-1">E-Mail</p>
+                  <Input
+                    id="email"
+                    type="email"
+                    value={loginData.email}
+                    onChange={(e) => setLoginData((prev) => ({ ...prev, email: e.target.value }))}
+                    placeholder="admin@email.com"
+                    required
+                    className="rounded-full bg-white border-gray-200 h-12 px-5"
+                  />
+                </div>
+
+                <div>
+                  <p className="text-sm text-gray-600 mb-1">Passwort</p>
+                  <div className="relative">
+                    <Input
+                      id="password"
+                      type={showPassword ? "text" : "password"}
+                      value={loginData.password}
+                      onChange={(e) => setLoginData((prev) => ({ ...prev, password: e.target.value }))}
+                      placeholder="••••••••"
+                      required
+                      className="rounded-full bg-white border-gray-200 h-12 px-5 pr-12"
+                    />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 hover:bg-transparent"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? <EyeOff className="w-4 h-4 text-gray-400" /> : <Eye className="w-4 h-4 text-gray-400" />}
+                    </Button>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id="rememberMe"
+                    checked={rememberMe}
+                    onChange={(e) => setRememberMe(e.target.checked)}
+                    className="rounded border-gray-300 text-[#2C5F2E]"
+                  />
+                  <Label htmlFor="rememberMe" className="text-sm text-gray-500">7 Tage angemeldet bleiben</Label>
+                </div>
+
+                {loginError && (
+                  <div className="bg-red-50 border border-red-200 rounded-xl p-3 text-red-600 text-sm">
+                    {loginError}
+                  </div>
                 )}
-              </Button>
-            </form>
+
+                <Button
+                  type="submit"
+                  disabled={isLoggingIn}
+                  className="w-full h-12 rounded-full bg-[#2C5F2E] hover:bg-[#1A4520] text-white font-semibold text-base"
+                >
+                  {isLoggingIn ? (
+                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white" />
+                  ) : (
+                    <>Anmelden &nbsp;→</>
+                  )}
+                </Button>
+              </form>
+            </div>
+
+            <p className="text-center text-sm text-gray-500 pb-6 px-4">
+              Jagd · Angeln · <span className="text-[#2C5F2E] font-semibold">Outdoor</span> · Schweiz
+            </p>
           </DialogContent>
         </Dialog>
       )}

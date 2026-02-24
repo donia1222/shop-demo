@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import {
   ArrowLeft,
   RefreshCw,
@@ -163,6 +163,9 @@ export function Admin({ onClose }: AdminProps) {
   // Bulk selection
   const [selectedProductIds, setSelectedProductIds] = useState<Set<number>>(new Set())
   const [bulkStatus, setBulkStatus] = useState<string>("")
+  const [showCategoryFilterModal, setShowCategoryFilterModal] = useState(false)
+  const [hasScrolled, setHasScrolled] = useState(false)
+  const filterCardRef = useRef<HTMLDivElement>(null)
   const [bulkLoading, setBulkLoading] = useState(false)
   const [removedImages, setRemovedImages] = useState<boolean[]>([false, false, false, false])
 
@@ -184,6 +187,32 @@ export function Admin({ onClose }: AdminProps) {
     errors?: string[]
     error?: string
   } | null>(null)
+
+  // Excel Add (sin borrar) State
+  const [addFile, setAddFile] = useState<File | null>(null)
+  const [addLoading, setAddLoading] = useState(false)
+  const [addResult, setAddResult] = useState<{
+    success: boolean
+    inserted?: number
+    updated?: number
+    skipped?: number
+    parsed?: number
+    processedIds?: number[]
+    errors?: string[]
+    error?: string
+  } | null>(null)
+
+  type ImportBatch = { filename: string; date: string; ids: number[]; count: number }
+  const [importHistory, setImportHistory] = useState<ImportBatch[]>(() => {
+    if (typeof window === "undefined") return []
+    try {
+      const saved: ImportBatch[] = JSON.parse(localStorage.getItem("excel-import-history") || "[]")
+      const cleaned = saved.filter(b => b.ids?.length > 0)
+      if (cleaned.length !== saved.length) localStorage.setItem("excel-import-history", JSON.stringify(cleaned))
+      return cleaned
+    } catch { return [] }
+  })
+  const [deletingBatch, setDeletingBatch] = useState<string | null>(null)
 
   // Blog State
   interface BlogPost { id: number; title: string; content: string; hero_image?: string; hero_image_url?: string; image2_url?: string; image3_url?: string; image4_url?: string; created_at: string }
@@ -215,6 +244,17 @@ export function Admin({ onClose }: AdminProps) {
   })
 
   const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL
+
+  useEffect(() => {
+    const onScroll = () => {
+      const el = filterCardRef.current
+      if (!el) { setHasScrolled(window.scrollY > 200); return }
+      const rect = el.getBoundingClientRect()
+      setHasScrolled(rect.bottom < 64)
+    }
+    window.addEventListener("scroll", onScroll, { passive: true })
+    return () => window.removeEventListener("scroll", onScroll)
+  }, [])
 
   useEffect(() => {
     if (activeTab === "orders") {
@@ -671,6 +711,68 @@ export function Admin({ onClose }: AdminProps) {
     }
   }
 
+  const handleExcelAdd = async () => {
+    if (!addFile) return
+    setAddLoading(true)
+    setAddResult(null)
+    try {
+      const formData = new FormData()
+      formData.append("file", addFile)
+      const response = await fetch("/api/add-products", { method: "POST", body: formData })
+      const data = await response.json()
+      setAddResult(data)
+      if (data.success) {
+        toast({ title: "Hinzufügen erfolgreich", description: `${data.inserted} neu, ${data.updated} aktualisiert — nichts gelöscht` })
+        loadProducts()
+        loadCategories()
+        // Solo guardar en historial si hay productos nuevos
+        if (data.processedIds?.length > 0) {
+          const batch = {
+            filename: addFile.name,
+            date: new Date().toLocaleString("de-CH"),
+            ids: data.processedIds,
+            count: data.processedIds.length,
+          }
+          const updated = [batch, ...importHistory].slice(0, 20)
+          setImportHistory(updated)
+          localStorage.setItem("excel-import-history", JSON.stringify(updated))
+        }
+      } else {
+        toast({ title: "Fehler", description: data.error, variant: "destructive" })
+      }
+    } catch {
+      toast({ title: "Fehler", description: "Verbindungsfehler", variant: "destructive" })
+    } finally {
+      setAddLoading(false)
+    }
+  }
+
+  const handleDeleteBatch = async (batch: { filename: string; date: string; ids: number[]; count: number }) => {
+    setDeletingBatch(batch.date)
+    try {
+      const response = await fetch("/api/delete-import", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ids: batch.ids }),
+      })
+      const data = await response.json()
+      if (data.success) {
+        toast({ title: "Gelöscht", description: `${data.deleted} Produkte aus "${batch.filename}" entfernt` })
+        const updated = importHistory.filter(b => b.date !== batch.date)
+        setImportHistory(updated)
+        localStorage.setItem("excel-import-history", JSON.stringify(updated))
+        loadProducts()
+        loadCategories()
+      } else {
+        toast({ title: "Fehler", description: data.error, variant: "destructive" })
+      }
+    } catch {
+      toast({ title: "Fehler", description: "Verbindungsfehler", variant: "destructive" })
+    } finally {
+      setDeletingBatch(null)
+    }
+  }
+
   const handleImageChange = (index: number) => (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
@@ -915,6 +1017,19 @@ export function Admin({ onClose }: AdminProps) {
             </div>
 
             <div className="flex items-center gap-2">
+              {activeTab === "products" && hasScrolled && (
+                <button
+                  onClick={() => setShowCategoryFilterModal(true)}
+                  className="flex items-center gap-2 px-4 py-2 bg-blue-100 hover:bg-blue-200 text-blue-800 text-sm font-bold rounded-full transition-all"
+                >
+                  <Filter className="w-4 h-4" />
+                  <span className="hidden sm:inline">
+                    {productFilters.category
+                      ? categories.find(c => c.slug === productFilters.category)?.name ?? productFilters.category
+                      : "Kategorie"}
+                  </span>
+                </button>
+              )}
               <button
                 onClick={activeTab === "orders" ? loadOrders : loadProducts}
                 disabled={ordersLoading || productsLoading}
@@ -1306,6 +1421,101 @@ export function Admin({ onClose }: AdminProps) {
               </CardContent>
             </Card>
 
+            {/* Excel Add (sin borrar) */}
+            <Card className="mb-6 border-dashed border-2 border-blue-400/30 rounded-2xl shadow-sm">
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center text-base">
+                  <FileSpreadsheet className="w-5 h-5 mr-2 text-blue-500" />
+                  Excel-Import (Produkte hinzufügen – nichts löschen)
+                </CardTitle>
+                <p className="text-xs text-gray-500 mt-1">Neue Kategorien & Produkte hinzufügen, ohne bestehende zu löschen.</p>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center gap-4 flex-wrap">
+                  <label className="flex-1 min-w-[220px] cursor-pointer">
+                    <div className="flex items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 bg-white hover:bg-gray-50 transition-colors">
+                      <Upload className="w-4 h-4 text-gray-500 shrink-0" />
+                      <span className="text-sm text-gray-600 truncate">
+                        {addFile ? addFile.name : ".xlsx / .xls auswählen"}
+                      </span>
+                    </div>
+                    <input
+                      type="file"
+                      accept=".xlsx,.xls"
+                      className="hidden"
+                      onChange={(e) => {
+                        setAddFile(e.target.files?.[0] ?? null)
+                        setAddResult(null)
+                      }}
+                    />
+                  </label>
+                  <Button
+                    onClick={handleExcelAdd}
+                    disabled={!addFile || addLoading}
+                    className="bg-blue-600 hover:bg-blue-700 text-white"
+                  >
+                    <Upload className={`w-4 h-4 mr-2 ${addLoading ? "animate-bounce" : ""}`} />
+                    {addLoading ? "Lädt hoch..." : "Hinzufügen"}
+                  </Button>
+                </div>
+
+                {addResult && (
+                  <div className={`mt-4 rounded-lg p-3 text-sm ${addResult.success ? "bg-blue-50 border border-blue-200" : "bg-red-50 border border-red-200"}`}>
+                    {addResult.success ? (
+                      <div className="space-y-1">
+                        <p className="font-medium text-blue-800">Abgeschlossen ({addResult.parsed} verarbeitet)</p>
+                        <div className="flex gap-4 text-blue-700 flex-wrap">
+                          <span>✅ Neu: <strong>{addResult.inserted}</strong></span>
+                          <span>🔄 Aktualisiert: <strong>{addResult.updated}</strong></span>
+                          <span>⏭ Übersprungen: <strong>{addResult.skipped}</strong></span>
+                          <span className="text-green-700">🛡 Gelöscht: <strong>0</strong></span>
+                        </div>
+                        {addResult.errors && addResult.errors.length > 0 && (
+                          <details className="mt-2">
+                            <summary className="cursor-pointer text-yellow-700 font-medium">
+                              {addResult.errors.length} Warnungen anzeigen
+                            </summary>
+                            <ul className="mt-1 space-y-0.5 text-yellow-700 text-xs">
+                              {addResult.errors.map((e, i) => <li key={i}>{e}</li>)}
+                            </ul>
+                          </details>
+                        )}
+                      </div>
+                    ) : (
+                      <p className="text-red-700 font-medium">Fehler: {addResult.error}</p>
+                    )}
+                  </div>
+                )}
+
+                {/* Historial de importaciones */}
+                {importHistory.length > 0 && (
+                  <div className="mt-4">
+                    <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Importverlauf</p>
+                    <div className="space-y-2">
+                      {importHistory.map((batch) => (
+                        <div key={batch.date} className="flex items-center justify-between bg-gray-50 border border-gray-200 rounded-lg px-3 py-2">
+                          <div className="min-w-0">
+                            <p className="text-sm font-medium text-gray-800 truncate">{batch.filename}</p>
+                            <p className="text-xs text-gray-500">{batch.date} · {batch.count} Produkte</p>
+                          </div>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            disabled={deletingBatch === batch.date}
+                            onClick={() => handleDeleteBatch(batch)}
+                            className="ml-3 shrink-0 border-red-200 text-red-600 hover:bg-red-50"
+                          >
+                            <Trash2 className="w-3.5 h-3.5 mr-1" />
+                            {deletingBatch === batch.date ? "..." : "Löschen"}
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
             {/* Products Header Actions */}
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-black text-[#1A1A1A] tracking-tight">Produktverwaltung</h2>
@@ -1361,10 +1571,9 @@ export function Admin({ onClose }: AdminProps) {
               </div>
             )}
 
-            {/* Products Filters + Bulk action bar — sticky below header */}
-            <div className="sticky top-16 z-20 bg-[#e8f5e9] pb-2 rounded-2xl px-3 pt-3 mb-4 border border-[#c8e6c9]">
             {/* Products Filters */}
-            <Card className="mb-2 rounded-2xl border-[#c8e6c9] shadow-sm bg-transparent">
+            <div ref={filterCardRef}>
+            <Card className="mb-4 rounded-2xl border-[#c8e6c9] shadow-sm bg-[#e8f5e9]">
               <CardHeader>
                 <CardTitle className="flex items-center text-base">
                   <Filter className="w-4 h-4 mr-2 text-[#2C5F2E]" />
@@ -1457,9 +1666,10 @@ export function Admin({ onClose }: AdminProps) {
                 </div>
               </CardContent>
             </Card>
+            </div>{/* end filterCardRef wrapper */}
 
-            {/* Bulk action bar */}
-            <div className="flex flex-wrap items-center gap-3 py-2 px-1">
+            {/* Bulk action bar — sticky */}
+            <div className="sticky top-16 z-20 bg-blue-200/95 backdrop-blur-sm border border-blue-300 rounded-2xl px-3 py-2 mb-4 shadow-sm flex flex-wrap items-center gap-3">
               <Button
                 variant="outline"
                 size="sm"
@@ -1470,6 +1680,7 @@ export function Admin({ onClose }: AdminProps) {
                   ? "Alle abwählen"
                   : "Alle auswählen"}
               </Button>
+
 
               {selectedProductIds.size > 0 && (
                 <>
@@ -1504,7 +1715,6 @@ export function Admin({ onClose }: AdminProps) {
                 </>
               )}
             </div>
-            </div>{/* end sticky wrapper */}
 
             {/* Products Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -1951,6 +2161,39 @@ export function Admin({ onClose }: AdminProps) {
         </Dialog>
 
         {/* Category Create/Edit Modal */}
+        {/* Modal filtro rápido de categoría */}
+        <Dialog open={showCategoryFilterModal} onOpenChange={setShowCategoryFilterModal}>
+          <DialogContent className="sm:max-w-xs rounded-2xl p-0 overflow-hidden">
+            <DialogHeader className="px-5 pt-5 pb-3 border-b border-gray-100">
+              <DialogTitle className="flex items-center gap-2 text-base">
+                <Filter className="w-4 h-4 text-blue-600" />
+                Kategorie auswählen
+              </DialogTitle>
+            </DialogHeader>
+            <div className="p-3 space-y-1 max-h-80 overflow-y-auto">
+              <button
+                onClick={() => { setProductFilters(prev => ({ ...prev, category: "" })); setShowCategoryFilterModal(false) }}
+                className={`w-full text-left px-4 py-2.5 rounded-xl text-sm font-medium transition-colors ${
+                  !productFilters.category ? "bg-blue-100 text-blue-800" : "hover:bg-gray-100 text-gray-700"
+                }`}
+              >
+                Alle Kategorien
+              </button>
+              {categories.map((cat) => (
+                <button
+                  key={cat.slug}
+                  onClick={() => { setProductFilters(prev => ({ ...prev, category: cat.slug })); setShowCategoryFilterModal(false) }}
+                  className={`w-full text-left px-4 py-2.5 rounded-xl text-sm font-medium transition-colors ${
+                    productFilters.category === cat.slug ? "bg-blue-100 text-blue-800" : "hover:bg-gray-100 text-gray-700"
+                  }`}
+                >
+                  {cat.name}
+                </button>
+              ))}
+            </div>
+          </DialogContent>
+        </Dialog>
+
         <Dialog open={isCategoryModalOpen} onOpenChange={(open) => { setIsCategoryModalOpen(open); if (!open) setEditingCategory(null) }}>
           <DialogContent className="max-w-md bg-white">
             <DialogHeader>
