@@ -424,7 +424,7 @@ export function Admin({ onClose }: AdminProps) {
     const formData = new FormData(e.currentTarget)
     const isEditing = editingCategory !== null
     if (isEditing) formData.append("id", editingCategory.id.toString())
-    const url = isEditing ? `${API_BASE_URL}/edit_category.php` : `${API_BASE_URL}/add_category.php`
+    const url = isEditing ? `/api/categories/edit` : `/api/categories/add`
     try {
       const response = await fetch(url, { method: "POST", body: formData })
       const data = await response.json()
@@ -432,7 +432,11 @@ export function Admin({ onClose }: AdminProps) {
         toast({ title: "Erfolg", description: isEditing ? "Kategorie aktualisiert" : "Kategorie erstellt" })
         setIsCategoryModalOpen(false)
         setEditingCategory(null)
-        loadCategories()
+        if (isEditing && data.category) {
+          setCategories(prev => prev.map(c => c.id === data.category.id ? data.category : c))
+        } else {
+          loadCategories()
+        }
         ;(e.target as HTMLFormElement).reset()
       } else {
         throw new Error(data.error || "Fehler")
@@ -444,7 +448,7 @@ export function Admin({ onClose }: AdminProps) {
 
   const handleDeleteCategory = async (cat: Category) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/delete_category.php`, {
+      const response = await fetch(`/api/categories/delete`, {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: `id=${cat.id}`,

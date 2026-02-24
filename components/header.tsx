@@ -17,6 +17,7 @@ export function Header({ onAdminOpen, onCartOpen, cartCount = 0 }: HeaderProps) 
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isLightSection] = useState(true)
   const [showScrollTop, setShowScrollTop] = useState(false)
+  const [backendCategories, setBackendCategories] = useState<{ slug: string; name: string }[]>([])
 
   useEffect(() => {
     const onScroll = () => setShowScrollTop(window.scrollY > 400)
@@ -24,17 +25,20 @@ export function Header({ onAdminOpen, onCartOpen, cartCount = 0 }: HeaderProps) 
     return () => window.removeEventListener("scroll", onScroll)
   }, [])
 
+  useEffect(() => {
+    fetch("/api/categories")
+      .then(r => r.json())
+      .then(data => { if (data.success) setBackendCategories(data.categories) })
+      .catch(() => {})
+  }, [])
+
   const categories: { label: string; href: string; highlight?: boolean }[] = [
     { label: "Home", href: "/" },
     { label: "Alle Produkte", href: "/shop" },
-    { label: "Messer", href: "/shop?cat=Messer" },
-    { label: "Armbrust", href: "/shop?cat=Armbrust" },
-    { label: "Pfeilbogen", href: "/shop?cat=Pfeilbogen" },
-    { label: "Beil", href: "/shop?cat=Beil" },
-    { label: "Security", href: "/shop?cat=Security" },
-    { label: "Lampen", href: "/shop?cat=Lampen" },
-    { label: "Schleuder & Blasrohr", href: "/shop?cat=Schleuder%20%26%20Blasrohr" },
-    { label: "Rauch & Grill", href: "/shop?cat=Rauch%20%26%20Grill" },
+    ...backendCategories.map(cat => ({
+      label: cat.name,
+      href: `/shop?cat=${encodeURIComponent(cat.name)}`,
+    })),
   ]
 
   const handleLoginSuccess = (_user: any) => {}
