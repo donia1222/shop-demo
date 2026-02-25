@@ -1226,50 +1226,52 @@ export function Admin({ onClose }: AdminProps) {
 
       <div className="max-w-7xl mx-auto px-4 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-6 mb-8 bg-white border border-[#EBEBEB] rounded-2xl p-1 shadow-sm">
+          <div className="overflow-x-auto mb-8 -mx-2 px-2 pb-1">
+          <TabsList className="flex w-max lg:grid lg:grid-cols-6 lg:w-full bg-white border border-[#EBEBEB] rounded-2xl p-1 shadow-sm">
             <TabsTrigger
               value="orders"
-              className="flex items-center gap-2 rounded-xl font-semibold data-[state=active]:bg-[#2C5F2E] data-[state=active]:text-white data-[state=active]:shadow-sm transition-all"
+              className="flex items-center gap-2 rounded-xl font-semibold shrink-0 data-[state=active]:bg-[#2C5F2E] data-[state=active]:text-white data-[state=active]:shadow-sm transition-all"
             >
               <ShoppingBag className="w-4 h-4" />
               <span>Bestellungen</span>
             </TabsTrigger>
             <TabsTrigger
               value="products"
-              className="flex items-center gap-2 rounded-xl font-semibold data-[state=active]:bg-[#2C5F2E] data-[state=active]:text-white data-[state=active]:shadow-sm transition-all"
+              className="flex items-center gap-2 rounded-xl font-semibold shrink-0 data-[state=active]:bg-[#2C5F2E] data-[state=active]:text-white data-[state=active]:shadow-sm transition-all"
             >
               <Package className="w-4 h-4" />
               <span>Produkte</span>
             </TabsTrigger>
             <TabsTrigger
               value="blog"
-              className="flex items-center gap-2 rounded-xl font-semibold data-[state=active]:bg-[#2C5F2E] data-[state=active]:text-white data-[state=active]:shadow-sm transition-all"
+              className="flex items-center gap-2 rounded-xl font-semibold shrink-0 data-[state=active]:bg-[#2C5F2E] data-[state=active]:text-white data-[state=active]:shadow-sm transition-all"
             >
               <BookOpen className="w-4 h-4" />
               <span>Blog</span>
             </TabsTrigger>
             <TabsTrigger
               value="gallery"
-              className="flex items-center gap-2 rounded-xl font-semibold data-[state=active]:bg-[#2C5F2E] data-[state=active]:text-white data-[state=active]:shadow-sm transition-all"
+              className="flex items-center gap-2 rounded-xl font-semibold shrink-0 data-[state=active]:bg-[#2C5F2E] data-[state=active]:text-white data-[state=active]:shadow-sm transition-all"
             >
               <Images className="w-4 h-4" />
               <span>Galerie</span>
             </TabsTrigger>
             <TabsTrigger
               value="versand"
-              className="flex items-center gap-2 rounded-xl font-semibold data-[state=active]:bg-[#2C5F2E] data-[state=active]:text-white data-[state=active]:shadow-sm transition-all"
+              className="flex items-center gap-2 rounded-xl font-semibold shrink-0 data-[state=active]:bg-[#2C5F2E] data-[state=active]:text-white data-[state=active]:shadow-sm transition-all"
             >
               <Package className="w-4 h-4" />
               <span>Versand</span>
             </TabsTrigger>
             <TabsTrigger
               value="einstellungen"
-              className="flex items-center gap-2 rounded-xl font-semibold data-[state=active]:bg-[#2C5F2E] data-[state=active]:text-white data-[state=active]:shadow-sm transition-all"
+              className="flex items-center gap-2 rounded-xl font-semibold shrink-0 data-[state=active]:bg-[#2C5F2E] data-[state=active]:text-white data-[state=active]:shadow-sm transition-all"
             >
               <Shield className="w-4 h-4" />
               <span>Zahlung</span>
             </TabsTrigger>
           </TabsList>
+          </div>
 
           {/* Orders Tab */}
           <TabsContent value="orders">
@@ -1719,9 +1721,9 @@ export function Admin({ onClose }: AdminProps) {
             </Card>
 
             {/* Products Header Actions */}
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
               <h2 className="text-xl font-black text-[#1A1A1A] tracking-tight">Produktverwaltung</h2>
-              <div className="flex items-center space-x-2">
+              <div className="flex flex-row items-center gap-2 flex-nowrap">
                 <Button onClick={() => { setEditingCategory(null); setIsCategoryModalOpen(true) }} variant="outline" className="border-[#2C5F2E]/40 text-[#2C5F2E] bg-white hover:bg-[#2C5F2E]/5 rounded-full">
                   <Plus className="w-4 h-4 mr-2" />
                   Kategorie erstellen

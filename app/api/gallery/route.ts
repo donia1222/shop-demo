@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server"
+import { galleryCache as cache } from "./cache"
 
 const PHP_BASE = process.env.NEXT_PUBLIC_API_BASE_URL + "/get_gallery_images.php"
 const CACHE_TTL = 5_000
-const cache = new Map<string, { data: unknown; at: number }>()
 
 export async function GET(_req: NextRequest) {
   const hit = cache.get("gallery")

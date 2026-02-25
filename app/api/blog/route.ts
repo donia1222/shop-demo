@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server"
+import { blogCache as cache } from "./cache"
 
 const PHP_BASE = process.env.NEXT_PUBLIC_API_BASE_URL + "/get_blog_posts.php"
 const CACHE_TTL = 5_000
-const cache = new Map<string, { data: unknown; at: number }>()
 
 export async function GET(req: NextRequest) {
   const qs = req.nextUrl.searchParams.toString()

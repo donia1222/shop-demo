@@ -356,6 +356,7 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
           city: data.user.city || "",
           postalCode: data.user.postal_code || "",
           canton: data.user.canton || "",
+          country: data.user.country || "CH",
           notes: data.user.notes || "",
         })
 
@@ -1019,6 +1020,7 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
           city: result.user.city || "",
           postalCode: result.user.postal_code || "",
           canton: result.user.canton || "",
+          country: result.user.country || "CH",
           notes: result.user.notes || "",
         })
 

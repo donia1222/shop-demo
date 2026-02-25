@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
+import { blogCache } from "../cache"
 
 const PHP_URL = process.env.NEXT_PUBLIC_API_BASE_URL + "/edit_blog_post.php"
 
@@ -14,7 +15,9 @@ export async function POST(req: NextRequest) {
     })
     const text = await res.text()
     try {
-      return NextResponse.json(JSON.parse(text))
+      const data = JSON.parse(text)
+      if (data.success) blogCache.clear()
+      return NextResponse.json(data)
     } catch {
       return NextResponse.json({ success: false, error: text.slice(0, 300) }, { status: 502 })
     }
@@ -32,7 +35,9 @@ export async function DELETE(req: NextRequest) {
     })
     const text = await res.text()
     try {
-      return NextResponse.json(JSON.parse(text))
+      const data = JSON.parse(text)
+      if (data.success) blogCache.clear()
+      return NextResponse.json(data)
     } catch {
       return NextResponse.json({ success: false, error: text.slice(0, 300) }, { status: 502 })
     }

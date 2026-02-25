@@ -83,8 +83,12 @@ function PremiumHotSauceStoreInner() {
 
   // 🔄 Guardar carrito en localStorage cada vez que cambie (pero no durante la carga inicial)
   useEffect(() => {
-    if (!isInitialLoad && cart.length > 0) {
-      localStorage.setItem("cantina-cart", JSON.stringify(cart))
+    if (!isInitialLoad) {
+      if (cart.length > 0) {
+        localStorage.setItem("cantina-cart", JSON.stringify(cart))
+      } else {
+        localStorage.removeItem("cantina-cart")
+      }
     }
   }, [cart, isInitialLoad])
 
