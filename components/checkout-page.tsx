@@ -1345,7 +1345,7 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
               <ArrowLeft className="w-4 h-4" />
             </button>
             <div>
-              <h1 className="text-2xl font-black text-[#1A1A1A] tracking-tight">Kasse</h1>
+              <h1 className="text-2xl font-black text-[#1A1A1A] tracking-tight">Warenkorb</h1>
               <p className="text-xs text-[#888] mt-0.5">Sicher & verschlüsselt</p>
             </div>
           </div>

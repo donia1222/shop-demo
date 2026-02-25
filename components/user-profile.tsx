@@ -1345,7 +1345,7 @@ export function UserProfile({ onClose, onAccountDeleted }: UserProfileProps) {
                                                   )}
                                                   {item.origin && (
                                                     <Badge variant="outline" className="text-xs">
-                                                      📍 {item.origin}
+                                                    {item.origin}
                                                     </Badge>
                                                   )}
                                                 </div>
