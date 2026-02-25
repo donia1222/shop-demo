@@ -30,6 +30,14 @@ function getDBConnection() {
     }
 }
 
+// URL base dinámica para uploads (funciona en cualquier servidor sin cambios)
+function getUploadBaseUrl() {
+    $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+    $host = $_SERVER['HTTP_HOST'];
+    $dir  = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\');
+    return $protocol . '://' . $host . $dir . '/upload/';
+}
+
 // Función para configurar headers CORS
 function setCORSHeaders() {
     $origin = $_SERVER['HTTP_ORIGIN'] ?? '';

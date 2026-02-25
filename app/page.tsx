@@ -13,7 +13,6 @@ import { GalleryBanner } from "@/components/gallery-banner"
 import { ShoppingCartComponent } from "@/components/shopping-cart"
 import { CheckoutPage } from "@/components/checkout-page"
 import { Footer } from "@/components/footer"
-import { Admin } from "@/components/admin"
 import  Bot  from "@/components/bot"
 interface Product {
   id: number
@@ -55,7 +54,7 @@ function PremiumHotSauceStoreInner() {
   const [isCartOpen, setIsCartOpen] = useState(false)
   const [purchasedItems, setPurchasedItems] = useState<Set<number>>(new Set())
   const [purchasedCombos, setPurchasedCombos] = useState<Set<string>>(new Set())
-  const [currentPage, setCurrentPage] = useState<"store" | "checkout" | "admin">("store")
+  const [currentPage, setCurrentPage] = useState<"store" | "checkout">("store")
   const [isInitialLoad, setIsInitialLoad] = useState(true)
 
   const searchParams = useSearchParams()
@@ -284,23 +283,6 @@ function PremiumHotSauceStoreInner() {
     // No limpiar carrito aquí automáticamente - se limpia cuando el pago se confirma
   }
 
-  // 🔐 Funciones para el admin
-  const goToAdmin = () => {
-    console.log("Navigating to admin panel...")
-    setCurrentPage("admin")
-    setIsCartOpen(false)
-  }
-
-  const backFromAdmin = () => {
-    console.log("Returning from admin panel...")
-    setCurrentPage("store")
-  }
-
-  // 📊 Renderizar página de admin
-  if (currentPage === "admin") {
-    return <Admin onClose={backFromAdmin} />
-  }
-
   // 🛒 Renderizar página de checkout
   if (currentPage === "checkout") {
     return (
@@ -318,7 +300,7 @@ function PremiumHotSauceStoreInner() {
   return (
     <div className="bg-white">
 
-      <Header onAdminOpen={goToAdmin} onCartOpen={() => setIsCartOpen(true)} cartCount={getTotalItems()} />
+      <Header onCartOpen={() => setIsCartOpen(true)} cartCount={getTotalItems()} />
 
       <HeroSection />
 
@@ -339,7 +321,7 @@ function PremiumHotSauceStoreInner() {
         onClearCart={clearCart}
       />
 
-      <Footer onAdminOpen={goToAdmin} />
+      <Footer />
     </div>
   )
 }

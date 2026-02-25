@@ -156,6 +156,8 @@ export function Admin({ onClose }: AdminProps) {
   const [totalOrderPages, setTotalOrderPages] = useState(1)
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null)
   const [isOrderModalOpen, setIsOrderModalOpen] = useState(false)
+  const [markingPaidId, setMarkingPaidId] = useState<number | null>(null)
+  const [sendingShipId, setSendingShipId] = useState<number | null>(null)
 
   // Products State
   const [products, setProducts] = useState<Product[]>([])
@@ -510,6 +512,50 @@ export function Admin({ onClose }: AdminProps) {
   }
 
   // Orders Functions
+  const sendShippingNotification = async (order: Order) => {
+    setSendingShipId(order.id)
+    try {
+      const res = await fetch("/api/orders/ship", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: order.id }),
+      })
+      const data = await res.json()
+      if (data.success) {
+        setOrders(prev => prev.map(o => o.id === order.id ? { ...o, status: "processing" } : o))
+        toast({ title: "📦 Versandbenachrichtigung gesendet", description: `Email an ${order.customer_email} gesendet.` })
+      } else {
+        toast({ title: "Fehler", description: data.error, variant: "destructive" })
+      }
+    } catch {
+      toast({ title: "Verbindungsfehler", variant: "destructive" })
+    } finally {
+      setSendingShipId(null)
+    }
+  }
+
+  const markAsPaid = async (order: Order) => {
+    setMarkingPaidId(order.id)
+    try {
+      const res = await fetch("/api/orders/update", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: order.id, payment_status: "completed", status: "completed" }),
+      })
+      const data = await res.json()
+      if (data.success) {
+        setOrders(prev => prev.map(o => o.id === order.id ? { ...o, payment_status: "completed", status: "completed" } : o))
+        toast({ title: "Als bezahlt markiert" })
+      } else {
+        toast({ title: "Fehler", description: data.error, variant: "destructive" })
+      }
+    } catch {
+      toast({ title: "Verbindungsfehler", variant: "destructive" })
+    } finally {
+      setMarkingPaidId(null)
+    }
+  }
+
   const loadOrders = async () => {
     try {
       setOrdersLoading(true)
@@ -1412,64 +1458,100 @@ export function Admin({ onClose }: AdminProps) {
             </Card>
 
             {/* Orders List */}
-            <div className="grid grid-cols-1 gap-4">
+            <div className="flex flex-col gap-2">
               {orders.map((order) => (
-                <Card key={order.id} className="rounded-2xl border-[#EBEBEB] shadow-sm hover:shadow-md transition-shadow">
-                  <CardHeader>
-                    <CardTitle className="flex items-center justify-between">
-                      <div className="flex items-center space-x-2">
-                        <Package className="w-6 h-6 text-gray-600" />
-                        <span>{order.order_number}</span>
-                      </div>
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <p className="text-gray-600 text-sm">Kunde</p>
-                        <p className="text-lg font-bold text-gray-800">
-                          {order.customer_first_name} {order.customer_last_name}
-                        </p>
-                        <p className="text-gray-600 text-sm">E-Mail: {order.customer_email}</p>
-                        <p className="text-gray-600 text-sm">Telefon: {order.customer_phone}</p>
-                        <p className="text-gray-600 text-sm">Adresse: {order.customer_address}</p>
-                        <p className="text-gray-600 text-sm">Stadt: {order.customer_city}</p>
-                        <p className="text-gray-600 text-sm">Kanton: {order.customer_canton}</p>
-                        {order.customer_notes && <p className="text-gray-600 text-sm">Notizen: {order.customer_notes}</p>}
-                      </div>
-                      <div>
-                        <p className="text-gray-600 text-sm">Gesamt</p>
-                        <p className="text-2xl font-bold text-gray-800">
-                          {(Number.parseFloat(order.total_amount.toString()) || 0).toFixed(2)} CHF
-                        </p>
-                        <p className="text-gray-600 text-sm">Versandkosten</p>
-                        <p className="text-lg font-bold text-gray-800">
-                          {(Number.parseFloat(order.shipping_cost.toString()) || 0).toFixed(2)} CHF
-                        </p>
-                        <p className="text-gray-600 text-sm">Erstellungsdatum</p>
-                        <p className="text-gray-600 text-sm">{formatDate(order.created_at)}</p>
-                        <p className="text-gray-600 text-sm">Aktualisierungsdatum</p>
-                        <p className="text-gray-600 text-sm">{formatDate(order.updated_at)}</p>
-                      </div>
-                    </div>
-                    <div className="mt-4 flex items-center gap-2">
-                      <Button
-                        onClick={() => showOrderDetail(order)}
-                        className="bg-[#2C5F2E] hover:bg-[#1A4520] text-white rounded-full px-5 text-sm"
-                      >
-                        Details anzeigen
-                      </Button>
-                      <Button
-                        onClick={() => downloadInvoicePDF(order)}
-                        variant="outline"
-                        className="rounded-full px-4 text-sm border-[#2C5F2E] text-[#2C5F2E] hover:bg-[#2C5F2E]/10"
-                      >
-                        <Download className="w-4 h-4 mr-2" />
-                        PDF
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
+                <div key={order.id} className="bg-white border border-[#EBEBEB] rounded-2xl px-4 py-3 shadow-sm hover:shadow-md transition-shadow flex flex-col sm:flex-row sm:items-center gap-3">
+                  {/* Order number + payment chip */}
+                  <div className="flex items-center gap-2 min-w-0 flex-1 flex-wrap">
+                    <Package className="w-4 h-4 text-gray-400 shrink-0" />
+                    <span className="font-bold text-[#1A1A1A] text-sm truncate">{order.order_number}</span>
+                    {order.payment_method && (
+                      <span className="shrink-0 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#2C5F2E]/10 text-[#2C5F2E] uppercase tracking-wide">
+                        {(() => {
+                          const m = (order.payment_method || "").toLowerCase()
+                          if (m.includes("twint")) return "TWINT"
+                          if (m.includes("paypal")) return "PayPal"
+                          if (m === "stripe" || m.includes("stripe_card") || m.includes("card")) return "Kreditkarte"
+                          if (m.includes("stripe")) return "Kreditkarte"
+                          if (m.includes("invoice") || m.includes("rechnung")) return "Auf Rechnung"
+                          return order.payment_method
+                        })()}
+                      </span>
+                    )}
+                    {(() => {
+                      const m = (order.payment_method || "").toLowerCase()
+                      const isInvoice = m.includes("invoice") || m.includes("rechnung") || m.includes("faktura")
+                      const paid = order.payment_status === "completed"
+                      if (isInvoice && !paid) {
+                        return (
+                          <span className="shrink-0 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 uppercase tracking-wide">
+                            Offen
+                          </span>
+                        )
+                      }
+                      if (paid) {
+                        return (
+                          <span className="shrink-0 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-green-100 text-green-700 uppercase tracking-wide">
+                            Bezahlt
+                          </span>
+                        )
+                      }
+                      return null
+                    })()}
+                  </div>
+                  {/* Customer name */}
+                  <div className="sm:w-40 shrink-0">
+                    <p className="text-sm font-semibold text-gray-800 truncate">{order.customer_first_name} {order.customer_last_name}</p>
+                    <p className="text-xs text-gray-400 truncate">{order.customer_email}</p>
+                  </div>
+                  {/* Total */}
+                  <div className="sm:w-28 shrink-0">
+                    <p className="text-sm font-bold text-gray-800">{(Number.parseFloat(order.total_amount.toString()) || 0).toFixed(2)} CHF</p>
+                    <p className="text-xs text-gray-400">{formatDate(order.created_at)}</p>
+                  </div>
+                  {/* Actions */}
+                  <div className="flex items-center gap-2 shrink-0 flex-wrap">
+                    {(() => {
+                      const m = (order.payment_method || "").toLowerCase()
+                      const isInvoice = m.includes("invoice") || m.includes("rechnung")
+                      const notPaid = order.payment_status !== "completed"
+                      if (isInvoice && notPaid) {
+                        return (
+                          <Button
+                            onClick={() => markAsPaid(order)}
+                            disabled={markingPaidId === order.id}
+                            className="bg-amber-500 hover:bg-amber-600 text-white rounded-full px-4 text-xs h-8"
+                          >
+                            {markingPaidId === order.id ? "..." : "✓ Bezahlt"}
+                          </Button>
+                        )
+                      }
+                      return null
+                    })()}
+                    <Button
+                      onClick={() => showOrderDetail(order)}
+                      className="bg-[#2C5F2E] hover:bg-[#1A4520] text-white rounded-full px-4 text-xs h-8"
+                    >
+                      Details
+                    </Button>
+                    <Button
+                      onClick={() => downloadInvoicePDF(order)}
+                      variant="outline"
+                      className="rounded-full px-3 text-xs h-8 border-[#2C5F2E] text-[#2C5F2E] hover:bg-[#2C5F2E]/10"
+                    >
+                      <Download className="w-3 h-3 mr-1" />
+                      PDF
+                    </Button>
+                    <Button
+                      onClick={() => sendShippingNotification(order)}
+                      disabled={sendingShipId === order.id}
+                      variant="outline"
+                      className="rounded-full px-3 text-xs h-8 border-blue-400 text-blue-600 hover:bg-blue-50"
+                    >
+                      📦 {sendingShipId === order.id ? "..." : "Versandt"}
+                    </Button>
+                  </div>
+                </div>
               ))}
             </div>
 
