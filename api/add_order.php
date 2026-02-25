@@ -86,7 +86,7 @@ try {
     }
     
     // Generar número de pedido único
-    $orderNumber = 'ORDER_' . date('Ymd') . '_' . strtoupper(substr(uniqid(), -6));
+    $orderNumber = (string)mt_rand(10000, 99999);
     error_log("Generated order number: $orderNumber");
     
     // Iniciar transacción

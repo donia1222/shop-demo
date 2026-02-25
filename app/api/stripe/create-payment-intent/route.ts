@@ -4,11 +4,15 @@ import Stripe from 'stripe'
 export const dynamic = 'force-dynamic'
 
 export async function POST(req: NextRequest) {
-  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-    apiVersion: '2024-06-20'
-  })
   try {
-    const { amount, currency, orderData } = await req.json()
+    const { amount, currency, orderData, stripeSecretKey } = await req.json()
+
+    const secretKey = process.env.STRIPE_SECRET_KEY || stripeSecretKey
+    if (!secretKey) {
+      return NextResponse.json({ error: 'Stripe secret key not configured' }, { status: 500 })
+    }
+
+    const stripe = new Stripe(secretKey, { apiVersion: '2024-06-20' })
 
     // Validar que el monto sea válido
     if (!amount || amount < 1) {

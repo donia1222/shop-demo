@@ -14,8 +14,6 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { CreditCard, Shield, CheckCircle, AlertCircle, Lock } from "lucide-react"
 
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
-
 interface StripePaymentProps {
   amount: number
   currency: string
@@ -23,9 +21,11 @@ interface StripePaymentProps {
   onSuccess: (paymentIntent: any) => void
   onError: (error: string) => void
   disabled?: boolean
+  publishableKey?: string
+  secretKey?: string
 }
 
-const StripeCheckoutForm = ({ amount, currency, orderData, onSuccess, onError, disabled }: StripePaymentProps) => {
+const StripeCheckoutForm = ({ amount, currency, orderData, onSuccess, onError, disabled, secretKey }: StripePaymentProps) => {
   const stripe = useStripe()
   const elements = useElements()
   const [isProcessing, setIsProcessing] = useState(false)
@@ -50,9 +50,10 @@ const StripeCheckoutForm = ({ amount, currency, orderData, onSuccess, onError, d
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          amount: Math.round(amount * 100), // Stripe usa centavos
+          amount: Math.round(amount * 100),
           currency: currency.toLowerCase(),
-          orderData
+          orderData,
+          stripeSecretKey: secretKey,
         })
       })
 
@@ -198,7 +199,9 @@ const StripeCheckoutForm = ({ amount, currency, orderData, onSuccess, onError, d
 }
 
 export function StripePayment(props: StripePaymentProps) {
-  if (!process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY) {
+  const key = props.publishableKey || process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+
+  if (!key) {
     return (
       <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
         <div className="flex items-center space-x-2 text-red-600">
@@ -206,11 +209,13 @@ export function StripePayment(props: StripePaymentProps) {
           <span className="text-sm font-medium">Stripe nicht konfiguriert</span>
         </div>
         <p className="text-xs text-red-500 mt-1">
-          Bitte konfigurieren Sie die Stripe API-Schlüssel in den Umgebungsvariablen.
+          Bitte konfigurieren Sie die Stripe-Schlüssel im Admin-Panel unter Zahlung.
         </p>
       </div>
     )
   }
+
+  const stripePromise = loadStripe(key)
 
   return (
     <Elements stripe={stripePromise}>

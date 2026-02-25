@@ -254,6 +254,16 @@ export function Admin({ onClose }: AdminProps) {
   const [shippingSavedMsg,  setShippingSavedMsg]  = useState("")
   const [isSavingShipping,  setIsSavingShipping]  = useState(false)
 
+  // Payment Settings State
+  const [paySettings, setPaySettings] = useState({
+    paypal_email: "", stripe_publishable_key: "", stripe_secret_key: "", twint_phone: "",
+    bank_iban: "", bank_holder: "", bank_name: "",
+    enable_paypal: false, enable_stripe: false, enable_twint: false, enable_invoice: true,
+  })
+  const [payLoading,     setPayLoading]     = useState(false)
+  const [paySavedMsg,    setPaySavedMsg]    = useState("")
+  const [isSavingPay,    setIsSavingPay]    = useState(false)
+
   // Filter Orders
   const [orderFilters, setOrderFilters] = useState({
     search: "",
@@ -294,6 +304,8 @@ export function Admin({ onClose }: AdminProps) {
       loadGalleryImages()
     } else if (activeTab === "versand") {
       loadShippingSettings()
+    } else if (activeTab === "einstellungen") {
+      loadPaymentSettings()
     }
   }, [activeTab, currentOrderPage, orderFilters])
 
@@ -464,6 +476,35 @@ export function Admin({ onClose }: AdminProps) {
     } catch (e: any) {
       toast({ title: "Fehler", description: e.message, variant: "destructive" })
     } finally { setIsSavingShipping(false) }
+  }
+
+  // Payment Settings Functions
+  const loadPaymentSettings = async () => {
+    setPayLoading(true)
+    try {
+      const res = await fetch(`${API_BASE_URL}/get_payment_settings.php`)
+      const d = await res.json()
+      if (d.success) setPaySettings(d.settings)
+    } catch {}
+    finally { setPayLoading(false) }
+  }
+
+  const savePaymentSettings = async () => {
+    setIsSavingPay(true)
+    setPaySavedMsg("")
+    try {
+      const res = await fetch(`${API_BASE_URL}/save_payment_settings.php`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(paySettings),
+      })
+      const d = await res.json()
+      if (!d.success) throw new Error(d.error)
+      setPaySavedMsg("Gespeichert ✓")
+      setTimeout(() => setPaySavedMsg(""), 3000)
+    } catch (e: any) {
+      toast({ title: "Fehler", description: e.message, variant: "destructive" })
+    } finally { setIsSavingPay(false) }
   }
 
   // Orders Functions
@@ -1178,7 +1219,7 @@ export function Admin({ onClose }: AdminProps) {
 
       <div className="max-w-7xl mx-auto px-4 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-5 mb-8 bg-white border border-[#EBEBEB] rounded-2xl p-1 shadow-sm">
+          <TabsList className="grid w-full grid-cols-6 mb-8 bg-white border border-[#EBEBEB] rounded-2xl p-1 shadow-sm">
             <TabsTrigger
               value="orders"
               className="flex items-center gap-2 rounded-xl font-semibold data-[state=active]:bg-[#2C5F2E] data-[state=active]:text-white data-[state=active]:shadow-sm transition-all"
@@ -1213,6 +1254,13 @@ export function Admin({ onClose }: AdminProps) {
             >
               <Package className="w-4 h-4" />
               <span>Versand</span>
+            </TabsTrigger>
+            <TabsTrigger
+              value="einstellungen"
+              className="flex items-center gap-2 rounded-xl font-semibold data-[state=active]:bg-[#2C5F2E] data-[state=active]:text-white data-[state=active]:shadow-sm transition-all"
+            >
+              <Shield className="w-4 h-4" />
+              <span>Zahlung</span>
             </TabsTrigger>
           </TabsList>
 
@@ -2129,6 +2177,164 @@ export function Admin({ onClose }: AdminProps) {
                 )}
               </div>
             ))}
+          </TabsContent>
+
+          {/* ── Einstellungen / Zahlung Tab ── */}
+          <TabsContent value="einstellungen">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="text-xl font-black text-[#1A1A1A]">Zahlungsmethoden</h2>
+                <p className="text-sm text-[#888] mt-0.5">Aktiviere und konfiguriere die verfügbaren Zahlungsoptionen</p>
+              </div>
+              <div className="flex items-center gap-3">
+                {paySavedMsg && <span className="text-sm text-green-600 font-semibold">{paySavedMsg}</span>}
+                <Button
+                  onClick={savePaymentSettings}
+                  disabled={isSavingPay}
+                  className="bg-[#2C5F2E] hover:bg-[#1A4520] text-white gap-2 rounded-xl"
+                >
+                  {isSavingPay ? "Speichern..." : "Speichern"}
+                </Button>
+              </div>
+            </div>
+
+            {payLoading && <p className="text-gray-400 text-sm">Laden...</p>}
+
+            {!payLoading && (
+              <div className="space-y-4 max-w-2xl">
+
+                {/* Rechnung */}
+                <div className="bg-white border border-[#EBEBEB] rounded-2xl shadow-sm p-5">
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center gap-3">
+                      <span className="text-2xl">🧾</span>
+                      <div>
+                        <p className="font-bold text-[#1A1A1A]">Rechnung</p>
+                        <p className="text-xs text-[#AAA]">Zahlung per Banküberweisung</p>
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setPaySettings(p => ({ ...p, enable_invoice: !p.enable_invoice }))}
+                      className={`px-4 py-1.5 rounded-full text-sm font-semibold transition-colors ${
+                        paySettings.enable_invoice ? "bg-green-100 text-green-700 hover:bg-green-200" : "bg-gray-100 text-gray-500 hover:bg-gray-200"
+                      }`}
+                    >
+                      {paySettings.enable_invoice ? "✓ Aktiv" : "✗ Deaktiviert"}
+                    </button>
+                  </div>
+                  {paySettings.enable_invoice && (
+                    <div className="grid grid-cols-1 gap-3 mt-3 pt-3 border-t border-[#F0F0F0]">
+                      <div>
+                        <Label className="text-xs text-[#888]">IBAN</Label>
+                        <Input value={paySettings.bank_iban} onChange={e => setPaySettings(p => ({ ...p, bank_iban: e.target.value }))} placeholder="CH00 0000 0000 0000 0000 0" className="bg-white mt-1" />
+                      </div>
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <Label className="text-xs text-[#888]">Kontoinhaber</Label>
+                          <Input value={paySettings.bank_holder} onChange={e => setPaySettings(p => ({ ...p, bank_holder: e.target.value }))} placeholder="Max Mustermann" className="bg-white mt-1" />
+                        </div>
+                        <div>
+                          <Label className="text-xs text-[#888]">Bank</Label>
+                          <Input value={paySettings.bank_name} onChange={e => setPaySettings(p => ({ ...p, bank_name: e.target.value }))} placeholder="PostFinance" className="bg-white mt-1" />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* PayPal */}
+                <div className="bg-white border border-[#EBEBEB] rounded-2xl shadow-sm p-5">
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center gap-3">
+                      <span className="text-2xl">💳</span>
+                      <div>
+                        <p className="font-bold text-[#1A1A1A]">PayPal</p>
+                        <p className="text-xs text-[#AAA]">Zahlung via PayPal</p>
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setPaySettings(p => ({ ...p, enable_paypal: !p.enable_paypal }))}
+                      className={`px-4 py-1.5 rounded-full text-sm font-semibold transition-colors ${
+                        paySettings.enable_paypal ? "bg-green-100 text-green-700 hover:bg-green-200" : "bg-gray-100 text-gray-500 hover:bg-gray-200"
+                      }`}
+                    >
+                      {paySettings.enable_paypal ? "✓ Aktiv" : "✗ Deaktiviert"}
+                    </button>
+                  </div>
+                  {paySettings.enable_paypal && (
+                    <div className="mt-3 pt-3 border-t border-[#F0F0F0]">
+                      <Label className="text-xs text-[#888]">PayPal E-Mail</Label>
+                      <Input value={paySettings.paypal_email} onChange={e => setPaySettings(p => ({ ...p, paypal_email: e.target.value }))} placeholder="paypal@beispiel.ch" className="bg-white mt-1" />
+                    </div>
+                  )}
+                </div>
+
+                {/* Stripe */}
+                <div className="bg-white border border-[#EBEBEB] rounded-2xl shadow-sm p-5">
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center gap-3">
+                      <span className="text-2xl">💜</span>
+                      <div>
+                        <p className="font-bold text-[#1A1A1A]">Stripe (Kreditkarte)</p>
+                        <p className="text-xs text-[#AAA]">Zahlung per Karte via Stripe</p>
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setPaySettings(p => ({ ...p, enable_stripe: !p.enable_stripe }))}
+                      className={`px-4 py-1.5 rounded-full text-sm font-semibold transition-colors ${
+                        paySettings.enable_stripe ? "bg-green-100 text-green-700 hover:bg-green-200" : "bg-gray-100 text-gray-500 hover:bg-gray-200"
+                      }`}
+                    >
+                      {paySettings.enable_stripe ? "✓ Aktiv" : "✗ Deaktiviert"}
+                    </button>
+                  </div>
+                  {paySettings.enable_stripe && (
+                    <div className="mt-3 pt-3 border-t border-[#F0F0F0] space-y-3">
+                      <div>
+                        <Label className="text-xs text-[#888]">Publishable Key (pk_live_...)</Label>
+                        <Input value={paySettings.stripe_publishable_key} onChange={e => setPaySettings(p => ({ ...p, stripe_publishable_key: e.target.value }))} placeholder="pk_live_..." className="bg-white mt-1 font-mono text-xs" />
+                      </div>
+                      <div>
+                        <Label className="text-xs text-[#888]">Secret Key (sk_live_...)</Label>
+                        <Input type="password" value={paySettings.stripe_secret_key} onChange={e => setPaySettings(p => ({ ...p, stripe_secret_key: e.target.value }))} placeholder="sk_live_..." className="bg-white mt-1 font-mono text-xs" />
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* TWINT */}
+                <div className="bg-white border border-[#EBEBEB] rounded-2xl shadow-sm p-5">
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center gap-3">
+                      <span className="text-2xl">📱</span>
+                      <div>
+                        <p className="font-bold text-[#1A1A1A]">TWINT</p>
+                        <p className="text-xs text-[#AAA]">Zahlung per TWINT (Schweiz)</p>
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setPaySettings(p => ({ ...p, enable_twint: !p.enable_twint }))}
+                      className={`px-4 py-1.5 rounded-full text-sm font-semibold transition-colors ${
+                        paySettings.enable_twint ? "bg-green-100 text-green-700 hover:bg-green-200" : "bg-gray-100 text-gray-500 hover:bg-gray-200"
+                      }`}
+                    >
+                      {paySettings.enable_twint ? "✓ Aktiv" : "✗ Deaktiviert"}
+                    </button>
+                  </div>
+                  {paySettings.enable_twint && (
+                    <div className="mt-3 pt-3 border-t border-[#F0F0F0]">
+                      <Label className="text-xs text-[#888]">TWINT Telefonnummer</Label>
+                      <Input value={paySettings.twint_phone} onChange={e => setPaySettings(p => ({ ...p, twint_phone: e.target.value }))} placeholder="+41 79 000 00 00" className="bg-white mt-1" />
+                    </div>
+                  )}
+                </div>
+
+              </div>
+            )}
           </TabsContent>
         </Tabs>
 
