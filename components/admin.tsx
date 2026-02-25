@@ -3206,7 +3206,7 @@ export function Admin({ onClose }: AdminProps) {
 
         {/* ── Announcement Create/Edit Modal ── */}
         <Dialog open={isAnnModalOpen} onOpenChange={open => { setIsAnnModalOpen(open); if (!open) setEditingAnn(null) }}>
-          <DialogContent className="max-w-lg bg-white max-h-[90vh] overflow-y-auto">
+          <DialogContent className="max-w-lg bg-white max-h-[90vh] overflow-y-auto" onInteractOutside={e => e.preventDefault()}>
             <DialogHeader>
               <DialogTitle>{editingAnn ? "Anzeige bearbeiten" : "Neue Anzeige erstellen"}</DialogTitle>
             </DialogHeader>
@@ -3231,13 +3231,13 @@ export function Admin({ onClose }: AdminProps) {
               {/* Title */}
               <div>
                 <Label className="text-sm font-semibold mb-1.5 block">Titel *</Label>
-                <Input value={annForm.title} onChange={e => setAnnForm(f => ({ ...f, title: e.target.value }))} placeholder="z.B. Sommerferien – wir sind zurück!" className="rounded-xl" />
+                <Input value={annForm.title} onChange={e => setAnnForm(f => ({ ...f, title: e.target.value }))} placeholder={annForm.type === 'product' ? "z.B. NEU: Habanero Gold Sauce" : "z.B. Sommerferien – wir sind zurück!"} className="rounded-xl" />
               </div>
 
               {/* Subtitle */}
               <div>
                 <Label className="text-sm font-semibold mb-1.5 block">Untertitel (optional)</Label>
-                <Input value={annForm.subtitle} onChange={e => setAnnForm(f => ({ ...f, subtitle: e.target.value }))} placeholder="Kurze Beschreibung..." className="rounded-xl" />
+                <Textarea value={annForm.subtitle} onChange={e => setAnnForm(f => ({ ...f, subtitle: e.target.value }))} placeholder={annForm.type === 'product' ? "z.B. Jetzt 10% Rabatt sichern – nur für kurze Zeit!" : "z.B. Wir sind wieder da mit neuen heissen Produkten."} className="rounded-xl max-h-40" rows={3} />
               </div>
 
               {/* Product URL — only for product type */}
