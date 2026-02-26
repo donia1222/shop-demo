@@ -825,6 +825,7 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
     if (!customerInfo.phone.trim()) errors.phone = "Telefon ist erforderlich"
     if (!customerInfo.address.trim()) errors.address = "Adresse ist erforderlich"
     if (!customerInfo.city.trim()) errors.city = "Stadt ist erforderlich"
+    if (!customerInfo.postalCode.trim()) errors.postalCode = "PLZ ist erforderlich"
     if (!customerInfo.canton.trim()) errors.canton = "Kanton ist erforderlich"
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -1759,7 +1760,7 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="postalCode">PLZ</Label>
+                    <Label htmlFor="postalCode">PLZ *</Label>
                     <Input
                       id="postalCode"
                       value={customerInfo.postalCode}
@@ -2290,7 +2291,7 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
                 {/* Rechnung */}
                 {paymentMethod === "invoice" && (
                   <>
-                    {paySettings.bank_iban && (
+                    {paySettings.bank_iban && (paySettings.enable_paypal || paySettings.enable_stripe || paySettings.enable_twint) && (
                       <div className="mb-4 border border-gray-200 rounded-xl overflow-hidden">
                         <div className="bg-gray-50 px-4 py-2 border-b border-gray-200">
                           <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Bankverbindung</p>

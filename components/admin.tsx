@@ -160,6 +160,7 @@ export function Admin({ onClose }: AdminProps) {
   const [isOrderModalOpen, setIsOrderModalOpen] = useState(false)
   const [markingPaidId, setMarkingPaidId] = useState<number | null>(null)
   const [sendingShipId, setSendingShipId] = useState<number | null>(null)
+  const [shipConfirmOrder, setShipConfirmOrder] = useState<Order | null>(null)
 
   // Products State
   const [products, setProducts] = useState<Product[]>([])
@@ -1593,8 +1594,9 @@ export function Admin({ onClose }: AdminProps) {
                     {(() => {
                       const m = (order.payment_method || "").toLowerCase()
                       const isInvoice = m.includes("invoice") || m.includes("rechnung") || m.includes("faktura")
+                      const isTwint = m.includes("twint")
                       const paid = order.payment_status === "completed"
-                      if (isInvoice && !paid) {
+                      if ((isInvoice || isTwint) && !paid) {
                         return (
                           <span className="shrink-0 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 uppercase tracking-wide">
                             Offen
@@ -1626,8 +1628,9 @@ export function Admin({ onClose }: AdminProps) {
                     {(() => {
                       const m = (order.payment_method || "").toLowerCase()
                       const isInvoice = m.includes("invoice") || m.includes("rechnung")
+                      const isTwint = m.includes("twint")
                       const notPaid = order.payment_status !== "completed"
-                      if (isInvoice && notPaid) {
+                      if ((isInvoice || isTwint) && notPaid) {
                         return (
                           <Button
                             onClick={() => markAsPaid(order)}
@@ -1657,11 +1660,12 @@ export function Admin({ onClose }: AdminProps) {
                     {(() => {
                       const m = (order.payment_method || "").toLowerCase()
                       const isInvoice = m.includes("invoice") || m.includes("rechnung")
+                      const isTwint = m.includes("twint")
                       const notPaid = order.payment_status !== "completed"
-                      if (isInvoice && notPaid) return null
+                      if ((isInvoice || isTwint) && notPaid) return null
                       return (
                         <Button
-                          onClick={() => sendShippingNotification(order)}
+                          onClick={() => setShipConfirmOrder(order)}
                           disabled={sendingShipId === order.id}
                           variant="outline"
                           className="rounded-full px-3 text-xs h-8 border-blue-400 text-blue-600 hover:bg-blue-50"
@@ -3329,6 +3333,25 @@ export function Admin({ onClose }: AdminProps) {
                 </Button>
                 <Button variant="outline" onClick={() => setIsAnnModalOpen(false)} className="rounded-xl">Abbrechen</Button>
               </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* ── Ship Confirm ── */}
+        <Dialog open={!!shipConfirmOrder} onOpenChange={open => { if (!open) setShipConfirmOrder(null) }}>
+          <DialogContent className="max-w-sm bg-white">
+            <DialogHeader><DialogTitle>📦 Versandbestätigung senden?</DialogTitle></DialogHeader>
+            <p className="text-sm text-[#666]">
+              Es wird eine E-Mail an <span className="font-semibold text-[#1A1A1A]">{shipConfirmOrder?.customer_email}</span> gesendet, um zu bestätigen, dass die Bestellung auf dem Weg ist.
+            </p>
+            <div className="flex gap-3 pt-2">
+              <Button
+                onClick={() => { if (shipConfirmOrder) { sendShippingNotification(shipConfirmOrder); setShipConfirmOrder(null) } }}
+                className="flex-1 rounded-xl bg-blue-500 hover:bg-blue-600 text-white"
+              >
+                Ja, senden
+              </Button>
+              <Button variant="outline" onClick={() => setShipConfirmOrder(null)} className="rounded-xl">Abbrechen</Button>
             </div>
           </DialogContent>
         </Dialog>
