@@ -1347,9 +1347,13 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
             >
               <ArrowLeft className="w-4 h-4" />
             </button>
+            <img src="/Security_n.png" alt="Logo" className="h-10 w-auto object-contain hidden sm:block" />
             <div>
-              <h1 className="text-2xl font-black text-[#1A1A1A] tracking-tight">Warenkorb</h1>
-              <p className="text-xs text-[#888] mt-0.5">Sicher & verschlüsselt</p>
+              <div className="leading-tight">
+                <span style={{ fontFamily: 'Impact, Arial Narrow, sans-serif', fontStyle: 'italic', fontWeight: 900, color: '#CC0000', fontSize: '1.1rem' }}>US-</span>
+                <span style={{ fontFamily: "'Rubik Dirt', sans-serif", color: '#1A1A1A', fontSize: '1rem' }}> FISHING &amp; HUNTINGSHOP</span>
+              </div>
+              <p className="text-xs text-[#888] mt-0.5">Warenkorb · Sicher &amp; verschlüsselt</p>
             </div>
           </div>
           <div className="flex items-center gap-2 text-xs text-[#888]">

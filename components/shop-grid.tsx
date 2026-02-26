@@ -551,7 +551,10 @@ export default function ShopGrid() {
                 <div className="flex items-center p-4 pr-12 border-b border-[#E0E0E0] flex-shrink-0">
                   <div className="flex items-center gap-2">
                     <img src="/Security_n.png" alt="Logo" className="h-8 w-auto object-contain" />
-                    <span className="font-black text-[#1A1A1A] text-sm">US - Fishing &amp; Huntingshop</span>
+                    <span className="leading-tight">
+                      <span style={{ fontFamily: 'Impact, Arial Narrow, sans-serif', fontStyle: 'italic', fontWeight: 900, color: '#CC0000', fontSize: '0.9rem' }}>US-</span>
+                      <span style={{ fontFamily: "'Rubik Dirt', sans-serif", color: '#1A1A1A', fontSize: '0.8rem' }}> FISHING &amp; HUNTINGSHOP</span>
+                    </span>
                   </div>
                 </div>
                 <nav className="p-4 space-y-1 flex-1 overflow-y-auto">
@@ -625,7 +628,7 @@ export default function ShopGrid() {
               <div className="w-8 h-8 rounded-full border border-[#E5E5E5] group-hover:border-[#2C5F2E]/60 group-hover:bg-[#2C5F2E]/5 flex items-center justify-center transition-all">
                 <ChevronLeft className="w-4 h-4" />
               </div>
-              <span className="text-sm font-bold">Home</span>
+              <span style={{ fontFamily: "'Rubik Dirt', sans-serif", fontSize: '1.1rem', color: '#333333' }}>Home</span>
             </button>
 
             {/* Divider (desktop only) */}

@@ -215,8 +215,11 @@ export default function BlogPage() {
           <div className="w-px h-6 bg-[#E5E5E5]" />
           <img src="/Security_n.png" alt="Logo" className="h-12 w-auto object-contain" />
           <div className="hidden sm:block">
-            <div className="font-black text-[#1A1A1A] text-base leading-tight tracking-tight">US - Fishing &amp; Huntingshop</div>
-            <div className="text-[11px] text-[#888] uppercase tracking-widest mt-0.5">Jagd · Angeln · Outdoor</div>
+            <div className="leading-tight">
+              <span style={{ fontFamily: 'Impact, Arial Narrow, sans-serif', fontStyle: 'italic', fontWeight: 900, color: '#CC0000', fontSize: '1rem' }}>US-</span>
+              <span style={{ fontFamily: "'Rubik Dirt', sans-serif", color: '#1A1A1A', fontSize: '0.9rem' }}> FISHING &amp; HUNTINGSHOP</span>
+            </div>
+            <div className="text-[11px] text-[#888] uppercase tracking-widest mt-0.5">News · Tipps · Wissen</div>
           </div>
         </div>
       </div>

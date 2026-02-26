@@ -1341,7 +1341,10 @@ export function Admin({ onClose }: AdminProps) {
               <div className="w-px h-6 bg-[#E0E0E0]" />
               <img src="/Security_n.png" alt="Logo" className="h-10 w-auto object-contain" />
               <div className="hidden sm:block">
-                <div className="font-black text-[#1A1A1A] text-base leading-none tracking-tight">US - Fishing &amp; Huntingshop</div>
+                <div className="leading-tight">
+                  <span style={{ fontFamily: 'Impact, Arial Narrow, sans-serif', fontStyle: 'italic', fontWeight: 900, color: '#CC0000', fontSize: '1rem' }}>US-</span>
+                  <span style={{ fontFamily: "'Rubik Dirt', sans-serif", color: '#1A1A1A', fontSize: '0.9rem' }}> FISHING &amp; HUNTINGSHOP</span>
+                </div>
                 <div className="text-[10px] text-[#888] tracking-widest uppercase flex items-center gap-1.5 mt-0.5">
                   <Shield className="w-3 h-3 text-[#2C5F2E]" />
                   Verwaltungspanel

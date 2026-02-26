@@ -333,7 +333,10 @@ Falls Sie eine beschädigte oder falsche Ware erhalten haben, wenden Sie sich bi
               <div className="flex items-center gap-3 mb-6">
                 <img src="/Security_n.png" alt="Logo" className="h-14 w-auto object-contain flex-shrink-0" />
                 <div>
-                  <div className="font-black text-[#1A1A1A] text-lg leading-tight tracking-tight">US - Fishing &amp; Huntingshop</div>
+                  <div className="leading-tight">
+                    <span style={{ fontFamily: 'Impact, Arial Narrow, sans-serif', fontStyle: 'italic', fontWeight: 900, color: '#CC0000', fontSize: '1.15rem' }}>US-</span>
+                    <span style={{ fontFamily: "'Rubik Dirt', sans-serif", color: '#1A1A1A', fontSize: '1rem' }}> FISHING &amp; HUNTINGSHOP</span>
+                  </div>
                   <div className="text-xs text-[#888] uppercase tracking-widest mt-1">Jagd · Angeln · Outdoor</div>
                 </div>
               </div>
