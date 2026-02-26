@@ -68,7 +68,10 @@ export function Header({ onCartOpen, cartCount = 0 }: HeaderProps) {
                 <div className="flex items-center justify-between p-4 pr-16 border-b border-[#E0E0E0] flex-shrink-0">
                   <div className="flex items-center gap-2">
                     <img src="/Security_n.png" alt="Logo" className="h-8 w-auto object-contain" />
-                    <span className="font-black text-[#1A1A1A] text-sm leading-tight">US - Fishing &amp;<br />Huntingshop</span>
+                    <span className="leading-tight">
+                      <span style={{ fontFamily: 'Impact, Arial Narrow, sans-serif', fontStyle: 'italic', fontWeight: 900, color: '#CC0000', fontSize: '0.9rem' }}>US-</span>
+                      <span style={{ fontFamily: "'Rubik Dirt', sans-serif", color: '#1A1A1A', fontSize: '0.8rem' }}> FISHING &amp;<br />HUNTINGSHOP</span>
+                    </span>
                   </div>
                   <div className="flex items-center gap-1">
                     <div className="[&_span]:hidden flex items-center">
@@ -160,7 +163,10 @@ export function Header({ onCartOpen, cartCount = 0 }: HeaderProps) {
                 className="h-16 w-auto object-contain"
               />
               <div className="hidden sm:block">
-                <div className="font-black text-[#1A1A1A] text-xl leading-tight tracking-tight">US - Fishing &amp;<br />Huntingshop</div>
+                <div className="leading-tight tracking-tight">
+                  <span style={{ fontFamily: 'Impact, Arial Narrow, sans-serif', fontStyle: 'italic', fontWeight: 900, color: '#CC0000', fontSize: '1.25rem' }}>US-</span>
+                  <span style={{ fontFamily: "'Rubik Dirt', sans-serif", color: '#1A1A1A', fontSize: '1.1rem' }}> FISHING &amp; HUNTINGSHOP</span>
+                </div>
                 <div className="text-xs text-[#666] tracking-widest uppercase mt-1">Jagd · Angeln · Outdoor</div>
               </div>
             </button>
