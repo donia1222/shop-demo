@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { ChevronLeft, X, ChevronRight, Images } from "lucide-react"
+import { ArrowLeft, ChevronLeft, X, ChevronRight, Images } from "lucide-react"
 
 interface GalleryImage {
   id: number
@@ -102,12 +102,9 @@ export default function GalleryPage() {
         <div className="max-w-6xl mx-auto px-4 h-20 flex items-center gap-3">
           <button
             onClick={() => router.push("/")}
-            className="flex items-center gap-2 text-[#555] hover:text-[#2C5F2E] transition-colors group flex-shrink-0"
+            className="w-9 h-9 flex items-center justify-center rounded-full border-2 border-[#2C5F2E]/30 text-[#2C5F2E] hover:bg-[#2C5F2E] hover:text-white hover:border-[#2C5F2E] transition-all flex-shrink-0"
           >
-            <div className="w-8 h-8 rounded-full border border-[#E5E5E5] group-hover:border-[#2C5F2E]/60 group-hover:bg-[#2C5F2E]/5 flex items-center justify-center transition-all">
-              <ChevronLeft className="w-4 h-4" />
-            </div>
-            <span className="text-sm font-bold">Galerie</span>
+            <ArrowLeft className="w-4 h-4" />
           </button>
           <div className="w-px h-6 bg-[#E5E5E5]" />
           <img src="/Security_n.png" alt="Logo" className="h-12 w-auto object-contain" />

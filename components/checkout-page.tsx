@@ -1336,10 +1336,10 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
   }
 
   return (
-    <div className="min-h-screen bg-[#F0F1F3] py-8">
-      <div className="container mx-auto px-4 max-w-7xl">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
+    <div className="min-h-screen bg-[#F0F1F3]">
+      {/* Header */}
+      <div className="bg-white shadow-sm border-b border-[#E0E0E0] sticky top-0 z-30 flex-shrink-0">
+        <div className="container mx-auto px-4 max-w-7xl py-3 sm:py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <button
               onClick={onBackToStore}
@@ -1357,6 +1357,8 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
             <span>SSL gesichert</span>
           </div>
         </div>
+      </div>
+      <div className="container mx-auto px-4 max-w-7xl py-8">
 
           {isLoggedIn && currentUser && (
             <div className="flex items-center space-x-4 bg-white rounded-2xl p-4 shadow-sm border border-[#2C5F2E]/20 mb-8">

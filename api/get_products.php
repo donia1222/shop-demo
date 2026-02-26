@@ -47,7 +47,7 @@ try {
 
         foreach ($image_fields as $field) {
             if (!empty($product[$field])) {
-                $image_urls[] = 'https://web.lweb.ch/templettedhop/upload/' . $product[$field];
+                $image_urls[] = getUploadBaseUrl() . $product[$field];
             } else {
                 $image_urls[] = null;
             }
@@ -133,7 +133,7 @@ try {
 
             foreach ($image_fields as $field) {
                 if (!empty($product[$field])) {
-                    $image_urls[] = 'https://web.lweb.ch/templettedhop/upload/' . $product[$field];
+                    $image_urls[] = getUploadBaseUrl() . $product[$field];
                 } else {
                     $image_urls[] = null;
                 }

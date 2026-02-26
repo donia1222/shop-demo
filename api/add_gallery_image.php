@@ -35,7 +35,7 @@ try {
         ':image' => $name,
     ]);
 
-    $base = 'https://web.lweb.ch/templettedhop/upload/';
+    $base = getUploadBaseUrl();
     echo json_encode([
         'success'   => true,
         'message'   => 'Bild hochgeladen',

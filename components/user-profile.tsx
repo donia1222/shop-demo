@@ -15,6 +15,7 @@ import {
   Trash2,
   AlertTriangle,
   Lock,
+  ArrowLeft,
   ChevronLeft,
   ChevronRight,
   Search,
@@ -855,13 +856,10 @@ export function UserProfile({ onClose, onAccountDeleted }: UserProfileProps) {
               <div className="flex items-center space-x-3 sm:space-x-4">
                 <button
                   onClick={onClose}
-                  className="flex items-center gap-2 text-[#555] hover:text-[#2C5F2E] transition-colors group flex-shrink-0"
+                  className="w-9 h-9 flex items-center justify-center rounded-full border-2 border-[#2C5F2E]/30 text-[#2C5F2E] hover:bg-[#2C5F2E] hover:text-white hover:border-[#2C5F2E] transition-all flex-shrink-0"
                   type="button"
                 >
-                  <div className="w-8 h-8 rounded-full border border-[#E5E5E5] group-hover:border-[#2C5F2E]/60 group-hover:bg-[#2C5F2E]/5 flex items-center justify-center transition-all">
-                    <ChevronLeft className="w-4 h-4" />
-                  </div>
-                  <span className="text-sm font-bold hidden sm:block">Zurück</span>
+                  <ArrowLeft className="w-4 h-4" />
                 </button>
                 <div className="w-px h-6 bg-[#E5E5E5] flex-shrink-0" />
                 <div className="w-10 h-10 sm:w-12 sm:h-12 bg-[#2C5F2E] rounded-full flex items-center justify-center">
