@@ -1378,55 +1378,55 @@ export function Admin({ onClose }: AdminProps) {
       <div className="max-w-7xl mx-auto px-4 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <div className="overflow-x-auto mb-8 -mx-2 px-2 pb-1">
-          <TabsList className="flex w-max lg:grid lg:grid-cols-7 lg:w-full bg-white border border-[#EBEBEB] rounded-2xl p-1 shadow-sm">
+          <TabsList className="flex w-max lg:grid lg:grid-cols-7 lg:w-full bg-white border border-[#EBEBEB] rounded-2xl p-1 shadow-sm gap-1">
             <TabsTrigger
               value="orders"
-              className="flex items-center gap-2 rounded-xl font-semibold shrink-0 data-[state=active]:bg-[#2C5F2E] data-[state=active]:text-white data-[state=active]:shadow-sm transition-all"
+              className="flex items-center gap-2 font-semibold shrink-0 bg-blue-50 text-blue-700 data-[state=active]:bg-blue-400 data-[state=active]:text-white data-[state=active]:shadow-sm transition-all"
             >
               <ShoppingBag className="w-4 h-4" />
               <span>Bestellungen</span>
             </TabsTrigger>
             <TabsTrigger
               value="products"
-              className="flex items-center gap-2 rounded-xl font-semibold shrink-0 data-[state=active]:bg-[#2C5F2E] data-[state=active]:text-white data-[state=active]:shadow-sm transition-all"
+              className="flex items-center gap-2 font-semibold shrink-0 bg-blue-50 text-blue-700 data-[state=active]:bg-blue-400 data-[state=active]:text-white data-[state=active]:shadow-sm transition-all"
             >
               <Package className="w-4 h-4" />
               <span>Produkte</span>
             </TabsTrigger>
             <TabsTrigger
+              value="einstellungen"
+              className="flex items-center gap-2 font-semibold shrink-0 bg-blue-50 text-blue-700 data-[state=active]:bg-blue-400 data-[state=active]:text-white data-[state=active]:shadow-sm transition-all"
+            >
+              <Shield className="w-4 h-4" />
+              <span>Zahlung</span>
+            </TabsTrigger>
+            <TabsTrigger
+              value="versand"
+              className="flex items-center gap-2 font-semibold shrink-0 bg-blue-50 text-blue-700 data-[state=active]:bg-blue-400 data-[state=active]:text-white data-[state=active]:shadow-sm transition-all"
+            >
+              <Package className="w-4 h-4" />
+              <span>Versand</span>
+            </TabsTrigger>
+            <TabsTrigger
+              value="anuncios"
+              className="flex items-center gap-2 font-semibold shrink-0 bg-green-50 text-green-700 data-[state=active]:bg-green-400 data-[state=active]:text-white data-[state=active]:shadow-sm transition-all"
+            >
+              <Megaphone className="w-4 h-4" />
+              <span>Anzeigen</span>
+            </TabsTrigger>
+            <TabsTrigger
               value="blog"
-              className="flex items-center gap-2 rounded-xl font-semibold shrink-0 data-[state=active]:bg-[#2C5F2E] data-[state=active]:text-white data-[state=active]:shadow-sm transition-all"
+              className="flex items-center gap-2 font-semibold shrink-0 bg-green-50 text-green-700 data-[state=active]:bg-green-400 data-[state=active]:text-white data-[state=active]:shadow-sm transition-all"
             >
               <BookOpen className="w-4 h-4" />
               <span>Blog</span>
             </TabsTrigger>
             <TabsTrigger
               value="gallery"
-              className="flex items-center gap-2 rounded-xl font-semibold shrink-0 data-[state=active]:bg-[#2C5F2E] data-[state=active]:text-white data-[state=active]:shadow-sm transition-all"
+              className="flex items-center gap-2 font-semibold shrink-0 bg-green-50 text-green-700 data-[state=active]:bg-green-400 data-[state=active]:text-white data-[state=active]:shadow-sm transition-all"
             >
               <Images className="w-4 h-4" />
               <span>Galerie</span>
-            </TabsTrigger>
-            <TabsTrigger
-              value="versand"
-              className="flex items-center gap-2 rounded-xl font-semibold shrink-0 data-[state=active]:bg-[#2C5F2E] data-[state=active]:text-white data-[state=active]:shadow-sm transition-all"
-            >
-              <Package className="w-4 h-4" />
-              <span>Versand</span>
-            </TabsTrigger>
-            <TabsTrigger
-              value="einstellungen"
-              className="flex items-center gap-2 rounded-xl font-semibold shrink-0 data-[state=active]:bg-[#2C5F2E] data-[state=active]:text-white data-[state=active]:shadow-sm transition-all"
-            >
-              <Shield className="w-4 h-4" />
-              <span>Zahlung</span>
-            </TabsTrigger>
-            <TabsTrigger
-              value="anuncios"
-              className="flex items-center gap-2 rounded-xl font-semibold shrink-0 data-[state=active]:bg-[#2C5F2E] data-[state=active]:text-white data-[state=active]:shadow-sm transition-all"
-            >
-              <Megaphone className="w-4 h-4" />
-              <span>Anzeigen</span>
             </TabsTrigger>
           </TabsList>
           </div>
@@ -1654,14 +1654,22 @@ export function Admin({ onClose }: AdminProps) {
                       <Download className="w-3 h-3 mr-1" />
                       PDF
                     </Button>
-                    <Button
-                      onClick={() => sendShippingNotification(order)}
-                      disabled={sendingShipId === order.id}
-                      variant="outline"
-                      className="rounded-full px-3 text-xs h-8 border-blue-400 text-blue-600 hover:bg-blue-50"
-                    >
-                      📦 {sendingShipId === order.id ? "..." : "Versandt"}
-                    </Button>
+                    {(() => {
+                      const m = (order.payment_method || "").toLowerCase()
+                      const isInvoice = m.includes("invoice") || m.includes("rechnung")
+                      const notPaid = order.payment_status !== "completed"
+                      if (isInvoice && notPaid) return null
+                      return (
+                        <Button
+                          onClick={() => sendShippingNotification(order)}
+                          disabled={sendingShipId === order.id}
+                          variant="outline"
+                          className="rounded-full px-3 text-xs h-8 border-blue-400 text-blue-600 hover:bg-blue-50"
+                        >
+                          📦 {sendingShipId === order.id ? "..." : "Versandt"}
+                        </Button>
+                      )
+                    })()}
                   </div>
                 </div>
               ))}
