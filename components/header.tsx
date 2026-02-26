@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { ShoppingCart, ChevronDown, Menu, ArrowUp, Newspaper, Download } from "lucide-react"
+import { ShoppingCart, ChevronDown, Menu, ArrowUp, Newspaper, Download, Images } from "lucide-react"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { LoginAuth } from "./login-auth"
 
@@ -64,11 +64,28 @@ export function Header({ onCartOpen, cartCount = 0 }: HeaderProps) {
                   <Menu className="w-5 h-5 text-[#333]" />
                 </button>
               </SheetTrigger>
-              <SheetContent side="left" className="w-72 bg-white p-0 flex flex-col h-full">
-                <div className="flex items-center p-4 pr-12 border-b border-[#E0E0E0] flex-shrink-0">
+              <SheetContent side="left" className="bg-white border-r border-gray-100 w-full sm:w-72 flex flex-col p-0 shadow-2xl h-full">
+                <div className="flex items-center justify-between p-4 pr-16 border-b border-[#E0E0E0] flex-shrink-0">
                   <div className="flex items-center gap-2">
                     <img src="/Security_n.png" alt="Logo" className="h-8 w-auto object-contain" />
-                    <span className="font-black text-[#1A1A1A] text-sm">US - Fishing &amp; Huntingshop</span>
+                    <span className="font-black text-[#1A1A1A] text-sm leading-tight">US - Fishing &amp;<br />Huntingshop</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <div className="[&_span]:hidden flex items-center">
+                      <LoginAuth
+                        onLoginSuccess={handleLoginSuccess}
+                        onLogout={handleLogout}
+                        onShowProfile={handleShowProfile}
+                        isLightSection={true}
+                        variant="button"
+                      />
+                    </div>
+                    <button
+                      onClick={() => { onCartOpen?.(); setIsMenuOpen(false) }}
+                      className="p-2 rounded-xl hover:bg-[#F5F5F5] text-[#555]"
+                    >
+                      <ShoppingCart className="w-5 h-5" />
+                    </button>
                   </div>
                 </div>
                 <nav className="p-4 space-y-1 flex-1 overflow-y-auto">
@@ -88,6 +105,13 @@ export function Header({ onCartOpen, cartCount = 0 }: HeaderProps) {
                     >
                       <Newspaper className="w-4 h-4" />
                       Blog
+                    </button>
+                    <button
+                      onClick={() => { router.push("/gallery"); setIsMenuOpen(false) }}
+                      className="w-full text-left flex items-center gap-2 px-3 py-2.5 text-sm rounded hover:bg-[#F5F5F5] text-[#2C5F2E] font-semibold"
+                    >
+                      <Images className="w-4 h-4" />
+                      Gallery
                     </button>
                     <button
                       onClick={() => {
@@ -120,23 +144,6 @@ export function Header({ onCartOpen, cartCount = 0 }: HeaderProps) {
                       <Download className="w-4 h-4" />
                       Digitale Visitenkarte
                     </button>
-                    <div className="flex items-center gap-1 pt-1 px-1 justify-end">
-                      <div className="[&_span]:hidden flex items-center">
-                        <LoginAuth
-                          onLoginSuccess={handleLoginSuccess}
-                          onLogout={handleLogout}
-                          onShowProfile={handleShowProfile}
-                          isLightSection={true}
-                          variant="button"
-                        />
-                      </div>
-                      <button
-                        onClick={() => { onCartOpen?.(); setIsMenuOpen(false) }}
-                        className="p-2 rounded-xl hover:bg-[#F5F5F5] text-[#555]"
-                      >
-                        <ShoppingCart className="w-5 h-5" />
-                      </button>
-                    </div>
                   </div>
                 </nav>
               </SheetContent>
@@ -153,7 +160,7 @@ export function Header({ onCartOpen, cartCount = 0 }: HeaderProps) {
                 className="h-16 w-auto object-contain"
               />
               <div className="hidden sm:block">
-                <div className="font-black text-[#1A1A1A] text-xl leading-none tracking-tight">US - Fishing &amp; Huntingshop</div>
+                <div className="font-black text-[#1A1A1A] text-xl leading-tight tracking-tight">US - Fishing &amp;<br />Huntingshop</div>
                 <div className="text-xs text-[#666] tracking-widest uppercase mt-1">Jagd · Angeln · Outdoor</div>
               </div>
             </button>
