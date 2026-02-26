@@ -94,6 +94,10 @@ export function HeroSection() {
 
   useEffect(() => {
     if (categories.length === 0) return
+    if (typeof window !== "undefined" && window.innerWidth < 1024) {
+      setVisibleCards(new Set([0, 1, 2, 3, 4, 5]))
+      return
+    }
     const timers = categories.slice(0, 6).map((_, i) =>
       setTimeout(() => setVisibleCards(prev => new Set([...prev, i])), i * 90)
     )
