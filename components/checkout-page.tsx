@@ -1349,11 +1349,8 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
             </button>
             <img src="/Security_n.png" alt="Logo" className="h-10 w-auto object-contain hidden sm:block" />
             <div>
-              <div className="leading-tight">
-                <span style={{ fontFamily: 'Impact, Arial Narrow, sans-serif', fontStyle: 'italic', fontWeight: 900, color: '#CC0000', fontSize: '1.1rem' }}>US-</span>
-                <span style={{ fontFamily: "'Rubik Dirt', sans-serif", color: '#1A1A1A', fontSize: '1rem' }}> FISHING &amp; HUNTINGSHOP</span>
-              </div>
-              <p className="text-xs text-[#888] mt-0.5">Warenkorb · Sicher &amp; verschlüsselt</p>
+              <span className="sm:hidden" style={{ fontFamily: "'Rubik Dirt', sans-serif", color: '#1A1A1A', fontSize: '1.1rem' }}>Warenkorb</span>
+              <span className="hidden sm:inline" style={{ fontFamily: "'Rubik Dirt', sans-serif", color: '#1A1A1A', fontSize: '1.1rem' }}>Warenkorb · Sicher &amp; verschlüsselt</span>
             </div>
           </div>
           <div className="flex items-center gap-2 text-xs text-[#888]">
@@ -1365,29 +1362,36 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
       <div className="container mx-auto px-4 max-w-7xl py-8">
 
           {isLoggedIn && currentUser && (
-            <div className="flex items-center space-x-4 bg-white rounded-2xl p-4 shadow-sm border border-[#2C5F2E]/20 mb-8">
-              <div className="text-right">
-                <p className="text-sm text-gray-600">Angemeldet als</p>
-                <p className="font-semibold text-lg text-green-700">
-                  {currentUser.firstName} {currentUser.lastName}
-                </p>
-                <p className="text-sm text-gray-500">{currentUser.email}</p>
+            <div className="flex items-center justify-between gap-4 bg-[#F8FAF8] border border-[#2C5F2E]/20 rounded-2xl px-5 py-4 mb-8">
+              {/* Avatar + info */}
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-[#2C5F2E] flex items-center justify-center flex-shrink-0">
+                  <span className="text-white text-sm font-black">
+                    {currentUser.firstName?.[0]?.toUpperCase()}{currentUser.lastName?.[0]?.toUpperCase()}
+                  </span>
+                </div>
+                <div>
+                  <p className="text-[11px] font-semibold text-[#2C5F2E] uppercase tracking-widest">Angemeldet</p>
+                  <p className="font-black text-[#1A1A1A] text-sm leading-tight">{currentUser.firstName} {currentUser.lastName}</p>
+                  <p className="text-xs text-[#888]">{currentUser.email}</p>
+                </div>
               </div>
-              <div className="flex flex-col space-y-2">
+              {/* Actions */}
+              <div className="flex items-center gap-2 flex-shrink-0">
                 <Button
                   onClick={() => router.push("/profile")}
                   variant="outline"
                   size="sm"
-                  className="bg-[#F0F9F0] hover:bg-[#E8F5E9] border-[#2C5F2E]/30 text-[#2C5F2E]"
+                  className="rounded-xl text-xs h-8 border-[#2C5F2E]/30 text-[#2C5F2E] hover:bg-[#2C5F2E] hover:text-white gap-1.5"
                 >
-                  <User className="w-4 h-4 mr-2" />
-                  Mein Profil
+                  <User className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">Mein Profil</span>
                 </Button>
                 <Button
                   onClick={handleLogout}
                   variant="outline"
                   size="sm"
-                  className="bg-red-500 hover:bg-red-600 text-white"
+                  className="rounded-xl text-xs h-8 border-red-200 text-red-500 hover:bg-red-500 hover:text-white"
                 >
                   Abmelden
                 </Button>

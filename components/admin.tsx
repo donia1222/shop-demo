@@ -2604,33 +2604,34 @@ export function Admin({ onClose }: AdminProps) {
             ) : (
               <div className="space-y-3">
                 {announcements.map(ann => (
-                  <div key={ann.id} className="flex items-center gap-4 p-4 bg-white border border-[#EBEBEB] rounded-2xl shadow-sm">
-                    {/* Type badge */}
-                    <div className={`shrink-0 px-2.5 py-1 rounded-lg text-xs font-bold uppercase tracking-wide ${ann.type === 'product' ? 'bg-blue-50 text-blue-600' : 'bg-orange-50 text-orange-600'}`}>
-                      {ann.type === 'product' ? 'Produkt' : 'Allgemein'}
+                  <div key={ann.id} className="flex flex-col sm:flex-row sm:items-center gap-3 p-4 bg-white border border-[#EBEBEB] rounded-2xl shadow-sm">
+                    {/* Row 1 (mobile) / full row (desktop): badge + image + title */}
+                    <div className="flex items-center gap-3 flex-1 min-w-0">
+                      {/* Type badge */}
+                      <div className={`shrink-0 px-2.5 py-1 rounded-lg text-xs font-bold uppercase tracking-wide ${ann.type === 'product' ? 'bg-blue-50 text-blue-600' : 'bg-orange-50 text-orange-600'}`}>
+                        {ann.type === 'product' ? 'Produkt' : 'Allgemein'}
+                      </div>
+                      {/* Image thumbnail */}
+                      {ann.image1_url && (
+                        <img src={ann.image1_url} alt="" className="w-10 h-10 rounded-lg object-cover shrink-0 border border-[#EBEBEB]" />
+                      )}
+                      {/* Title + info */}
+                      <div className="flex-1 min-w-0">
+                        <p className="font-bold text-[#1A1A1A] truncate">{ann.title}</p>
+                        <p className="text-xs text-[#888] mt-0.5">
+                          {ann.subtitle && <span className="mr-2">{ann.subtitle}</span>}
+                          {ann.show_once && <span className="bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded text-[10px] font-medium">Einmalig</span>}
+                        </p>
+                      </div>
                     </div>
 
-                    {/* Image thumbnail */}
-                    {ann.image1_url && (
-                      <img src={ann.image1_url} alt="" className="w-10 h-10 rounded-lg object-cover shrink-0 border border-[#EBEBEB]" />
-                    )}
-
-                    {/* Title + info */}
-                    <div className="flex-1 min-w-0">
-                      <p className="font-bold text-[#1A1A1A] truncate">{ann.title}</p>
-                      <p className="text-xs text-[#888] mt-0.5">
-                        {ann.subtitle && <span className="mr-2">{ann.subtitle}</span>}
-                        {ann.show_once && <span className="bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded text-[10px] font-medium">Einmalig</span>}
-                      </p>
-                    </div>
-
-                    {/* Active status */}
-                    <div className={`shrink-0 px-2.5 py-1 rounded-full text-xs font-bold ${ann.is_active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-400'}`}>
-                      {ann.is_active ? 'AKTIV' : 'INAKTIV'}
-                    </div>
-
-                    {/* Actions */}
-                    <div className="flex gap-2 shrink-0">
+                    {/* Row 2 (mobile) / end (desktop): status + actions */}
+                    <div className="flex items-center gap-2 shrink-0">
+                      {/* Active status */}
+                      <div className={`shrink-0 px-2.5 py-1 rounded-full text-xs font-bold ${ann.is_active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-400'}`}>
+                        {ann.is_active ? 'AKTIV' : 'INAKTIV'}
+                      </div>
+                      {/* Actions */}
                       <Button
                         size="sm"
                         variant="outline"
