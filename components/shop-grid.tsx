@@ -549,7 +549,8 @@ export default function ShopGrid() {
       {showBackTop && (
         <button
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          className="fixed bottom-6 right-5 z-40 bg-white hover:bg-gray-50 text-gray-700 rounded-2xl p-3 shadow-xl border border-gray-200 transition-all hover:scale-110 active:scale-95"
+          className="fixed right-6 z-50 bg-white hover:bg-gray-50 text-gray-700 rounded-2xl p-3 shadow-xl border border-gray-200 transition-all hover:scale-110 active:scale-95"
+          style={{ bottom: typeof window !== 'undefined' && window.innerWidth >= 1024 ? '5.5rem' : '1.5rem' }}
         >
           <ArrowUp className="w-5 h-5" />
         </button>
@@ -569,14 +570,36 @@ export default function ShopGrid() {
                   <Menu className="w-5 h-5 text-[#333]" />
                 </button>
               </SheetTrigger>
-              <SheetContent side="left" className="w-72 bg-white p-0 flex flex-col">
-                <div className="flex items-center p-4 pr-12 border-b border-[#E0E0E0] flex-shrink-0">
+              <SheetContent side="left" className="bg-white border-r border-gray-100 w-full sm:w-72 flex flex-col p-0 shadow-2xl h-full">
+                <div className="flex items-center justify-between p-4 pr-16 border-b border-[#E0E0E0] flex-shrink-0">
                   <div className="flex items-center gap-2">
                     <img src="/Security_n.png" alt="Logo" className="h-8 w-auto object-contain" />
                     <span className="leading-tight">
                       <span style={{ fontFamily: 'Impact, Arial Narrow, sans-serif', fontStyle: 'italic', fontWeight: 900, color: '#CC0000', fontSize: '0.9rem' }}>US-</span>
-                      <span style={{ fontFamily: "'Rubik Dirt', sans-serif", color: '#1A1A1A', fontSize: '0.8rem' }}> FISHING &amp; HUNTINGSHOP</span>
+                      <span style={{ fontFamily: "'Rubik Dirt', sans-serif", color: '#1A1A1A', fontSize: '0.8rem' }}> FISHING &amp;<br />HUNTINGSHOP</span>
                     </span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <div className="[&_span]:hidden flex items-center">
+                      <LoginAuth
+                        onLoginSuccess={() => {}}
+                        onLogout={() => {}}
+                        onShowProfile={() => { setShowUserProfile(true); setNavMenuOpen(false) }}
+                        isLightSection={true}
+                        variant="button"
+                      />
+                    </div>
+                    <button
+                      onClick={() => { setCartOpen(true); setNavMenuOpen(false) }}
+                      className="relative p-2 rounded-xl hover:bg-[#F5F5F5] text-[#555]"
+                    >
+                      <ShoppingCart className="w-5 h-5" />
+                      {cart.reduce((s, i) => s + i.quantity, 0) > 0 && (
+                        <span className="absolute top-0 right-0 bg-[#CC0000] text-white text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center shadow-sm">
+                          {cart.reduce((s, i) => s + i.quantity, 0) > 9 ? "9+" : cart.reduce((s, i) => s + i.quantity, 0)}
+                        </span>
+                      )}
+                    </button>
                   </div>
                 </div>
                 <nav className="p-4 space-y-1 flex-1 overflow-y-auto">
@@ -616,23 +639,6 @@ export default function ShopGrid() {
                       <Download className="w-4 h-4" />
                       Digitale Visitenkarte
                     </button>
-                    <div className="flex items-center gap-1 pt-1 px-1 justify-end">
-                      <div className="[&_span]:hidden flex items-center">
-                        <LoginAuth
-                          onLoginSuccess={() => {}}
-                          onLogout={() => {}}
-                          onShowProfile={() => { setShowUserProfile(true); setNavMenuOpen(false) }}
-                          isLightSection={true}
-                          variant="button"
-                        />
-                      </div>
-                      <button
-                        onClick={() => { setCartOpen(true); setNavMenuOpen(false) }}
-                        className="p-2 rounded-xl hover:bg-[#F5F5F5] text-[#555]"
-                      >
-                        <ShoppingCart className="w-5 h-5" />
-                      </button>
-                    </div>
                   </div>
                 </nav>
               </SheetContent>
@@ -640,7 +646,7 @@ export default function ShopGrid() {
 
             {/* Mobile: divider + page title (like blog header) */}
             <div className="lg:hidden w-px h-6 bg-[#E5E5E5] flex-shrink-0" />
-            <span className="lg:hidden flex-shrink-0" style={{ fontFamily: "'Rubik Dirt', sans-serif", fontSize: '1.1rem', color: '#333333' }}>Shop</span>
+            <span className="lg:hidden flex-shrink-0" style={{ fontFamily: "'Rubik Dirt', sans-serif", fontSize: '1.1rem', color: '#333333' }}>Online-Shop</span>
 
             {/* Desktop: ← Home button */}
             <button
@@ -650,7 +656,7 @@ export default function ShopGrid() {
               <div className="w-8 h-8 rounded-full border border-[#E5E5E5] group-hover:border-[#2C5F2E]/60 group-hover:bg-[#2C5F2E]/5 flex items-center justify-center transition-all">
                 <ChevronLeft className="w-4 h-4" />
               </div>
-              <span style={{ fontFamily: "'Rubik Dirt', sans-serif", fontSize: '1.1rem', color: '#333333' }}>Home</span>
+              <span style={{ fontFamily: "'Rubik Dirt', sans-serif", fontSize: '1.1rem', color: '#333333' }}>Online-Shop</span>
             </button>
 
             {/* Divider (desktop only) */}

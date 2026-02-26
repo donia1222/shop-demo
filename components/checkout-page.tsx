@@ -2395,7 +2395,10 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
                       disabled={isSubmitting}
                       className="w-full min-h-14 h-auto py-3 text-base font-bold bg-gradient-to-r from-orange-400 to-orange-500 hover:from-orange-500 hover:to-orange-600 text-white shadow-xl transition-all duration-300"
                     >
-                      {isSubmitting ? <><div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>Verarbeitung...</> : `Bestellen & via TWINT bezahlen · ${getFinalTotal().toFixed(2)} CHF`}
+                      {isSubmitting
+                        ? <><div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>Verarbeitung...</>
+                        : <span className="flex flex-col items-center leading-tight"><span>Bestellen &amp; via TWINT bezahlen</span><span className="text-sm font-semibold opacity-90">{getFinalTotal().toFixed(2)} CHF</span></span>
+                      }
                     </Button>
                   </>
                 )}
@@ -2542,8 +2545,51 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
             }}
           />
         )}
-        
+
       </div>
+
+      {/* ── Payment footer strip ── */}
+      {paySettings && (paySettings.enable_invoice || paySettings.enable_stripe || paySettings.enable_twint || paySettings.enable_paypal) && (
+        <div className="border-t border-[#E0E0E0] py-5 bg-white mt-8">
+          <div className="container mx-auto px-4 max-w-7xl">
+            <div className="flex flex-wrap items-center justify-center gap-3">
+              <div className="flex items-center gap-1.5 pr-4 border-r border-[#E0E0E0]">
+                <Shield className="w-4 h-4 text-[#2C5F2E]" />
+                <span className="text-[11px] font-semibold text-[#555] tracking-widest uppercase">Sichere Zahlung</span>
+              </div>
+              {paySettings.enable_invoice && (
+                <div className="h-9 px-4 rounded-lg bg-[#F5F5F5] border border-[#E0E0E0] flex items-center gap-2 shadow-sm">
+                  <span className="text-lg">🏦</span>
+                  <span className="text-[11px] font-bold text-[#444] tracking-tight">Rechnung</span>
+                </div>
+              )}
+              {paySettings.enable_twint && (
+                <div className="h-9 px-3 rounded-lg bg-black flex items-center shadow-sm">
+                  <img src="/twint-logo.svg" alt="TWINT" className="h-7 w-auto" />
+                </div>
+              )}
+              {paySettings.enable_stripe && (
+                <>
+                  <div className="h-9 px-5 rounded-lg bg-[#1A1F71] flex items-center shadow-sm">
+                    <span className="font-black text-white text-base italic tracking-tight">VISA</span>
+                  </div>
+                  <div className="h-9 px-4 rounded-lg bg-white border border-[#E0E0E0] flex items-center gap-1 shadow-sm">
+                    <div className="w-5 h-5 rounded-full bg-[#EB001B] opacity-90" />
+                    <div className="w-5 h-5 rounded-full bg-[#F79E1B] opacity-90 -ml-2" />
+                    <span className="text-[11px] font-bold text-[#333] ml-1.5 tracking-tight">Mastercard</span>
+                  </div>
+                </>
+              )}
+              {paySettings.enable_paypal && (
+                <div className="h-9 px-3 rounded-lg bg-white border border-[#E0E0E0] flex items-center shadow-sm">
+                  <img src="/0014294_paypal-express-payment-plugin.png" alt="PayPal" className="h-7 w-auto object-contain" />
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   )
 }

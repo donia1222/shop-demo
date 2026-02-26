@@ -862,11 +862,11 @@ export function UserProfile({ onClose, onAccountDeleted }: UserProfileProps) {
                   <ArrowLeft className="w-4 h-4" />
                 </button>
                 <div className="w-px h-6 bg-[#E5E5E5] flex-shrink-0" />
-                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-[#2C5F2E] rounded-full flex items-center justify-center">
-                  <User className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+                <div className="w-8 h-8 bg-[#2C5F2E] rounded-full flex items-center justify-center">
+                  <User className="w-4 h-4 text-white" />
                 </div>
                 <div>
-                  <h1 className="text-xl sm:text-2xl font-bold text-gray-800">Mein Profil</h1>
+                  <h1 style={{ fontFamily: "'Rubik Dirt', sans-serif", fontSize: '1.1rem', color: '#333333' }}>Mein Profil</h1>
       
                 </div>
               </div>

@@ -214,6 +214,7 @@ export default function BlogPage() {
           </button>
           <div className="w-px h-6 bg-[#E5E5E5]" />
           <img src="/Security_n.png" alt="Logo" className="h-12 w-auto object-contain" />
+          <span className="sm:hidden" style={{ fontFamily: "'Rubik Dirt', sans-serif", fontSize: '1.1rem', color: '#333333' }}>Blog</span>
           <div className="hidden sm:block">
             <div className="leading-tight">
               <span style={{ fontFamily: 'Impact, Arial Narrow, sans-serif', fontStyle: 'italic', fontWeight: 900, color: '#CC0000', fontSize: '1rem' }}>US-</span>

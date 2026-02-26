@@ -61,7 +61,7 @@ export function ShoppingCartComponent({
                 <ShoppingCart className="w-4 h-4 text-white" />
               </div>
               <div>
-                <SheetTitle className="text-base font-black text-gray-900 leading-none">Warenkorb</SheetTitle>
+                <SheetTitle className="leading-none" style={{ fontFamily: "'Rubik Dirt', sans-serif", color: '#1A1A1A', fontSize: '1.1rem', fontWeight: 'normal' }}>Warenkorb</SheetTitle>
                 <p className="text-xs text-gray-400 mt-0.5">{totalItems} {totalItems === 1 ? "Artikel" : "Artikel"}</p>
               </div>
             </div>

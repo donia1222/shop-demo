@@ -1340,6 +1340,7 @@ export function Admin({ onClose }: AdminProps) {
               </button>
               <div className="w-px h-6 bg-[#E0E0E0]" />
               <img src="/Security_n.png" alt="Logo" className="h-10 w-auto object-contain" />
+              <span className="sm:hidden" style={{ fontFamily: "'Rubik Dirt', sans-serif", fontSize: '1rem', color: '#333333' }}>Verwaltungspanel</span>
               <div className="hidden sm:block">
                 <div className="leading-tight">
                   <span style={{ fontFamily: 'Impact, Arial Narrow, sans-serif', fontStyle: 'italic', fontWeight: 900, color: '#CC0000', fontSize: '1rem' }}>US-</span>
