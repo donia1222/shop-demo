@@ -297,44 +297,44 @@ Falls Sie eine beschädigte oder falsche Ware erhalten haben, wenden Sie sich bi
 
       {/* ── Payment icons strip ── */}
       {paySettings && (paySettings.enable_invoice || paySettings.enable_stripe || paySettings.enable_twint || paySettings.enable_paypal) && (
-        <div className="border-t border-b border-[#E0E0E0] py-5 bg-white">
+        <div className="border-t border-b border-[#E0E0E0] py-3.5 bg-white">
           <div className="container mx-auto px-4">
-            <div className="flex flex-wrap items-center justify-center gap-3">
+            <div className="flex flex-wrap items-center justify-center gap-2">
               {/* Sichere Zahlung */}
-              <div className="flex items-center gap-1.5 pr-4 border-r border-[#E0E0E0]">
-                <ShieldCheck className="w-4 h-4 text-[#2C5F2E]" />
-                <span className="text-[11px] font-semibold text-[#555] tracking-widest uppercase">Sichere Zahlung</span>
+              <div className="flex items-center gap-1 pr-3 border-r border-[#E0E0E0]">
+                <ShieldCheck className="w-3.5 h-3.5 text-[#2C5F2E]" />
+                <span className="text-[10px] font-semibold text-[#555] tracking-widest uppercase">Sichere Zahlung</span>
               </div>
               {/* Factura / Transferencia */}
               {paySettings.enable_invoice && (
-                <div className="h-9 px-4 rounded-lg bg-[#F5F5F5] border border-[#E0E0E0] flex items-center gap-2 shadow-sm">
-                  <span className="text-lg">🏦</span>
-                  <span className="text-[11px] font-bold text-[#444] tracking-tight">Rechnung</span>
+                <div className="h-7 px-3 rounded-md bg-[#F5F5F5] border border-[#E0E0E0] flex items-center gap-1.5 shadow-sm">
+                  <span className="text-sm">🏦</span>
+                  <span className="text-[10px] font-bold text-[#444] tracking-tight">Rechnung</span>
                 </div>
               )}
               {/* TWINT */}
               {paySettings.enable_twint && (
-                <div className="h-9 px-3 rounded-lg bg-black flex items-center shadow-sm">
-                  <img src="/twint-logo.svg" alt="TWINT" className="h-7 w-auto" />
+                <div className="h-7 px-2.5 rounded-md bg-black flex items-center shadow-sm">
+                  <img src="/twint-logo.svg" alt="TWINT" className="h-5 w-auto" />
                 </div>
               )}
               {/* Stripe → Visa + Mastercard */}
               {paySettings.enable_stripe && (
                 <>
-                  <div className="h-9 px-5 rounded-lg bg-[#1A1F71] flex items-center shadow-sm">
-                    <span className="font-black text-white text-base italic tracking-tight">VISA</span>
+                  <div className="h-7 px-3.5 rounded-md bg-[#1A1F71] flex items-center shadow-sm">
+                    <span className="font-black text-white text-sm italic tracking-tight">VISA</span>
                   </div>
-                  <div className="h-9 px-4 rounded-lg bg-white border border-[#E0E0E0] flex items-center gap-1 shadow-sm">
-                    <div className="w-5 h-5 rounded-full bg-[#EB001B] opacity-90" />
-                    <div className="w-5 h-5 rounded-full bg-[#F79E1B] opacity-90 -ml-2" />
-                    <span className="text-[11px] font-bold text-[#333] ml-1.5 tracking-tight">Mastercard</span>
+                  <div className="h-7 px-3 rounded-md bg-white border border-[#E0E0E0] flex items-center gap-1 shadow-sm">
+                    <div className="w-4 h-4 rounded-full bg-[#EB001B] opacity-90" />
+                    <div className="w-4 h-4 rounded-full bg-[#F79E1B] opacity-90 -ml-1.5" />
+                    <span className="text-[10px] font-bold text-[#333] ml-1 tracking-tight">Mastercard</span>
                   </div>
                 </>
               )}
               {/* PayPal */}
               {paySettings.enable_paypal && (
-                <div className="h-9 px-3 rounded-lg bg-white border border-[#E0E0E0] flex items-center shadow-sm">
-                  <img src="/0014294_paypal-express-payment-plugin.png" alt="PayPal" className="h-7 w-auto object-contain" />
+                <div className="h-7 px-2.5 rounded-md bg-white border border-[#E0E0E0] flex items-center shadow-sm">
+                  <img src="/0014294_paypal-express-payment-plugin.png" alt="PayPal" className="h-5 w-auto object-contain" />
                 </div>
               )}
             </div>
