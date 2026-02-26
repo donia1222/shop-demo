@@ -57,11 +57,9 @@ export function HeroSection() {
   const router = useRouter()
   const [categories, setCategories] = useState<Category[]>([])
   const [products, setProducts] = useState<Product[]>([])
-  const [mounted, setMounted] = useState(false)
   const [count, setCount] = useState(0)
 
   useEffect(() => {
-    setMounted(true)
     // Wait for the element to be visible (fade delay 360ms + partial animation), then count
     const startDelay = setTimeout(() => {
       const target = 500
@@ -159,10 +157,7 @@ export function HeroSection() {
 
         <div className="relative z-10 container mx-auto px-6 flex items-center" style={{ minHeight: "520px" }}>
           <div className="max-w-2xl">
-            <div
-              className="inline-flex items-center gap-2.5 mb-6 transition-all duration-700"
-              style={{ opacity: mounted ? 1 : 0, transform: mounted ? "translateY(0)" : "translateY(20px)", transitionDelay: "0ms" }}
-            >
+            <div className="inline-flex items-center gap-2.5 mb-6">
               <span className="bg-[#CC0000] text-white text-xs font-black uppercase tracking-widest px-4 py-1.5 rounded-full">
                 🔥 Frühjahrs-Sale
               </span>
@@ -170,32 +165,23 @@ export function HeroSection() {
             </div>
 
             <h1
-              className="text-white font-black leading-[1.05] mb-5 transition-all duration-700"
+              className="text-white font-black leading-[1.05] mb-5"
               style={{
                 fontSize: "clamp(2.5rem, 6vw, 4.5rem)",
                 textShadow: "0 2px 24px rgba(0,0,0,0.45)",
                 letterSpacing: "-0.02em",
-                opacity: mounted ? 1 : 0,
-                transform: mounted ? "translateY(0)" : "translateY(24px)",
-                transitionDelay: "150ms",
               }}
             >
               Top-Ausrüstung<br />
               <span className="text-[#6DBF6A]">zu Bestpreisen</span>
             </h1>
 
-            <p
-              className="text-white/75 text-lg mb-8 leading-relaxed max-w-lg transition-all duration-700"
-              style={{ opacity: mounted ? 1 : 0, transform: mounted ? "translateY(0)" : "translateY(20px)", transitionDelay: "300ms" }}
-            >
+            <p className="text-white/75 text-lg mb-8 leading-relaxed max-w-lg">
               Jagd, Angeln & Outdoor — alles was du brauchst,<br />
               jetzt zum Frühjahrs-Sale-Preis.
             </p>
 
-            <div
-              className="flex flex-wrap gap-3 transition-all duration-700"
-              style={{ opacity: mounted ? 1 : 0, transform: mounted ? "translateY(0)" : "translateY(20px)", transitionDelay: "450ms" }}
-            >
+            <div className="flex flex-wrap gap-3">
               <button
                 onClick={() => router.push("/shop")}
                 className="bg-white text-[#1A1A1A] font-bold px-8 py-3.5 text-sm hover:bg-[#F0F0F0] transition-all rounded-full inline-flex items-center gap-2 shadow-xl"
@@ -309,7 +295,7 @@ export function HeroSection() {
           {/* Grid — solo 6 primeras */}
           {categories.length > 0 && (
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-              {categories.slice(0, 6).map((cat) => {
+              {categories.slice(0, 6).map((cat, i) => {
                 const catProds = products.filter(p =>
                   p.category === cat.slug || p.category === cat.name
                 )
@@ -318,7 +304,8 @@ export function HeroSection() {
                   <button
                     key={cat.id}
                     onClick={() => router.push(`/shop?cat=${encodeURIComponent(cat.name)}`)}
-                    className="relative overflow-hidden rounded-2xl bg-[#1a1a1a] group aspect-[3/4] text-left"
+                    className="relative overflow-hidden rounded-2xl bg-[#1a1a1a] group aspect-[3/4] text-left section-fade"
+                    style={{ animationDelay: `${i * 80}ms`, animationDuration: "0.7s" }}
                   >
                     <CatImageCard
                       srcs={srcs}
