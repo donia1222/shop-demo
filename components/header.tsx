@@ -154,6 +154,7 @@ export function Header({ onCartOpen, cartCount = 0 }: HeaderProps) {
                         VCard
                       </button>
                     </div>
+                    <p className="px-3 pt-3 pb-1 text-sm text-[#AAA] tracking-wide">Jagd · Angeln · Outdoor · Schweiz🇨🇭</p>
                   </div>
                 </nav>
               </SheetContent>

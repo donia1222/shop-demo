@@ -569,7 +569,7 @@ export function LoginAuth({
 
       {/* Auth Modal (Login/Register) */}
       <Dialog open={showAuthModal} onOpenChange={setShowAuthModal}>
-        <DialogContent className="p-0 gap-0 sm:max-w-sm bg-[#F7F7F5] border-0 overflow-hidden rounded-2xl">
+        <DialogContent className="left-0 top-0 translate-x-0 translate-y-0 w-full max-w-full h-full max-h-full rounded-none sm:left-[50%] sm:top-[50%] sm:translate-x-[-50%] sm:translate-y-[-50%] sm:max-w-sm sm:h-auto sm:max-h-[90vh] sm:rounded-2xl p-0 gap-0 bg-[#F7F7F5] border-0 overflow-y-auto">
           {/* Hidden accessible title */}
           <DialogTitle className="sr-only">
             {authMode === "login" ? "Anmelden" : "Registrieren"}
@@ -793,7 +793,7 @@ export function LoginAuth({
 
           {/* Bottom tagline */}
           <p className="text-center text-sm text-gray-500 pb-6 px-4">
-            Jagd · Angeln · <span className="text-[#2C5F2E] font-semibold">Outdoor</span> · Schweiz
+            Jagd · Angeln · <span className="text-[#2C5F2E] font-semibold">Outdoor</span> · Schweiz🇨🇭
           </p>
         </DialogContent>
       </Dialog>
@@ -840,7 +840,7 @@ export function LoginAuth({
           </div>
 
           <p className="text-center text-sm text-gray-500 pb-6 px-4">
-            Jagd · Angeln · <span className="text-[#2C5F2E] font-semibold">Outdoor</span> · Schweiz
+            Jagd · Angeln · <span className="text-[#2C5F2E] font-semibold">Outdoor</span> · Schweiz🇨🇭
           </p>
         </DialogContent>
       </Dialog>
