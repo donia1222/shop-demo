@@ -5,7 +5,7 @@ import { useSearchParams, useRouter, usePathname } from "next/navigation"
 import {
   ShoppingCart, ChevronLeft, ChevronRight,
   Search, X, Check, LayoutGrid,
-  ArrowUp, ChevronDown, Heart, Menu, Newspaper, Download
+  ArrowUp, ChevronDown, Heart, Menu, Newspaper, Download, Images
 } from "lucide-react"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { ShoppingCartComponent } from "./shopping-cart"
@@ -640,21 +640,30 @@ export default function ShopGrid() {
                       {cat.name.replace(/\s*\d{4}$/, "")}
                     </button>
                   ))}
-                  <div className="pt-2 mt-1 border-t border-[#E0E0E0] space-y-0.5">
-                    <button
-                      onClick={() => { router.push("/blog"); setNavMenuOpen(false) }}
-                      className={`w-full text-left flex items-center gap-2 px-3 py-2.5 text-sm rounded hover:bg-[#F5F5F5] font-semibold ${pathname === "/blog" ? "bg-[#2C5F2E] text-white" : "text-[#2C5F2E]"}`}
-                    >
-                      <Newspaper className="w-4 h-4" />
-                      Blog
-                    </button>
-                    <button
-                      onClick={() => { handleDownloadVCard(); setNavMenuOpen(false) }}
-                      className="w-full text-left flex items-center gap-2 px-3 py-2.5 text-sm rounded hover:bg-[#F5F5F5] font-semibold text-[#2C5F2E]"
-                    >
-                      <Download className="w-4 h-4" />
-                      Digitale Visitenkarte
-                    </button>
+                  <div className="pt-2 mt-1 border-t border-[#E0E0E0]">
+                    <div className="flex">
+                      <button
+                        onClick={() => { router.push("/blog"); setNavMenuOpen(false) }}
+                        className={`flex items-center gap-1.5 px-3 py-2.5 text-sm rounded hover:bg-[#F5F5F5] font-semibold ${pathname === "/blog" ? "bg-[#2C5F2E] text-white" : "text-[#2C5F2E]"}`}
+                      >
+                        <Newspaper className="w-4 h-4 shrink-0" />
+                        Blog
+                      </button>
+                      <button
+                        onClick={() => { router.push("/gallery"); setNavMenuOpen(false) }}
+                        className="flex items-center gap-1.5 px-3 py-2.5 text-sm rounded hover:bg-[#F5F5F5] font-semibold text-[#2C5F2E]"
+                      >
+                        <Images className="w-4 h-4 shrink-0" />
+                        Gallery
+                      </button>
+                      <button
+                        onClick={() => { handleDownloadVCard(); setNavMenuOpen(false) }}
+                        className="flex items-center gap-1.5 px-3 py-2.5 text-sm rounded hover:bg-[#F5F5F5] font-semibold text-[#2C5F2E]"
+                      >
+                        <Download className="w-4 h-4 shrink-0" />
+                        VCard
+                      </button>
+                    </div>
                   </div>
                 </nav>
               </SheetContent>
