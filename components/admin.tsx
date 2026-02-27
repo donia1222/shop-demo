@@ -2767,7 +2767,7 @@ export function Admin({ onClose }: AdminProps) {
 
         {/* Product Add/Edit Modal */}
         <Dialog open={isProductModalOpen} onOpenChange={setIsProductModalOpen}>
-          <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto bg-white">
+          <DialogContent className="left-0 top-0 translate-x-0 translate-y-0 w-full max-w-full h-full max-h-full rounded-none sm:left-[50%] sm:top-[50%] sm:translate-x-[-50%] sm:translate-y-[-50%] sm:max-w-2xl sm:h-auto sm:max-h-[80vh] sm:rounded-lg overflow-y-auto bg-white">
             <DialogHeader>
               <DialogTitle>{currentEditingProduct ? "Produkt bearbeiten" : "Produkt hinzufügen"}</DialogTitle>
             </DialogHeader>
@@ -2995,42 +2995,44 @@ export function Admin({ onClose }: AdminProps) {
         </Dialog>
 
         <Dialog open={isCategoryModalOpen} onOpenChange={(open) => { setIsCategoryModalOpen(open); if (!open) setEditingCategory(null) }}>
-          <DialogContent className="max-w-md bg-white">
-            <DialogHeader>
+          <DialogContent className="left-0 top-0 translate-x-0 translate-y-0 w-full max-w-full h-full max-h-full rounded-none flex flex-col overflow-hidden p-0 sm:left-[50%] sm:top-[50%] sm:translate-x-[-50%] sm:translate-y-[-50%] sm:max-w-md sm:h-auto sm:max-h-[80vh] sm:rounded-lg bg-white">
+            <DialogHeader className="px-6 pt-6 pb-4 border-b border-gray-100 shrink-0">
               <DialogTitle>{editingCategory ? "Kategorie bearbeiten" : "Neue Kategorie erstellen"}</DialogTitle>
             </DialogHeader>
-            <form onSubmit={handleCategorySubmit} className="space-y-4">
-              <div>
-                <Label htmlFor="cat-name">Name *</Label>
-                <Input
-                  id="cat-name"
-                  name="name"
-                  required
-                  defaultValue={editingCategory?.name || ""}
-                  key={editingCategory?.id ?? "new"}
-                  placeholder="z.B. Rubs & Gewürze"
-                  className="bg-white"
-                />
-                {!editingCategory && (
-                  <p className="text-xs text-gray-400 mt-1">Der Slug wird automatisch generiert</p>
-                )}
-                {editingCategory && (
-                  <p className="text-xs text-gray-400 mt-1">Slug: <span className="font-mono">{editingCategory.slug}</span> (wird nicht geändert)</p>
-                )}
+            <form onSubmit={handleCategorySubmit} className="flex flex-col flex-1 min-h-0">
+              <div className="flex-1 overflow-y-auto px-6 py-5 space-y-4">
+                <div>
+                  <Label htmlFor="cat-name" className="text-sm font-medium">Name *</Label>
+                  <Input
+                    id="cat-name"
+                    name="name"
+                    required
+                    defaultValue={editingCategory?.name || ""}
+                    key={editingCategory?.id ?? "new"}
+                    placeholder="z.B. Rubs & Gewürze"
+                    className="bg-white h-12 text-base sm:h-10 sm:text-sm mt-1"
+                  />
+                  {!editingCategory && (
+                    <p className="text-xs text-gray-400 mt-1">Der Slug wird automatisch generiert</p>
+                  )}
+                  {editingCategory && (
+                    <p className="text-xs text-gray-400 mt-1">Slug: <span className="font-mono">{editingCategory.slug}</span> (wird nicht geändert)</p>
+                  )}
+                </div>
+                <div>
+                  <Label htmlFor="cat-description" className="text-sm font-medium">Beschreibung</Label>
+                  <Textarea
+                    id="cat-description"
+                    name="description"
+                    rows={4}
+                    defaultValue={editingCategory?.description || ""}
+                    key={(editingCategory?.id ?? "new") + "-desc"}
+                    placeholder="Kurze Beschreibung der Kategorie..."
+                    className="bg-white text-base sm:text-sm mt-1"
+                  />
+                </div>
               </div>
-              <div>
-                <Label htmlFor="cat-description">Beschreibung</Label>
-                <Textarea
-                  id="cat-description"
-                  name="description"
-                  rows={2}
-                  defaultValue={editingCategory?.description || ""}
-                  key={(editingCategory?.id ?? "new") + "-desc"}
-                  placeholder="Kurze Beschreibung der Kategorie..."
-                  className="bg-white"
-                />
-              </div>
-              <div className="flex justify-end space-x-2 pt-2">
+              <div className="flex justify-end gap-2 px-6 py-4 border-t border-gray-100 bg-white shrink-0">
                 <Button type="button" variant="outline" onClick={() => { setIsCategoryModalOpen(false); setEditingCategory(null) }} className="bg-white text-gray-700 hover:bg-gray-50">
                   Abbrechen
                 </Button>
@@ -3069,18 +3071,18 @@ export function Admin({ onClose }: AdminProps) {
 
         {/* ── Blog Post Modal ── */}
         <Dialog open={isBlogModalOpen} onOpenChange={open => { setIsBlogModalOpen(open); if (!open) setCurrentEditingPost(null) }}>
-          <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto bg-white">
-            <DialogHeader>
+          <DialogContent className="left-0 top-0 translate-x-0 translate-y-0 w-full max-w-full h-full max-h-full rounded-none flex flex-col overflow-hidden p-0 sm:left-[50%] sm:top-[50%] sm:translate-x-[-50%] sm:translate-y-[-50%] sm:max-w-2xl sm:h-auto sm:max-h-[85vh] sm:rounded-lg bg-white">
+            <DialogHeader className="px-6 pt-6 pb-4 border-b border-gray-100 shrink-0">
               <DialogTitle>{currentEditingPost ? "Beitrag bearbeiten" : "Neuer Beitrag"}</DialogTitle>
             </DialogHeader>
-            <div className="space-y-5 pt-2">
+            <div className="flex-1 overflow-y-auto px-6 py-5 space-y-5">
               <div>
                 <Label className="text-sm font-semibold mb-1.5 block">Titel *</Label>
-                <Input value={blogForm.title} onChange={e => setBlogForm(f => ({ ...f, title: e.target.value }))} placeholder="Beitragstitel..." className="rounded-xl" />
+                <Input value={blogForm.title} onChange={e => setBlogForm(f => ({ ...f, title: e.target.value }))} placeholder="Beitragstitel..." className="rounded-xl h-12 text-base sm:h-10 sm:text-sm" />
               </div>
               <div>
                 <Label className="text-sm font-semibold mb-1.5 block">Inhalt *</Label>
-                <Textarea value={blogForm.content} onChange={e => setBlogForm(f => ({ ...f, content: e.target.value }))} placeholder="Schreibe deinen Beitrag hier..." rows={8} className="rounded-xl resize-none" />
+                <Textarea value={blogForm.content} onChange={e => setBlogForm(f => ({ ...f, content: e.target.value }))} placeholder="Schreibe deinen Beitrag hier..." rows={8} className="rounded-xl resize-none text-base sm:text-sm" />
               </div>
 
               {/* Images */}
@@ -3139,12 +3141,12 @@ export function Admin({ onClose }: AdminProps) {
                 </div>
               ))}
 
-              <div className="flex gap-3 pt-2">
-                <Button onClick={saveBlogPost} disabled={blogSaving} className="flex-1 bg-[#2C5F2E] hover:bg-[#1A4520] text-white rounded-xl">
-                  {blogSaving ? "Speichern..." : currentEditingPost ? "Aktualisieren" : "Veröffentlichen"}
-                </Button>
-                <Button variant="outline" onClick={() => setIsBlogModalOpen(false)} className="rounded-xl">Abbrechen</Button>
-              </div>
+            </div>
+            <div className="flex gap-3 px-6 py-4 border-t border-gray-100 bg-white shrink-0">
+              <Button onClick={saveBlogPost} disabled={blogSaving} className="flex-1 bg-[#2C5F2E] hover:bg-[#1A4520] text-white rounded-xl">
+                {blogSaving ? "Speichern..." : currentEditingPost ? "Aktualisieren" : "Veröffentlichen"}
+              </Button>
+              <Button variant="outline" onClick={() => setIsBlogModalOpen(false)} className="rounded-xl">Abbrechen</Button>
             </div>
           </DialogContent>
         </Dialog>
@@ -3163,14 +3165,14 @@ export function Admin({ onClose }: AdminProps) {
 
         {/* ── Gallery Upload Modal ── */}
         <Dialog open={isGalleryModalOpen} onOpenChange={open => { setIsGalleryModalOpen(open); if (!open) { setGalleryFile(null); setGalleryPreview(null); setGalleryTitle("") } }}>
-          <DialogContent className="max-w-md bg-white">
-            <DialogHeader>
+          <DialogContent className="left-0 top-0 translate-x-0 translate-y-0 w-full max-w-full h-full max-h-full rounded-none flex flex-col overflow-hidden p-0 sm:left-[50%] sm:top-[50%] sm:translate-x-[-50%] sm:translate-y-[-50%] sm:max-w-md sm:h-auto sm:max-h-[85vh] sm:rounded-lg bg-white">
+            <DialogHeader className="px-6 pt-6 pb-4 border-b border-gray-100 shrink-0">
               <DialogTitle>Bild hochladen</DialogTitle>
             </DialogHeader>
-            <div className="space-y-5 pt-2">
+            <div className="flex-1 overflow-y-auto px-6 py-5 space-y-5">
               <div>
                 <Label className="text-sm font-semibold mb-1.5 block">Titel (optional)</Label>
-                <Input value={galleryTitle} onChange={e => setGalleryTitle(e.target.value)} placeholder="Bildbeschreibung..." className="rounded-xl" />
+                <Input value={galleryTitle} onChange={e => setGalleryTitle(e.target.value)} placeholder="Bildbeschreibung..." className="rounded-xl h-12 text-base sm:h-10 sm:text-sm" />
               </div>
 
               <div>
@@ -3186,8 +3188,8 @@ export function Admin({ onClose }: AdminProps) {
                     ><X className="w-3.5 h-3.5" /></button>
                   </div>
                 ) : (
-                  <label className="flex flex-col items-center justify-center h-36 border-2 border-dashed border-[#D5D5D5] rounded-xl cursor-pointer hover:border-[#2C5F2E] hover:bg-[#2C5F2E]/5 transition-colors">
-                    <Upload className="w-6 h-6 text-[#AAA] mb-2" />
+                  <label className="flex flex-col items-center justify-center h-48 border-2 border-dashed border-[#D5D5D5] rounded-xl cursor-pointer hover:border-[#2C5F2E] hover:bg-[#2C5F2E]/5 transition-colors">
+                    <Upload className="w-8 h-8 text-[#AAA] mb-2" />
                     <span className="text-sm text-[#AAA] font-medium">Datei auswählen</span>
                     <span className="text-[11px] text-[#CCC] mt-1">JPG, PNG, GIF, WebP — max. 8MB</span>
                     <input type="file" accept="image/*" className="hidden" onChange={e => {
@@ -3198,13 +3200,12 @@ export function Admin({ onClose }: AdminProps) {
                   </label>
                 )}
               </div>
-
-              <div className="flex gap-3 pt-1">
-                <Button onClick={saveGalleryImage} disabled={gallerySaving || !galleryFile} className="flex-1 bg-[#2C5F2E] hover:bg-[#1A4520] text-white rounded-xl">
-                  {gallerySaving ? "Hochladen..." : "Hochladen"}
-                </Button>
-                <Button variant="outline" onClick={() => setIsGalleryModalOpen(false)} className="rounded-xl">Abbrechen</Button>
-              </div>
+            </div>
+            <div className="flex gap-3 px-6 py-4 border-t border-gray-100 bg-white shrink-0">
+              <Button onClick={saveGalleryImage} disabled={gallerySaving || !galleryFile} className="flex-1 bg-[#2C5F2E] hover:bg-[#1A4520] text-white rounded-xl">
+                {gallerySaving ? "Hochladen..." : "Hochladen"}
+              </Button>
+              <Button variant="outline" onClick={() => setIsGalleryModalOpen(false)} className="rounded-xl">Abbrechen</Button>
             </div>
           </DialogContent>
         </Dialog>
