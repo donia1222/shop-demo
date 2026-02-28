@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import crypto from 'crypto'
 
-const DATA_DIR = path.join(process.cwd(), 'demo-data')
+const DATA_DIR = process.env.VERCEL ? '/tmp/demo-data' : path.join(process.cwd(), 'demo-data')
 const IMG_BASE = 'https://web.lweb.ch/templettedhop/upload/'
 
 function ensureDataDir() {
@@ -61,9 +61,9 @@ function createSeedData() {
     products,
     categories,
     orders,
-    blog_posts: [],
-    gallery_images: [],
-    announcements: [],
+    blog_posts: [] as any[],
+    gallery_images: [] as any[],
+    announcements: [] as any[],
     payment_settings: {
       enable_invoice: true, enable_paypal: false, enable_stripe: false, enable_twint: false,
       paypal_email: '', stripe_publishable_key: '', stripe_secret_key: '', stripe_pmc_id: '',
@@ -89,7 +89,7 @@ function createSeedData() {
         {zone_id:3,range_id:1,price:18.00},{zone_id:3,range_id:2,price:24.00},{zone_id:3,range_id:3,price:35.00},{zone_id:3,range_id:4,price:50.00},{zone_id:3,range_id:5,price:75.00},{zone_id:3,range_id:6,price:110.00},
       ],
     },
-    users: [],
+    users: [] as any[],
     nextIds: { product:100, category:10, order:3, blog:1, gallery:1, announcement:1, user:1 },
   }
 }

@@ -6,7 +6,7 @@ import crypto from 'crypto'
 import fs from 'fs'
 import path from 'path'
 
-const UPLOAD_DIR = path.join(process.cwd(), 'public', 'demo-uploads')
+const UPLOAD_DIR = process.env.VERCEL ? '/tmp/demo-uploads' : path.join(process.cwd(), 'public', 'demo-uploads')
 
 function ensureUploadDir() {
   if (!fs.existsSync(UPLOAD_DIR)) fs.mkdirSync(UPLOAD_DIR, { recursive: true })
