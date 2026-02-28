@@ -2,8 +2,7 @@
 
 import { useState, useEffect, Suspense } from "react"
 import { useSearchParams } from "next/navigation"
-import { Header } from "@/components/header"
-import { HeroSection } from "@/components/hero-section"
+import { HeroHeader } from "@/components/hero-header"
 import { CategoryPreviewSection } from "@/components/category-preview-section"
 import { RecommendedProducts } from "@/components/recommended-products"
 import ProductsGridCombined from "@/components/products-grid"
@@ -395,9 +394,7 @@ function PremiumHotSauceStoreInner() {
         </Dialog>
       )}
 
-      <Header onCartOpen={() => setIsCartOpen(true)} cartCount={getTotalItems()} />
-
-      <HeroSection />
+      <HeroHeader onCartOpen={() => setIsCartOpen(true)} cartCount={getTotalItems()} />
 
       <FadeSection>
         <CategoryPreviewSection />
@@ -409,13 +406,8 @@ function PremiumHotSauceStoreInner() {
       <FadeSection>
         <BlogBanner />
       </FadeSection>
-      <FadeSection>
-        <GalleryBanner />
-      </FadeSection>
 
-          <FadeSection>
-        <SpiceDiscovery />
-      </FadeSection>
+
 
 
 

@@ -7,7 +7,7 @@ export function GalleryBanner() {
   const router = useRouter()
 
   return (
-    <section className="py-6 bg-[#F4F4F5]">
+    <section className="py-6 bg-[#F0F1F3]">
       <div className="container mx-auto px-4">
         <button
           onClick={() => router.push("/gallery")}
@@ -20,7 +20,7 @@ export function GalleryBanner() {
               alt=""
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-[#1A0000]/80 via-[#1A0000]/55 to-[#1A0000]/10" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#0A0000]/95 via-[#1A0000]/80 to-[#1A0000]/30" />
           </div>
 
           {/* Content */}

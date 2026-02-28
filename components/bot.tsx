@@ -362,7 +362,7 @@ export default function SpaceChat() {
     "Wie lange hält ein Lederportemonnaie?",
     "Welche Zahlungsmethoden akzeptieren Sie?",
     "Gibt es gravierbare Produkte?",
-    "Was macht GLUTWERK Produkte besonders?",
+    "Was macht Hot-Sauce Shop Produkte besonders?",
     "Wie lange dauert die Lieferung?",
     "Kann ich ein Portemonnaie umtauschen?",
     "Welches Material verwenden Sie?",
@@ -613,7 +613,7 @@ ${contactMessage}`
       <div className="p-3 sm:p-6 space-y-3 sm:space-y-4">
         <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
           <button
-            className="px-3 py-1.5 sm:px-4 sm:py-2 bg-[#9B9189] hover:bg-[#2E1F0F] text-white rounded-lg transition-colors duration-200 font-medium text-xs sm:text-sm"
+            className="px-3 py-1.5 sm:px-4 sm:py-2 bg-gray-400 hover:bg-gray-500 text-white rounded-lg transition-colors duration-200 font-medium text-xs sm:text-sm"
             onClick={() => {
               setContactStep(0)
             }}
@@ -635,7 +635,7 @@ ${contactMessage}`
             <p className="text-gray-700 font-medium text-sm sm:text-base">Möchten Sie uns kontaktieren?</p>
             <div className="flex gap-2 sm:gap-3 justify-center">
               <button 
-                className="px-4 py-2 sm:px-6 sm:py-3 bg-[#2E1F0F] hover:bg-[#B8864E] text-white rounded-lg transition-all duration-200 font-semibold shadow-md hover:shadow-lg text-sm sm:text-base"
+                className="px-4 py-2 sm:px-6 sm:py-3 bg-[#CC0000] hover:bg-[#AA0000] text-white rounded-lg transition-all duration-200 font-semibold shadow-md hover:shadow-lg text-sm sm:text-base"
                 onClick={() => setContactStep(2)}
               >
                 Ja
@@ -655,7 +655,7 @@ ${contactMessage}`
             <p className="text-gray-700 font-medium text-center mb-3 sm:mb-4 text-sm sm:text-base">Worum geht es in Ihrer Anfrage?</p>
             <div className="grid grid-cols-1 gap-2 sm:gap-3">
               <button
-                className="p-3 sm:p-4 bg-[#2E1F0F] hover:bg-[#B8864E] text-white rounded-lg transition-all duration-200 font-semibold shadow-md hover:shadow-lg text-left text-sm sm:text-base"
+                className="p-3 sm:p-4 bg-[#CC0000] hover:bg-[#AA0000] text-white rounded-lg transition-all duration-200 font-semibold shadow-md hover:shadow-lg text-left text-sm sm:text-base"
                 onClick={() => {
                   setContactReason("Produktberatung und Empfehlungen")
                   setContactStep(3)
@@ -664,7 +664,7 @@ ${contactMessage}`
                 Produktberatung und Empfehlungen
               </button>
               <button
-                className="p-3 sm:p-4 bg-[#2E1F0F] hover:bg-[#B8864E] text-white rounded-lg transition-all duration-200 font-semibold shadow-md hover:shadow-lg text-left text-sm sm:text-base"
+                className="p-3 sm:p-4 bg-[#CC0000] hover:bg-[#AA0000] text-white rounded-lg transition-all duration-200 font-semibold shadow-md hover:shadow-lg text-left text-sm sm:text-base"
                 onClick={() => {
                   setContactReason("Großhandel und Mengenrabatte")
                   setContactStep(3)
@@ -673,7 +673,7 @@ ${contactMessage}`
                 Großhandel und Mengenrabatte
               </button>
               <button
-                className="p-3 sm:p-4 bg-[#2E1F0F] hover:bg-[#B8864E] text-white rounded-lg transition-all duration-200 font-semibold shadow-md hover:shadow-lg text-left text-sm sm:text-base"
+                className="p-3 sm:p-4 bg-[#CC0000] hover:bg-[#AA0000] text-white rounded-lg transition-all duration-200 font-semibold shadow-md hover:shadow-lg text-left text-sm sm:text-base"
                 onClick={() => {
                   setContactReason("Maßanfertigung & Gravur")
                   setContactStep(3)
@@ -682,7 +682,7 @@ ${contactMessage}`
                 Maßanfertigung & Gravur
               </button>
               <button
-                className="p-3 sm:p-4 bg-[#2E1F0F] hover:bg-[#B8864E] text-white rounded-lg transition-all duration-200 font-semibold shadow-md hover:shadow-lg text-left text-sm sm:text-base"
+                className="p-3 sm:p-4 bg-[#CC0000] hover:bg-[#AA0000] text-white rounded-lg transition-all duration-200 font-semibold shadow-md hover:shadow-lg text-left text-sm sm:text-base"
                 onClick={() => {
                   setContactReason("Allgemeine Fragen")
                   setContactStep(3)
@@ -702,10 +702,10 @@ ${contactMessage}`
               value={contactName}
               onChange={(e) => setContactName(e.target.value)}
               placeholder="Ihr vollständiger Name"
-              className="w-full p-2.5 sm:p-3 border-2 border-gray-300 rounded-lg focus:border-[#B8864E] focus:outline-none transition-colors duration-200 text-sm sm:text-base"
+              className="w-full p-2.5 sm:p-3 border-2 border-gray-300 rounded-lg focus:border-[#CC0000] focus:outline-none transition-colors duration-200 text-sm sm:text-base"
             />
             <button
-              className="w-full py-2.5 sm:py-3 bg-[#2E1F0F] hover:bg-[#B8864E] text-white rounded-lg transition-all duration-200 font-semibold shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
+              className="w-full py-2.5 sm:py-3 bg-[#CC0000] hover:bg-[#AA0000] text-white rounded-lg transition-all duration-200 font-semibold shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
               onClick={() => {
                 if (contactName.trim()) setContactStep(4)
               }}
@@ -724,10 +724,10 @@ ${contactMessage}`
               value={contactEmail}
               onChange={(e) => setContactEmail(e.target.value)}
               placeholder="ihre.email@beispiel.ch"
-              className="w-full p-2.5 sm:p-3 border-2 border-gray-300 rounded-lg focus:border-[#B8864E] focus:outline-none transition-colors duration-200 text-sm sm:text-base"
+              className="w-full p-2.5 sm:p-3 border-2 border-gray-300 rounded-lg focus:border-[#CC0000] focus:outline-none transition-colors duration-200 text-sm sm:text-base"
             />
             <button
-              className="w-full py-2.5 sm:py-3 bg-[#2E1F0F] hover:bg-[#B8864E] text-white rounded-lg transition-all duration-200 font-semibold shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
+              className="w-full py-2.5 sm:py-3 bg-[#CC0000] hover:bg-[#AA0000] text-white rounded-lg transition-all duration-200 font-semibold shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
               onClick={() => {
                 if (contactEmail.trim() && contactEmail.includes('@')) setContactStep(5)
               }}
@@ -746,10 +746,10 @@ ${contactMessage}`
               onChange={(e) => setContactMessage(e.target.value)}
               placeholder="Beschreiben Sie Ihre Anfrage detailliert..."
               rows={3}
-              className="w-full p-2.5 sm:p-3 border-2 border-gray-300 rounded-lg focus:border-[#B8864E] focus:outline-none transition-colors duration-200 resize-none text-sm sm:text-base"
+              className="w-full p-2.5 sm:p-3 border-2 border-gray-300 rounded-lg focus:border-[#CC0000] focus:outline-none transition-colors duration-200 resize-none text-sm sm:text-base"
             />
             <button
-              className="w-full py-2.5 sm:py-3 bg-[#2E1F0F] hover:bg-[#B8864E] text-white rounded-lg transition-all duration-200 font-semibold shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
+              className="w-full py-2.5 sm:py-3 bg-[#CC0000] hover:bg-[#AA0000] text-white rounded-lg transition-all duration-200 font-semibold shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
               onClick={() => {
                 if (contactMessage.trim()) setContactStep(6)
               }}
@@ -804,10 +804,10 @@ ${contactMessage}`
           }`}
         >
           {/* Glow effect background */}
-          <div className="absolute inset-0 bg-[#B8864E] rounded-full blur-lg opacity-30 group-hover:opacity-50 transition-all duration-300 scale-110"></div>
-          
+          <div className="absolute inset-0 bg-[#CC0000] rounded-full blur-lg opacity-30 group-hover:opacity-50 transition-all duration-300 scale-110"></div>
+
           {/* Main button - Más pequeño en móvil */}
-          <div className="relative bg-[#2E1F0F] rounded-full p-3 sm:p-4 shadow-xl border border-[#B8864E]/30 group-hover:scale-105 transition-all duration-300">
+          <div className="relative bg-[#CC0000] rounded-full p-3 sm:p-4 shadow-xl border border-white/20 group-hover:scale-105 transition-all duration-300">
             {/* Inner glow */}
             <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent rounded-full"></div>
             
@@ -832,9 +832,10 @@ ${contactMessage}`
           : 'translate-y-8 opacity-0 scale-95 pointer-events-none'
       }`}>
         {/* Header del chat - Más compacto en móvil */}
-        <div className="bg-[#2E1F0F] rounded-t-2xl p-3 sm:p-4 flex items-center justify-between">
+        <div className="bg-[#CC0000] rounded-t-2xl p-3 sm:p-4 flex items-center justify-between">
           <h2 className="flex items-center gap-1 sm:gap-2 text-white font-bold text-base sm:text-lg">
-            <span className="hidden xs:inline">GLUTWERK Berater</span>
+            <Flame className="w-4 h-4" />
+            <span className="hidden xs:inline">Hot-Sauce Berater</span>
             <span className="xs:hidden">Berater</span>
           </h2>
           <button 
@@ -856,12 +857,12 @@ ${contactMessage}`
             <div className="h-[calc(100%-120px)] sm:h-[calc(100%-140px)] overflow-y-auto p-3 sm:p-4 space-y-3 sm:space-y-4">
               {messages.length === 0 ? (
                 <div className="space-y-3 sm:space-y-4">
-                  <p className="text-center text-gray-600 font-medium mb-4 sm:mb-6 text-base sm:text-lg">Wie kann ich Ihnen bei der Wahl Ihres perfekten Lederprodukts helfen?</p>
+                  <p className="text-center text-gray-600 font-medium mb-4 sm:mb-6 text-base sm:text-lg">Wie kann ich Ihnen bei der Wahl Ihrer perfekten Hot Sauce helfen?</p>
                   <div className="space-y-2 sm:space-y-2">
                     {visibleQuestions.map((question, index) => (
                       <button
                         key={index}
-                        className="w-full text-left p-3 sm:p-3 bg-[#F9F7F4] hover:bg-[#E8E0D5] border border-[#E8E0D5] rounded-lg transition-all duration-200 text-sm sm:text-base text-gray-700 hover:text-[#2E1F0F] shadow-sm hover:shadow-md"
+                        className="w-full text-left p-3 sm:p-3 bg-white hover:bg-[#FFF5F5] border border-[#EBEBEB] hover:border-[#CC0000]/30 rounded-lg transition-all duration-200 text-sm sm:text-base text-gray-700 hover:text-[#CC0000] shadow-sm hover:shadow-md"
                         onClick={() => handleQuestionClick(question)}
                         disabled={isLoading}
                       >
@@ -879,14 +880,14 @@ ${contactMessage}`
                     <div
                       className={`max-w-[85%] sm:max-w-[80%] rounded-2xl p-3 sm:p-4 ${
                         msg.role === "user" 
-                          ? "bg-[#2E1F0F] text-white"
+                          ? "bg-[#CC0000] text-white"
                           : "bg-gray-100 text-gray-800"
                       }`}
                     >
                       <div className={`text-sm font-medium mb-2 ${
-                        msg.role === "user" ? "text-white/70" : "text-[#B8864E]"
+                        msg.role === "user" ? "text-white/70" : "text-[#CC0000]"
                       }`}>
-                        {msg.role === "user" ? "Sie" : "GLUTWERK Berater"}
+                        {msg.role === "user" ? "Sie" : "Hot-Sauce Shop Berater"}
                       </div>
                       
                       {/* Contenido del mensaje */}
@@ -923,7 +924,7 @@ ${contactMessage}`
                     name="message"
                     value={input}
                     onChange={autoResizeTextarea}
-                    className="w-full p-3 sm:p-3 border-2 border-gray-300 rounded-xl focus:border-[#B8864E] focus:outline-none resize-none transition-colors duration-200 text-sm sm:text-base"
+                    className="w-full p-3 sm:p-3 border-2 border-gray-300 rounded-xl focus:border-[#CC0000] focus:outline-none resize-none transition-colors duration-200 text-sm sm:text-base"
                     placeholder="Ihre Frage zu unseren Produkten..."
                     disabled={isLoading}
                     rows={1}
@@ -941,7 +942,7 @@ ${contactMessage}`
                   className={`p-3 sm:p-3 rounded-xl transition-all duration-200 ${
                     !input.trim() && !isLoading
                       ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                      : "bg-[#2E1F0F] hover:bg-[#B8864E] text-white shadow-md hover:shadow-lg"
+                      : "bg-[#CC0000] hover:bg-[#AA0000] text-white shadow-md hover:shadow-lg"
                   }`}
                   disabled={!input.trim() || isLoading}
                   aria-label="Senden"
@@ -1062,12 +1063,12 @@ ${contactMessage}`
         }
         
         .prose a {
-          color: #ea580c;
+          color: #CC0000;
           text-decoration: underline;
         }
-        
+
         .prose a:hover {
-          color: #dc2626;
+          color: #AA0000;
         }
         
         /* Efectos de highlight para navegación desde el chat */

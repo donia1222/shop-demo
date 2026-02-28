@@ -35,7 +35,7 @@ const CATEGORY_CONFIG = [
     headline:    ["Schärfer.", "Intensiver."],
     accent:      "Besser.",
     description: "Premium Hot Sauces aus aller Welt — von mild bis extrem scharf, Qualität die überzeugt.",
-    accentColor: "#FF6B35",
+    accentColor: "#CC0000",
     overlayFrom: "#1A0000",
     stats:       [["200+", "Saucen"], ["Top", "Qualität"], ["Swiss", "Service"]],
     ctaLabel:    "Alle Hot Sauces entdecken",
@@ -50,8 +50,8 @@ const CATEGORY_CONFIG = [
     headline:    ["Feuer auf", "dem Teller."],
     accent:      "Erleben.",
     description: "Karibische und mexikanische Chilisaucen — Aromen aus aller Welt direkt zu dir.",
-    accentColor: "#FF4500",
-    overlayFrom: "#1a0800",
+    accentColor: "#CC0000",
+    overlayFrom: "#1A0000",
     stats:       [["50+", "Saucen"], ["Exotisch", "Aromen"], ["Gratis", "Beratung"]],
     ctaLabel:    "Alle Chilisaucen entdecken",
     catParam:    "Chilisauce",
@@ -217,7 +217,7 @@ export function CategoryPreviewSection() {
                         )}
                       </div>
                       <div className="p-3 flex flex-col h-[72px]">
-                        <p className="text-xs font-semibold text-[#1A1A1A] line-clamp-2 leading-tight group-hover:text-[#2C5F2E] transition-colors flex-1">
+                        <p className="text-xs font-semibold text-[#1A1A1A] line-clamp-2 leading-tight group-hover:text-[#CC0000] transition-colors flex-1">
                           {product.name}
                         </p>
                         {product.price > 0 && (
@@ -235,7 +235,7 @@ export function CategoryPreviewSection() {
               <div className="px-5 pb-5">
                 <button
                   onClick={() => router.push(`/shop?cat=${encodeURIComponent(catParam)}`)}
-                  className="w-full py-3.5 rounded-2xl border-2 border-[#2C5F2E]/20 hover:border-[#2C5F2E] hover:bg-[#2C5F2E]/5 text-sm font-bold text-[#2C5F2E] transition-all duration-200 flex items-center justify-center gap-2"
+                  className="w-full py-3.5 rounded-2xl border-2 border-[#CC0000]/20 hover:border-[#CC0000] hover:bg-[#CC0000]/5 text-sm font-bold text-[#CC0000] transition-all duration-200 flex items-center justify-center gap-2"
                 >
                   Mehr aus {label} entdecken <span className="text-base">→</span>
                 </button>
@@ -255,12 +255,12 @@ export function CategoryPreviewSection() {
           <div className="absolute inset-0 bg-gradient-to-r from-[#1a0000] via-[#1a0000]/80 to-[#1a0000]/20" />
           <div className="absolute inset-0 bg-gradient-to-t from-[#1a0000]/70 via-transparent to-transparent" />
           <div className="relative h-full flex flex-col justify-center px-10 max-w-lg gap-5">
-            <span className="inline-flex items-center gap-1.5 self-start bg-[#FF6B35]/20 text-[#FF6B35] border border-[#FF6B35]/40 text-[11px] font-bold uppercase tracking-[0.15em] px-3 py-1.5 rounded-full">
+            <span className="inline-flex items-center gap-1.5 self-start bg-[#CC0000]/20 text-[#CC0000] border border-[#CC0000]/40 text-[11px] font-bold uppercase tracking-[0.15em] px-3 py-1.5 rounded-full">
               🌶️ Alle Saucen & Spezialitäten
             </span>
             <h2 className="text-white font-black text-4xl leading-[1.1]" style={{ letterSpacing: "-0.02em" }}>
               Die grösste<br />
-              <span className="text-[#FF6B35]">Hot-Sauce-Auswahl</span>
+              <span className="text-[#CC0000]">Hot-Sauce-Auswahl</span>
             </h2>
             <p className="text-white/65 text-sm leading-relaxed max-w-xs">
               Über 200 Saucen aus aller Welt — von Tabasco bis zu exklusiven Importartikel in der Schweiz.
@@ -275,7 +275,7 @@ export function CategoryPreviewSection() {
             </div>
             <button
               onClick={() => router.push("/shop")}
-              className="self-start bg-[#FF6B35] text-white font-bold px-6 py-3 text-sm hover:bg-white hover:text-[#CC0000] transition-all duration-200 rounded-xl inline-flex items-center gap-2 shadow-xl"
+              className="self-start bg-[#CC0000] text-white font-bold px-6 py-3 text-sm hover:bg-white hover:text-[#CC0000] transition-all duration-200 rounded-xl inline-flex items-center gap-2 shadow-xl"
             >
               Jetzt entdecken →
             </button>
