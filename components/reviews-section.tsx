@@ -78,29 +78,29 @@ function Stars({ count }: { count: number }) {
 
 export function ReviewsSection() {
   return (
-    <section className="bg-gradient-to-b from-[#F0F1F3] to-white border-t border-[#E0E0E0] py-14">
+    <section className="bg-[#0D0D0D] border-t border-[#1A1A1A] py-14">
       <div className="container mx-auto px-4">
 
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-10 gap-5">
           <div>
-            <div className="inline-flex items-center gap-2 bg-[#FFF8E1] border border-[#FBBC04]/30 text-[#92650A] text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-3">
-              <span className="w-1.5 h-1.5 bg-[#FBBC04] rounded-full" />
+            <div className="inline-flex items-center gap-2 bg-[#F59E0B]/10 border border-[#F59E0B]/20 text-[#F59E0B] text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-3">
+              <span className="w-1.5 h-1.5 bg-[#F59E0B] rounded-full" />
               Verifizierte Kundenbewertungen
             </div>
-            <h2 className="text-2xl font-black text-[#1A1A1A] tracking-tight">Was unsere Kunden sagen</h2>
-            <p className="text-sm text-[#888] mt-1">Echte Erfahrungen — direkt von Google.</p>
+            <h2 className="text-2xl font-black text-white tracking-tight">Was unsere Kunden sagen</h2>
+            <p className="text-sm text-[#666] mt-1">Echte Erfahrungen — direkt von Google.</p>
           </div>
 
           {/* Google rating badge */}
-          <div className="flex items-center gap-4 bg-white border border-[#E5E7EB] rounded-2xl px-6 py-4 shadow-sm self-start sm:self-auto">
+          <div className="flex items-center gap-4 bg-[#141414] border border-[#333] rounded-2xl px-6 py-4 shadow-sm self-start sm:self-auto">
             <GoogleLogo size={8} />
             <div>
               <div className="flex items-center gap-2">
-                <span className="font-black text-3xl text-[#1A1A1A] leading-none">4.8</span>
+                <span className="font-black text-3xl text-white leading-none">4.8</span>
                 <div className="flex flex-col gap-0.5">
                   <Stars count={5} />
-                  <span className="text-xs text-[#888]">41 Bewertungen</span>
+                  <span className="text-xs text-[#666]">41 Bewertungen</span>
                 </div>
               </div>
             </div>
@@ -110,7 +110,7 @@ export function ReviewsSection() {
         {/* Reviews carousel */}
         <div className="relative">
           {/* Fade right */}
-          <div className="absolute right-0 top-0 bottom-4 w-20 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
+          <div className="absolute right-0 top-0 bottom-4 w-20 bg-gradient-to-l from-[#0D0D0D] to-transparent z-10 pointer-events-none" />
 
           <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide -mx-4 px-4">
             {reviews.map((review, i) => {
@@ -118,29 +118,29 @@ export function ReviewsSection() {
               return (
                 <div
                   key={i}
-                  className="flex-shrink-0 bg-white rounded-2xl border border-[#EBEBEB] p-5 hover:shadow-lg hover:border-[#D0D0D0] hover:-translate-y-0.5 transition-all duration-300 flex flex-col"
+                  className="flex-shrink-0 bg-[#141414] rounded-2xl border border-[#2A2A2A] p-5 hover:shadow-[0_8px_30px_rgba(204,0,0,0.15)] hover:border-[#CC0000]/30 hover:-translate-y-0.5 transition-all duration-300 flex flex-col"
                   style={{ width: "296px" }}
                 >
                   {/* Decorative quote mark */}
-                  <div className="text-5xl text-[#F0F0F0] font-serif leading-none select-none mb-1">&ldquo;</div>
+                  <div className="text-5xl text-[#2A2A2A] font-serif leading-none select-none mb-1">&ldquo;</div>
 
                   {/* Review text */}
-                  <p className="text-[#444] text-sm leading-relaxed line-clamp-4 flex-1 -mt-2">
+                  <p className="text-[#999] text-sm leading-relaxed line-clamp-4 flex-1 -mt-2">
                     {review.text}
                   </p>
 
                   {/* Footer */}
-                  <div className="mt-4 pt-4 border-t border-[#F5F5F5] flex items-center justify-between gap-2">
+                  <div className="mt-4 pt-4 border-t border-[#222] flex items-center justify-between gap-2">
                     <div className="flex items-center gap-2.5 min-w-0">
                       {/* Gradient avatar */}
                       <div className={`w-9 h-9 rounded-full bg-gradient-to-br ${gradient} flex items-center justify-center flex-shrink-0 shadow-sm`}>
                         <span className="text-white font-bold text-sm">{review.name.charAt(0)}</span>
                       </div>
                       <div className="min-w-0">
-                        <p className="font-bold text-[#1A1A1A] text-sm leading-tight truncate">{review.name}</p>
+                        <p className="font-bold text-white text-sm leading-tight truncate">{review.name}</p>
                         <div className="flex items-center gap-1.5 mt-0.5">
                           <Stars count={review.stars} />
-                          <span className="text-[#CCC] text-xs">· {review.date}</span>
+                          <span className="text-[#555] text-xs">· {review.date}</span>
                         </div>
                       </div>
                     </div>

@@ -263,14 +263,14 @@ function DetectedProductsDisplay({ products, onCloseChat }: { products: Detected
   }
   
   return (
-    <div className="border-t border-gray-200 pt-3 sm:pt-3 mt-3 sm:mt-3">
-      <p className="text-sm text-gray-500 mb-2 sm:mb-2 font-medium">Erwähnte Produkte (klicken für Details):</p>
+    <div className="border-t border-[#333] pt-3 sm:pt-3 mt-3 sm:mt-3">
+      <p className="text-sm text-[#777] mb-2 sm:mb-2 font-medium">Erwähnte Produkte (klicken für Details):</p>
       <div className="flex flex-wrap gap-2 sm:gap-2">
         {products.map(product => (
           <div 
             key={product.id} 
             onClick={() => scrollToProducts(product.id)}
-            className="flex items-center gap-2 sm:gap-2 bg-[#F9F7F4] border border-[#E8E0D5] p-2 sm:p-2 rounded-lg hover:bg-[#F9F7F4] transition-all duration-200 cursor-pointer group transform hover:scale-105 active:scale-95 mobile-product-card"
+            className="flex items-center gap-2 sm:gap-2 bg-[#1A1A1A] border border-[#2A2A2A] p-2 sm:p-2 rounded-lg hover:bg-[#CC0000]/10 hover:border-[#CC0000]/40 transition-all duration-200 cursor-pointer group transform hover:scale-105 active:scale-95 mobile-product-card"
             title={`Klicken um ${product.name} im Shop zu sehen`}
           >
             {/* Imagen en miniatura con efecto hover */}
@@ -293,11 +293,11 @@ function DetectedProductsDisplay({ products, onCloseChat }: { products: Detected
             
             {/* Información del producto */}
             <div className="flex flex-col min-w-0 flex-1">
-              <span className="text-sm font-semibold text-gray-800 line-clamp-1 group-hover:text-[#B8864E] transition-colors duration-200">
+              <span className="text-sm font-semibold text-[#DDD] line-clamp-1 group-hover:text-[#CC0000] transition-colors duration-200">
                 {product.name}
               </span>
               <div className="flex items-center gap-1">
-                <span className="text-sm text-gray-600 font-medium group-hover:text-[#B8864E] transition-colors duration-200">
+                <span className="text-sm text-[#999] font-medium group-hover:text-[#CC0000] transition-colors duration-200">
                   {product.price.toFixed(2)} CHF
                 </span>
                 {/* Indicador visual de nivel de picor */}
@@ -323,7 +323,7 @@ function DetectedProductsDisplay({ products, onCloseChat }: { products: Detected
       </div>
       
       {/* Texto explicativo sutil */}
-      <p className="text-xs text-gray-400 mt-2 italic">
+      <p className="text-xs text-[#555] mt-2 italic">
         💡 Tipp: Klicken Sie auf ein Produkt, um es im Shop zu sehen
       </p>
     </div>
@@ -613,7 +613,7 @@ ${contactMessage}`
       <div className="p-3 sm:p-6 space-y-3 sm:space-y-4">
         <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
           <button
-            className="px-3 py-1.5 sm:px-4 sm:py-2 bg-gray-400 hover:bg-gray-500 text-white rounded-lg transition-colors duration-200 font-medium text-xs sm:text-sm"
+            className="px-3 py-1.5 sm:px-4 sm:py-2 bg-[#333] hover:bg-[#444] text-[#CCC] rounded-lg transition-colors duration-200 font-medium text-xs sm:text-sm"
             onClick={() => {
               setContactStep(0)
             }}
@@ -622,7 +622,7 @@ ${contactMessage}`
           </button>
           {contactStep > 1 && (
             <button 
-              className="px-3 py-1.5 sm:px-4 sm:py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition-colors duration-200 font-medium text-xs sm:text-sm"
+              className="px-3 py-1.5 sm:px-4 sm:py-2 bg-[#333] hover:bg-[#444] text-[#CCC] rounded-lg transition-colors duration-200 font-medium text-xs sm:text-sm"
               onClick={() => setContactStep(contactStep - 1)}
             >
               Zurück
@@ -632,7 +632,7 @@ ${contactMessage}`
 
         {contactStep === 1 && (
           <div className="text-center space-y-3 sm:space-y-4">
-            <p className="text-gray-700 font-medium text-sm sm:text-base">Möchten Sie uns kontaktieren?</p>
+            <p className="text-[#DDD] font-medium text-sm sm:text-base">Möchten Sie uns kontaktieren?</p>
             <div className="flex gap-2 sm:gap-3 justify-center">
               <button 
                 className="px-4 py-2 sm:px-6 sm:py-3 bg-[#CC0000] hover:bg-[#AA0000] text-white rounded-lg transition-all duration-200 font-semibold shadow-md hover:shadow-lg text-sm sm:text-base"
@@ -640,8 +640,8 @@ ${contactMessage}`
               >
                 Ja
               </button>
-              <button 
-                className="px-4 py-2 sm:px-6 sm:py-3 bg-gray-300 hover:bg-gray-400 text-gray-700 rounded-lg transition-colors duration-200 font-semibold text-sm sm:text-base"
+              <button
+                className="px-4 py-2 sm:px-6 sm:py-3 bg-[#2A2A2A] hover:bg-[#333] text-[#CCC] rounded-lg transition-colors duration-200 font-semibold text-sm sm:text-base"
                 onClick={() => setContactStep(0)}
               >
                 Nein
@@ -652,7 +652,7 @@ ${contactMessage}`
 
         {contactStep === 2 && (
           <div className="space-y-3 sm:space-y-4">
-            <p className="text-gray-700 font-medium text-center mb-3 sm:mb-4 text-sm sm:text-base">Worum geht es in Ihrer Anfrage?</p>
+            <p className="text-[#DDD] font-medium text-center mb-3 sm:mb-4 text-sm sm:text-base">Worum geht es in Ihrer Anfrage?</p>
             <div className="grid grid-cols-1 gap-2 sm:gap-3">
               <button
                 className="p-3 sm:p-4 bg-[#CC0000] hover:bg-[#AA0000] text-white rounded-lg transition-all duration-200 font-semibold shadow-md hover:shadow-lg text-left text-sm sm:text-base"
@@ -696,13 +696,13 @@ ${contactMessage}`
 
         {contactStep === 3 && (
           <div className="space-y-3 sm:space-y-4">
-            <p className="text-gray-700 font-medium text-center text-sm sm:text-base">Wie ist Ihr Name?</p>
+            <p className="text-[#DDD] font-medium text-center text-sm sm:text-base">Wie ist Ihr Name?</p>
             <input
               type="text"
               value={contactName}
               onChange={(e) => setContactName(e.target.value)}
               placeholder="Ihr vollständiger Name"
-              className="w-full p-2.5 sm:p-3 border-2 border-gray-300 rounded-lg focus:border-[#CC0000] focus:outline-none transition-colors duration-200 text-sm sm:text-base"
+              className="w-full p-2.5 sm:p-3 border-2 border-[#333] bg-[#1A1A1A] text-[#DDD] placeholder-[#555] rounded-lg focus:border-[#CC0000] focus:outline-none transition-colors duration-200 text-sm sm:text-base"
             />
             <button
               className="w-full py-2.5 sm:py-3 bg-[#CC0000] hover:bg-[#AA0000] text-white rounded-lg transition-all duration-200 font-semibold shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
@@ -718,13 +718,13 @@ ${contactMessage}`
 
         {contactStep === 4 && (
           <div className="space-y-3 sm:space-y-4">
-            <p className="text-gray-700 font-medium text-center text-sm sm:text-base">Ihre E-Mail-Adresse:</p>
+            <p className="text-[#DDD] font-medium text-center text-sm sm:text-base">Ihre E-Mail-Adresse:</p>
             <input
               type="email"
               value={contactEmail}
               onChange={(e) => setContactEmail(e.target.value)}
               placeholder="ihre.email@beispiel.ch"
-              className="w-full p-2.5 sm:p-3 border-2 border-gray-300 rounded-lg focus:border-[#CC0000] focus:outline-none transition-colors duration-200 text-sm sm:text-base"
+              className="w-full p-2.5 sm:p-3 border-2 border-[#333] bg-[#1A1A1A] text-[#DDD] placeholder-[#555] rounded-lg focus:border-[#CC0000] focus:outline-none transition-colors duration-200 text-sm sm:text-base"
             />
             <button
               className="w-full py-2.5 sm:py-3 bg-[#CC0000] hover:bg-[#AA0000] text-white rounded-lg transition-all duration-200 font-semibold shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
@@ -740,13 +740,13 @@ ${contactMessage}`
 
         {contactStep === 5 && (
           <div className="space-y-3 sm:space-y-4">
-            <p className="text-gray-700 font-medium text-center text-sm sm:text-base">Ihre Nachricht:</p>
+            <p className="text-[#DDD] font-medium text-center text-sm sm:text-base">Ihre Nachricht:</p>
             <textarea
               value={contactMessage}
               onChange={(e) => setContactMessage(e.target.value)}
               placeholder="Beschreiben Sie Ihre Anfrage detailliert..."
               rows={3}
-              className="w-full p-2.5 sm:p-3 border-2 border-gray-300 rounded-lg focus:border-[#CC0000] focus:outline-none transition-colors duration-200 resize-none text-sm sm:text-base"
+              className="w-full p-2.5 sm:p-3 border-2 border-[#333] bg-[#1A1A1A] text-[#DDD] placeholder-[#555] rounded-lg focus:border-[#CC0000] focus:outline-none transition-colors duration-200 resize-none text-sm sm:text-base"
             />
             <button
               className="w-full py-2.5 sm:py-3 bg-[#CC0000] hover:bg-[#AA0000] text-white rounded-lg transition-all duration-200 font-semibold shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
@@ -762,23 +762,23 @@ ${contactMessage}`
 
         {contactStep === 6 && (
           <div className="space-y-3 sm:space-y-4">
-            <p className="text-gray-700 font-medium text-center mb-3 sm:mb-4 text-sm sm:text-base">Überprüfen Sie Ihre Angaben:</p>
-            <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 sm:p-4 space-y-2 sm:space-y-3">
+            <p className="text-[#DDD] font-medium text-center mb-3 sm:mb-4 text-sm sm:text-base">Überprüfen Sie Ihre Angaben:</p>
+            <div className="bg-[#1A1A1A] border border-[#333] rounded-lg p-3 sm:p-4 space-y-2 sm:space-y-3">
               <div className="flex justify-between items-start">
-                <span className="font-semibold text-gray-700 text-xs sm:text-sm">Betreff:</span>
-                <span className="text-gray-600 text-right text-xs sm:text-sm max-w-[60%]">{contactReason}</span>
+                <span className="font-semibold text-[#999] text-xs sm:text-sm">Betreff:</span>
+                <span className="text-[#DDD] text-right text-xs sm:text-sm max-w-[60%]">{contactReason}</span>
               </div>
               <div className="flex justify-between">
-                <span className="font-semibold text-gray-700 text-xs sm:text-sm">Name:</span>
-                <span className="text-gray-600 text-xs sm:text-sm">{contactName}</span>
+                <span className="font-semibold text-[#999] text-xs sm:text-sm">Name:</span>
+                <span className="text-[#DDD] text-xs sm:text-sm">{contactName}</span>
               </div>
               <div className="flex justify-between">
-                <span className="font-semibold text-gray-700 text-xs sm:text-sm">E-Mail:</span>
-                <span className="text-gray-600 text-xs sm:text-sm">{contactEmail}</span>
+                <span className="font-semibold text-[#999] text-xs sm:text-sm">E-Mail:</span>
+                <span className="text-[#DDD] text-xs sm:text-sm">{contactEmail}</span>
               </div>
-              <div className="border-t pt-2 sm:pt-3">
-                <span className="font-semibold text-gray-700 text-xs sm:text-sm">Nachricht:</span>
-                <p className="text-gray-600 mt-1 text-xs sm:text-sm">{contactMessage}</p>
+              <div className="border-t border-[#333] pt-2 sm:pt-3">
+                <span className="font-semibold text-[#999] text-xs sm:text-sm">Nachricht:</span>
+                <p className="text-[#DDD] mt-1 text-xs sm:text-sm">{contactMessage}</p>
               </div>
             </div>
             <button 
@@ -826,7 +826,7 @@ ${contactMessage}`
       )}
 
       {/* Ventana del chat - Responsiva para pantallas pequeñas */}
-      <div className={`fixed bottom-2 right-2 left-2 sm:bottom-6 sm:right-6 sm:left-auto z-[9998] sm:w-96 h-[calc(100vh-100px)] sm:h-[600px] max-h-[600px] bg-white rounded-2xl shadow-2xl border border-gray-200 transition-all duration-500 ${
+      <div className={`fixed bottom-2 right-2 left-2 sm:bottom-6 sm:right-6 sm:left-auto z-[9998] sm:w-96 h-[calc(100vh-100px)] sm:h-[600px] max-h-[600px] bg-[#141414] rounded-2xl shadow-2xl border border-[#2A2A2A] transition-all duration-500 ${
         isOpen 
           ? 'translate-y-0 opacity-100 scale-100' 
           : 'translate-y-8 opacity-0 scale-95 pointer-events-none'
@@ -857,12 +857,12 @@ ${contactMessage}`
             <div className="h-[calc(100%-120px)] sm:h-[calc(100%-140px)] overflow-y-auto p-3 sm:p-4 space-y-3 sm:space-y-4">
               {messages.length === 0 ? (
                 <div className="space-y-3 sm:space-y-4">
-                  <p className="text-center text-gray-600 font-medium mb-4 sm:mb-6 text-base sm:text-lg">Wie kann ich Ihnen bei der Wahl Ihrer perfekten Hot Sauce helfen?</p>
+                  <p className="text-center text-[#999] font-medium mb-4 sm:mb-6 text-base sm:text-lg">Wie kann ich Ihnen bei der Wahl Ihrer perfekten Hot Sauce helfen?</p>
                   <div className="space-y-2 sm:space-y-2">
                     {visibleQuestions.map((question, index) => (
                       <button
                         key={index}
-                        className="w-full text-left p-3 sm:p-3 bg-white hover:bg-[#FFF5F5] border border-[#EBEBEB] hover:border-[#CC0000]/30 rounded-lg transition-all duration-200 text-sm sm:text-base text-gray-700 hover:text-[#CC0000] shadow-sm hover:shadow-md"
+                        className="w-full text-left p-3 sm:p-3 bg-[#1A1A1A] hover:bg-[#CC0000]/10 border border-[#2A2A2A] hover:border-[#CC0000]/40 rounded-lg transition-all duration-200 text-sm sm:text-base text-[#DDD] hover:text-[#CC0000] shadow-sm"
                         onClick={() => handleQuestionClick(question)}
                         disabled={isLoading}
                       >
@@ -881,7 +881,7 @@ ${contactMessage}`
                       className={`max-w-[85%] sm:max-w-[80%] rounded-2xl p-3 sm:p-4 ${
                         msg.role === "user" 
                           ? "bg-[#CC0000] text-white"
-                          : "bg-gray-100 text-gray-800"
+                          : "bg-[#1E1E1E] text-[#DDD]"
                       }`}
                     >
                       <div className={`text-sm font-medium mb-2 ${
@@ -916,7 +916,7 @@ ${contactMessage}`
             </div>
 
             {/* Área de entrada de mensajes - Más compacta en móvil */}
-            <div className="p-3 sm:p-4 border-t border-gray-200 bg-white rounded-b-2xl">
+            <div className="p-3 sm:p-4 border-t border-[#222] bg-[#141414] rounded-b-2xl">
               <div className="flex items-end gap-1.5 sm:gap-2">
                 <div className="flex-1 relative">
                   <textarea
@@ -924,7 +924,7 @@ ${contactMessage}`
                     name="message"
                     value={input}
                     onChange={autoResizeTextarea}
-                    className="w-full p-3 sm:p-3 border-2 border-gray-300 rounded-xl focus:border-[#CC0000] focus:outline-none resize-none transition-colors duration-200 text-sm sm:text-base"
+                    className="w-full p-3 sm:p-3 border-2 border-[#333] bg-[#1A1A1A] text-[#DDD] placeholder-[#555] rounded-xl focus:border-[#CC0000] focus:outline-none resize-none transition-colors duration-200 text-sm sm:text-base"
                     placeholder="Ihre Frage zu unseren Produkten..."
                     disabled={isLoading}
                     rows={1}
@@ -941,7 +941,7 @@ ${contactMessage}`
                   onClick={() => sendMessage(input)}
                   className={`p-3 sm:p-3 rounded-xl transition-all duration-200 ${
                     !input.trim() && !isLoading
-                      ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                      ? "bg-[#222] text-[#555] cursor-not-allowed"
                       : "bg-[#CC0000] hover:bg-[#AA0000] text-white shadow-md hover:shadow-lg"
                   }`}
                   disabled={!input.trim() || isLoading}
@@ -956,7 +956,7 @@ ${contactMessage}`
                 {showClearIcon && (
                   <button 
                     onClick={clearChat} 
-                    className="p-3 sm:p-3 bg-gray-200 hover:bg-gray-300 text-gray-600 rounded-xl transition-colors duration-200" 
+                    className="p-3 sm:p-3 bg-[#222] hover:bg-[#333] text-[#777] rounded-xl transition-colors duration-200" 
                     aria-label="Chat löschen"
                   >
                     <Trash2 className="w-5 h-5 sm:w-5 sm:h-5" />
@@ -1049,7 +1049,7 @@ ${contactMessage}`
         }
         
         .prose p {
-          color: #374151;
+          color: #CCC;
           line-height: 1.6;
         }
         

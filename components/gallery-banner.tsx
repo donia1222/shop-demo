@@ -7,7 +7,7 @@ export function GalleryBanner() {
   const router = useRouter()
 
   return (
-    <section className="py-6 bg-[#F0F1F3]">
+    <section className="py-6 bg-[#0D0D0D]">
       <div className="container mx-auto px-4">
         <button
           onClick={() => router.push("/gallery")}

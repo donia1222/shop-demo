@@ -270,23 +270,23 @@ Falls Sie eine beschädigte oder falsche Ware erhalten haben, wenden Sie sich bi
   }
 
   return (
-    <footer className="bg-white mt-0">
+    <footer className="bg-[#0A0A0A] mt-0">
 
       {/* ── Payment icons strip ── */}
       {paySettings && (paySettings.enable_invoice || paySettings.enable_stripe || paySettings.enable_twint || paySettings.enable_paypal) && (
-        <div className="border-t border-b border-[#E0E0E0] py-3.5 bg-white">
+        <div className="border-t border-b border-[#1E1E1E] py-3.5 bg-[#0D0D0D]">
           <div className="container mx-auto px-4">
             <div className="flex flex-wrap items-center justify-center gap-2">
               {/* Sichere Zahlung */}
-              <div className="flex items-center gap-1 pr-3 border-r border-[#E0E0E0]">
+              <div className="flex items-center gap-1 pr-3 border-r border-[#1E1E1E]">
                 <ShieldCheck className="w-3.5 h-3.5 text-[#CC0000]" />
-                <span className="text-[10px] font-semibold text-[#555] tracking-widest uppercase">Sichere Zahlung</span>
+                <span className="text-[10px] font-semibold text-[#777] tracking-widest uppercase">Sichere Zahlung</span>
               </div>
               {/* Factura / Transferencia */}
               {paySettings.enable_invoice && (
-                <div className="h-7 px-3 rounded-md bg-[#F5F5F5] border border-[#E0E0E0] flex items-center gap-1.5 shadow-sm">
+                <div className="h-7 px-3 rounded-md bg-[#1A1A1A] border border-[#2A2A2A] flex items-center gap-1.5 shadow-sm">
                   <span className="text-sm">🏦</span>
-                  <span className="text-[10px] font-bold text-[#444] tracking-tight">Rechnung</span>
+                  <span className="text-[10px] font-bold text-[#CCC] tracking-tight">Rechnung</span>
                 </div>
               )}
               {/* TWINT */}
@@ -301,16 +301,16 @@ Falls Sie eine beschädigte oder falsche Ware erhalten haben, wenden Sie sich bi
                   <div className="h-7 px-3.5 rounded-md bg-[#1A1F71] flex items-center shadow-sm">
                     <span className="font-black text-white text-sm italic tracking-tight">VISA</span>
                   </div>
-                  <div className="h-7 px-3 rounded-md bg-white border border-[#E0E0E0] flex items-center gap-1 shadow-sm">
+                  <div className="h-7 px-3 rounded-md bg-[#1A1A1A] border border-[#2A2A2A] flex items-center gap-1 shadow-sm">
                     <div className="w-4 h-4 rounded-full bg-[#EB001B] opacity-90" />
                     <div className="w-4 h-4 rounded-full bg-[#F79E1B] opacity-90 -ml-1.5" />
-                    <span className="text-[10px] font-bold text-[#333] ml-1 tracking-tight">Mastercard</span>
+                    <span className="text-[10px] font-bold text-[#CCC] ml-1 tracking-tight">Mastercard</span>
                   </div>
                 </>
               )}
               {/* PayPal */}
               {paySettings.enable_paypal && (
-                <div className="h-7 px-2.5 rounded-md bg-white border border-[#E0E0E0] flex items-center shadow-sm">
+                <div className="h-7 px-2.5 rounded-md bg-[#1A1A1A] border border-[#2A2A2A] flex items-center shadow-sm">
                   <img src="/0014294_paypal-express-payment-plugin.png" alt="PayPal" className="h-5 w-auto object-contain" />
                 </div>
               )}
@@ -320,7 +320,7 @@ Falls Sie eine beschädigte oder falsche Ware erhalten haben, wenden Sie sich bi
       )}
 
       {/* ── Social icons ── */}
-      <div className="border-b border-[#E0E0E0] py-4 bg-white">
+      <div className="border-b border-[#1E1E1E] py-4 bg-[#0D0D0D]">
         <div className="container mx-auto px-4 flex justify-center gap-6">
           {[
             { Icon: Facebook, href: null },
@@ -328,11 +328,11 @@ Falls Sie eine beschädigte oder falsche Ware erhalten haben, wenden Sie sich bi
             { Icon: Instagram, href: null },
           ].map(({ Icon, href }, i) =>
             href ? (
-              <a key={i} href={href} target="_blank" rel="noopener noreferrer" className="w-9 h-9 flex items-center justify-center text-[#666] hover:text-[#CC0000] transition-colors">
+              <a key={i} href={href} target="_blank" rel="noopener noreferrer" className="w-9 h-9 flex items-center justify-center text-[#555] hover:text-[#CC0000] transition-colors">
                 <Icon className="w-5 h-5" />
               </a>
             ) : (
-              <button key={i} className="w-9 h-9 flex items-center justify-center text-[#666] hover:text-[#CC0000] transition-colors">
+              <button key={i} className="w-9 h-9 flex items-center justify-center text-[#555] hover:text-[#CC0000] transition-colors">
                 <Icon className="w-5 h-5" />
               </button>
             )
@@ -341,7 +341,7 @@ Falls Sie eine beschädigte oder falsche Ware erhalten haben, wenden Sie sich bi
       </div>
 
       {/* ── Footer columns ── */}
-      <div className="bg-white border-t border-[#E8E8E8] py-14">
+      <div className="bg-[#0A0A0A] border-t border-[#1A1A1A] py-14">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr_1fr] gap-10">
 
@@ -353,24 +353,24 @@ Falls Sie eine beschädigte oder falsche Ware erhalten haben, wenden Sie sich bi
                 <div>
                   <div className="leading-tight">
                     <span style={{ fontFamily: 'Impact, Arial Narrow, sans-serif', fontStyle: 'italic', fontWeight: 900, color: '#CC0000', fontSize: '1.15rem' }}>HOT-SAUCE</span>
-                    <span style={{ fontFamily: 'Impact, Arial Narrow, sans-serif', fontWeight: 900, color: '#1A1A1A', fontSize: '1rem' }}> SHOP</span>
+                    <span style={{ fontFamily: 'Impact, Arial Narrow, sans-serif', fontWeight: 900, color: '#DDD', fontSize: '1rem' }}> SHOP</span>
                   </div>
-                  <div className="text-xs text-[#888] uppercase tracking-widest mt-1">Scharfe Saucen · Schweiz</div>
+                  <div className="text-xs text-[#555] uppercase tracking-widest mt-1">Scharfe Saucen · Schweiz</div>
                 </div>
               </div>
 
               {/* Contact pills */}
               <div className="flex flex-wrap gap-2 mb-6">
                 <a href="https://maps.google.com/?q=Bahnhofstrasse+2+9475+Sevelen" target="_blank" rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 bg-[#F5F5F5] hover:bg-[#EBEBEB] text-[#444] text-sm px-3 py-1.5 rounded-full transition-colors">
+                  className="inline-flex items-center gap-2 bg-[#1A1A1A] hover:bg-[#222] text-[#999] text-sm px-3 py-1.5 rounded-full transition-colors border border-[#2A2A2A]">
                   <span className="text-base">📍</span> Bahnhofstrasse 2, 9475 Sevelen
                 </a>
                 <a href="tel:0786066105"
-                  className="inline-flex items-center gap-2 bg-[#F5F5F5] hover:bg-[#CC0000] hover:text-white text-[#CC0000] font-semibold text-sm px-3 py-1.5 rounded-full transition-colors">
+                  className="inline-flex items-center gap-2 bg-[#1A1A1A] hover:bg-[#CC0000] hover:text-white text-[#CC0000] font-semibold text-sm px-3 py-1.5 rounded-full transition-colors border border-[#2A2A2A] hover:border-[#CC0000]">
                   <span className="text-base">📞</span> 078 606 61 05
                 </a>
                 <a href="mailto:info@hot-sauce-shop.ch"
-                  className="inline-flex items-center gap-2 bg-[#F5F5F5] hover:bg-[#CC0000] hover:text-white text-[#CC0000] font-semibold text-sm px-3 py-1.5 rounded-full transition-colors">
+                  className="inline-flex items-center gap-2 bg-[#1A1A1A] hover:bg-[#CC0000] hover:text-white text-[#CC0000] font-semibold text-sm px-3 py-1.5 rounded-full transition-colors border border-[#2A2A2A] hover:border-[#CC0000]">
                   <span className="text-base">✉️</span> info@hot-sauce-shop.ch
                 </a>
               </div>
@@ -380,7 +380,7 @@ Falls Sie eine beschädigte oder falsche Ware erhalten haben, wenden Sie sich bi
             
            
 
-                <div className="bg-[#FFF8F8] border border-[#E8E8E8] rounded-2xl p-4" style={{ width: "260px", flexShrink: 0 }}>
+                <div className="bg-[#141414] border border-[#2A2A2A] rounded-2xl p-4" style={{ width: "260px", flexShrink: 0 }}>
                   <p className="text-xs font-black text-[#CC0000] uppercase tracking-widest mb-3">Öffnungszeiten</p>
                   <div className="space-y-1.5">
                     {[
@@ -389,8 +389,8 @@ Falls Sie eine beschädigte oder falsche Ware erhalten haben, wenden Sie sich bi
                       { day: "So", hours: "Geschlossen", open: false },
                     ].map(({ day, hours, open }) => (
                       <div key={day} className="flex items-center justify-between gap-6">
-                        <span className={`text-sm font-medium ${open ? "text-[#333]" : "text-[#AAA]"}`}>{day}</span>
-                        <span className={`text-sm ${open ? "text-[#1A1A1A] font-semibold" : "text-[#AAA]"}`}>{hours}</span>
+                        <span className={`text-sm font-medium ${open ? "text-[#CCC]" : "text-[#444]"}`}>{day}</span>
+                        <span className={`text-sm ${open ? "text-white font-semibold" : "text-[#444]"}`}>{hours}</span>
                       </div>
                     ))}
                   </div>
@@ -400,15 +400,15 @@ Falls Sie eine beschädigte oder falsche Ware erhalten haben, wenden Sie sich bi
 
             {/* Service */}
             <div>
-              <h3 className="font-black text-[#1A1A1A] text-base mb-5 uppercase tracking-widest">Service</h3>
+              <h3 className="font-black text-white text-base mb-5 uppercase tracking-widest">Service</h3>
               <ul className="space-y-3">
                 <li>
-                  <a href="mailto:info@hot-sauce-shop.ch" className="text-sm font-medium text-[#444] hover:text-[#CC0000] transition-colors">Kontakt</a>
+                  <a href="mailto:info@hot-sauce-shop.ch" className="text-sm font-medium text-[#777] hover:text-[#CC0000] transition-colors">Kontakt</a>
                 </li>
                 <li>
                   <Dialog open={openModal === "rueckgabe"} onOpenChange={(open) => setOpenModal(open ? "rueckgabe" : null)}>
                     <DialogTrigger asChild>
-                      <button className="text-sm font-medium text-[#444] hover:text-[#CC0000] transition-colors text-left">Versand und Rückgabe</button>
+                      <button className="text-sm font-medium text-[#777] hover:text-[#CC0000] transition-colors text-left">Versand und Rückgabe</button>
                     </DialogTrigger>
                     <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
                       <DialogHeader>
@@ -421,7 +421,7 @@ Falls Sie eine beschädigte oder falsche Ware erhalten haben, wenden Sie sich bi
                 <li>
                   <Dialog open={openModal === "zahlungsarten"} onOpenChange={(open) => setOpenModal(open ? "zahlungsarten" : null)}>
                     <DialogTrigger asChild>
-                      <button className="text-sm font-medium text-[#444] hover:text-[#CC0000] transition-colors text-left">Zahlungsarten</button>
+                      <button className="text-sm font-medium text-[#777] hover:text-[#CC0000] transition-colors text-left">Zahlungsarten</button>
                     </DialogTrigger>
                     <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
                       <DialogHeader>
@@ -434,7 +434,7 @@ Falls Sie eine beschädigte oder falsche Ware erhalten haben, wenden Sie sich bi
                 <li>
                   <Dialog open={openModal === "cookies"} onOpenChange={(open) => setOpenModal(open ? "cookies" : null)}>
                     <DialogTrigger asChild>
-                      <button className="text-sm font-medium text-[#444] hover:text-[#CC0000] transition-colors text-left">Cookie Manager</button>
+                      <button className="text-sm font-medium text-[#777] hover:text-[#CC0000] transition-colors text-left">Cookie Manager</button>
                     </DialogTrigger>
                     <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
                       <DialogHeader>
@@ -447,7 +447,7 @@ Falls Sie eine beschädigte oder falsche Ware erhalten haben, wenden Sie sich bi
                 <li>
                   <button
                     onClick={handleDownloadVCard}
-                    className="flex items-center gap-1.5 text-sm font-medium text-[#444] hover:text-[#CC0000] transition-colors text-left"
+                    className="flex items-center gap-1.5 text-sm font-medium text-[#777] hover:text-[#CC0000] transition-colors text-left"
                   >
                     <Download className="w-3.5 h-3.5" />
                     Digitale Visitenkarte
@@ -458,12 +458,12 @@ Falls Sie eine beschädigte oder falsche Ware erhalten haben, wenden Sie sich bi
 
             {/* Firma */}
             <div>
-              <h3 className="font-black text-[#1A1A1A] text-base mb-5 uppercase tracking-widest">Firma</h3>
+              <h3 className="font-black text-white text-base mb-5 uppercase tracking-widest">Firma</h3>
               <ul className="space-y-3">
                 <li>
                   <Dialog open={openModal === "ueberuns"} onOpenChange={(open) => setOpenModal(open ? "ueberuns" : null)}>
                     <DialogTrigger asChild>
-                      <button className="text-sm font-medium text-[#444] hover:text-[#CC0000] transition-colors text-left">Über uns</button>
+                      <button className="text-sm font-medium text-[#777] hover:text-[#CC0000] transition-colors text-left">Über uns</button>
                     </DialogTrigger>
                     <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
                       <DialogHeader>
@@ -476,7 +476,7 @@ Falls Sie eine beschädigte oder falsche Ware erhalten haben, wenden Sie sich bi
                 <li>
                   <Dialog open={openModal === "impressum"} onOpenChange={(open) => setOpenModal(open ? "impressum" : null)}>
                     <DialogTrigger asChild>
-                      <button className="text-sm font-medium text-[#444] hover:text-[#CC0000] transition-colors text-left">Impressum</button>
+                      <button className="text-sm font-medium text-[#777] hover:text-[#CC0000] transition-colors text-left">Impressum</button>
                     </DialogTrigger>
                     <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
                       <DialogHeader>
@@ -489,7 +489,7 @@ Falls Sie eine beschädigte oder falsche Ware erhalten haben, wenden Sie sich bi
                 <li>
                   <Dialog open={openModal === "datenschutz"} onOpenChange={(open) => setOpenModal(open ? "datenschutz" : null)}>
                     <DialogTrigger asChild>
-                      <button className="text-sm font-medium text-[#444] hover:text-[#CC0000] transition-colors text-left">Datenschutzerklärung</button>
+                      <button className="text-sm font-medium text-[#777] hover:text-[#CC0000] transition-colors text-left">Datenschutzerklärung</button>
                     </DialogTrigger>
                     <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
                       <DialogHeader>
@@ -502,7 +502,7 @@ Falls Sie eine beschädigte oder falsche Ware erhalten haben, wenden Sie sich bi
                 <li>
                   <Dialog open={openModal === "agb"} onOpenChange={(open) => setOpenModal(open ? "agb" : null)}>
                     <DialogTrigger asChild>
-                      <button className="text-sm font-medium text-[#444] hover:text-[#CC0000] transition-colors text-left">AGB</button>
+                      <button className="text-sm font-medium text-[#777] hover:text-[#CC0000] transition-colors text-left">AGB</button>
                     </DialogTrigger>
                     <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
                       <DialogHeader>
@@ -521,20 +521,20 @@ Falls Sie eine beschädigte oder falsche Ware erhalten haben, wenden Sie sich bi
       </div>
 
       {/* ── Bottom copyright bar ── */}
-      <div className="bg-[#F5F5F5] border-t border-[#E0E0E0] py-5">
+      <div className="bg-[#060606] border-t border-[#1A1A1A] py-5">
         <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-[#888]">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-[#555]">
             <span className="flex items-center gap-3">
               <span>* Alle Preise inkl. MwSt., zzgl. Versandkosten</span>
-              <span className="text-[#DDD] hidden md:inline">·</span>
-              <span className="hidden md:flex items-center gap-1 text-[#AAA] text-xs">
-                Design by&nbsp;<a href="https://lweb.ch" target="_blank" rel="noopener noreferrer" className="font-black tracking-tight text-[#555] hover:text-[#CC0000] transition-colors uppercase text-[11px]">lweb.ch</a>
+              <span className="text-[#222] hidden md:inline">·</span>
+              <span className="hidden md:flex items-center gap-1 text-[#444] text-xs">
+                Design by&nbsp;<a href="https://lweb.ch" target="_blank" rel="noopener noreferrer" className="font-black tracking-tight text-[#666] hover:text-[#CC0000] transition-colors uppercase text-[11px]">lweb.ch</a>
               </span>
             </span>
-            <span className="font-semibold text-xs text-[#555]">Copyright © 2026 Hot-Sauce Shop. Alle Rechte vorbehalten.</span>
+            <span className="font-semibold text-xs text-[#777]">Copyright © 2026 Hot-Sauce Shop. Alle Rechte vorbehalten.</span>
             <span className="flex items-center gap-2">
-              <span className="flex md:hidden items-center gap-1 text-[#AAA] text-xs">
-                Design by&nbsp;<a href="https://lweb.ch" target="_blank" rel="noopener noreferrer" className="font-black tracking-tight text-[#555] hover:text-[#CC0000] transition-colors uppercase text-[11px]">lweb.ch</a>
+              <span className="flex md:hidden items-center gap-1 text-[#444] text-xs">
+                Design by&nbsp;<a href="https://lweb.ch" target="_blank" rel="noopener noreferrer" className="font-black tracking-tight text-[#666] hover:text-[#CC0000] transition-colors uppercase text-[11px]">lweb.ch</a>
               </span>
               <AdminLoginButton subtle />
             </span>

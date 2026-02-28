@@ -1167,16 +1167,18 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
     const isInvoice = orderDetails?.status === "INVOICE_SENT"
 
     return (
-      <div className="min-h-screen bg-[#F0F1F3]">
+      <div className="min-h-screen bg-[#0A0A0A]">
 
         {/* Header — same style as checkout */}
-        <div className="bg-white border-b border-[#E5E5E5] px-4 py-3">
+        <div className="bg-[#0D0D0D] border-b border-[#1E1E1E] px-4 py-3">
           <div className="container mx-auto max-w-4xl flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <img src="/Security_n.png" alt="Logo" className="h-10 w-auto object-contain" />
+              <div className="flex items-center gap-2">
+                <span className="text-2xl">🌶️</span><span style={{fontFamily:"'Space Grotesk',sans-serif",fontWeight:900,color:'#CC0000',fontSize:'0.9rem'}}>HOT-SAUCE<br/><span style={{color:'#777',fontSize:'0.7rem',fontWeight:600}}>SHOP</span></span>
+              </div>
             </div>
-            <div className="flex items-center gap-1.5 text-xs text-[#888]">
-              <Shield className="w-4 h-4 text-[#2C5F2E]" />
+            <div className="flex items-center gap-1.5 text-xs text-[#555]">
+              <Shield className="w-4 h-4 text-[#CC0000]" />
               <span>SSL gesichert</span>
             </div>
           </div>
@@ -1186,16 +1188,16 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
 
           {/* Success Icon + Title */}
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-[#2C5F2E] mb-5 shadow-lg">
+            <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-[#CC0000] mb-5 shadow-lg">
               {isTwint
                 ? <img src="/twint-logo.svg" alt="TWINT" className="h-8 w-auto object-contain" />
                 : <CheckCircle className="w-10 h-10 text-white" />
               }
             </div>
-            <h1 className="text-3xl font-black text-[#1A1A1A] tracking-tight mb-2">
+            <h1 className="text-3xl font-black text-white tracking-tight mb-2">
               {isTwint ? "Bestellung aufgegeben!" : "Bestellung bestätigt!"}
             </h1>
-            <p className="text-[#666] text-base max-w-md mx-auto">
+            <p className="text-[#999] text-base max-w-md mx-auto">
               {isTwint
                 ? "Bitte schließen Sie die Zahlung via TWINT ab, um Ihre Bestellung zu bestätigen."
                 : isInvoice
@@ -1206,34 +1208,34 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
           </div>
 
           {/* Order Summary Card */}
-          <div className="bg-white rounded-2xl shadow-sm border border-[#EBEBEB] overflow-hidden mb-5">
+          <div className="bg-[#141414] rounded-2xl shadow-sm border border-[#2A2A2A] overflow-hidden mb-5">
             <div className="bg-[#1A1A1A] px-6 py-4 flex items-center gap-2">
               <ReceiptText className="w-4 h-4 text-[#aaa]" />
               <span className="text-sm font-bold text-white tracking-wide uppercase">Bestelldetails</span>
             </div>
             <div className="px-6 py-4 space-y-3">
-              <div className="flex justify-between items-center py-2 border-b border-[#F0F0F0]">
-                <span className="text-sm text-[#888]">Bestellnummer</span>
-                <span className="font-mono font-black text-[#1A1A1A] text-lg tracking-widest">#{orderDetails?.id}</span>
+              <div className="flex justify-between items-center py-2 border-b border-[#222]">
+                <span className="text-sm text-[#666]">Bestellnummer</span>
+                <span className="font-mono font-black text-white text-lg tracking-widest">#{orderDetails?.id}</span>
               </div>
-              <div className="flex justify-between items-center py-2 border-b border-[#F0F0F0]">
-                <span className="text-sm text-[#888]">Gesamtbetrag</span>
-                <span className="font-black text-xl text-[#1A1A1A]">{orderDetails?.total?.toFixed(2) || "0.00"} CHF</span>
+              <div className="flex justify-between items-center py-2 border-b border-[#222]">
+                <span className="text-sm text-[#666]">Gesamtbetrag</span>
+                <span className="font-black text-xl text-white">{orderDetails?.total?.toFixed(2) || "0.00"} CHF</span>
               </div>
-              <div className="flex justify-between items-center py-2 border-b border-[#F0F0F0]">
-                <span className="text-sm text-[#888]">Zahlungsstatus</span>
+              <div className="flex justify-between items-center py-2 border-b border-[#222]">
+                <span className="text-sm text-[#666]">Zahlungsstatus</span>
                 <span className={`text-sm font-bold px-3 py-1 rounded-full ${
                   isTwint ? "bg-orange-100 text-orange-700" :
                   isInvoice ? "bg-blue-100 text-blue-700" :
-                  "bg-green-100 text-[#2C5F2E]"
+                  "bg-emerald-500/10 text-emerald-400"
                 }`}>
                   {isTwint ? "Ausstehend" : isInvoice ? "Rechnung" : "Bezahlt"}
                 </span>
               </div>
               {isLoggedIn && (
                 <div className="flex justify-between items-center py-2">
-                  <span className="text-sm text-[#888]">Konto</span>
-                  <span className="text-sm font-semibold text-[#2C5F2E]">Gespeichert</span>
+                  <span className="text-sm text-[#666]">Konto</span>
+                  <span className="text-sm font-semibold text-[#CC0000]">Gespeichert</span>
                 </div>
               )}
             </div>
@@ -1241,7 +1243,7 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
 
           {/* TWINT Instructions */}
           {isTwint && (
-            <div className="bg-white rounded-2xl shadow-sm border border-[#EBEBEB] overflow-hidden mb-5">
+            <div className="bg-[#141414] rounded-2xl shadow-sm border border-[#2A2A2A] overflow-hidden mb-5">
               <div className="bg-black px-6 py-4 flex items-center justify-between">
                 <span className="text-sm font-bold text-white tracking-wide uppercase">Jetzt via TWINT bezahlen</span>
                 <img src="/twint-logo.svg" alt="TWINT" className="h-5 w-auto" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }} />
@@ -1249,27 +1251,27 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
               <div className="px-6 py-5 space-y-4">
                 <div className="flex items-start gap-3">
                   <span className="w-6 h-6 rounded-full bg-black text-white text-xs font-black flex items-center justify-center flex-shrink-0 mt-0.5">1</span>
-                  <p className="text-sm text-[#444]">Öffnen Sie Ihre <strong>TWINT-App</strong></p>
+                  <p className="text-sm text-[#999]">Öffnen Sie Ihre <strong>TWINT-App</strong></p>
                 </div>
                 <div className="flex items-start gap-3">
                   <span className="w-6 h-6 rounded-full bg-black text-white text-xs font-black flex items-center justify-center flex-shrink-0 mt-0.5">2</span>
                   <div className="flex-1">
-                    <p className="text-sm text-[#444] mb-2">Überweisen Sie <strong>{orderDetails?.total?.toFixed(2)} CHF</strong> an diese Nummer:</p>
-                    <div className="bg-[#F5F5F5] rounded-xl px-5 py-3 text-center border border-[#E0E0E0]">
-                      <p className="text-2xl font-black text-[#1A1A1A] tracking-wider">{orderDetails?.twintPhone}</p>
+                    <p className="text-sm text-[#999] mb-2">Überweisen Sie <strong>{orderDetails?.total?.toFixed(2)} CHF</strong> an diese Nummer:</p>
+                    <div className="bg-[#1A1A1A] rounded-xl px-5 py-3 text-center border border-[#333]">
+                      <p className="text-2xl font-black text-white tracking-wider">{orderDetails?.twintPhone}</p>
                     </div>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <span className="w-6 h-6 rounded-full bg-black text-white text-xs font-black flex items-center justify-center flex-shrink-0 mt-0.5">3</span>
                   <div className="flex-1">
-                    <p className="text-sm text-[#444] mb-2">Geben Sie als <strong>Mitteilung / Referenz</strong> ein:</p>
-                    <div className="bg-[#F5F5F5] rounded-xl px-5 py-3 text-center border border-[#E0E0E0]">
-                      <p className="text-2xl font-black text-[#1A1A1A] tracking-widest">#{orderDetails?.id}</p>
+                    <p className="text-sm text-[#999] mb-2">Geben Sie als <strong>Mitteilung / Referenz</strong> ein:</p>
+                    <div className="bg-[#1A1A1A] rounded-xl px-5 py-3 text-center border border-[#333]">
+                      <p className="text-2xl font-black text-white tracking-widest">#{orderDetails?.id}</p>
                     </div>
                   </div>
                 </div>
-                <p className="text-xs text-[#999] bg-orange-50 border border-orange-200 rounded-lg px-4 py-3">
+                <p className="text-xs text-[#999] bg-orange-900/10 border border-orange-500/20 rounded-lg px-4 py-3">
                   Die Bestellnummer als Referenz ist wichtig, damit wir Ihre Zahlung zuordnen können.
                 </p>
               </div>
@@ -1278,9 +1280,9 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
 
           {/* Delivery info */}
           {!isTwint && (
-            <div className="bg-white rounded-2xl shadow-sm border border-[#EBEBEB] px-6 py-4 mb-5 flex items-center gap-3">
-              <Truck className="w-5 h-5 text-[#2C5F2E] flex-shrink-0" />
-              <p className="text-sm text-[#555]">
+            <div className="bg-[#141414] rounded-2xl shadow-sm border border-[#2A2A2A] px-6 py-4 mb-5 flex items-center gap-3">
+              <Truck className="w-5 h-5 text-[#CC0000] flex-shrink-0" />
+              <p className="text-sm text-[#999]">
                 {isInvoice
                   ? "Der Verkäufer wird Sie per E-Mail oder Telefon kontaktieren, um die Bestellung abzuschließen."
                   : "Ihre Bestellung wird innerhalb von 2–3 Werktagen versendet."
@@ -1292,7 +1294,7 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
           {/* CTA */}
           <Button
             onClick={onBackToStore}
-            className="w-full bg-[#2C5F2E] hover:bg-[#1A4520] text-white font-bold py-4 rounded-xl text-base shadow-lg transition-all"
+            className="w-full bg-[#CC0000] hover:bg-[#AA0000] text-white font-bold py-4 rounded-xl text-base shadow-lg transition-all"
           >
             <Home className="w-4 h-4 mr-2" />
             Zurück zum Shop
@@ -1305,12 +1307,14 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
 
   if (orderStatus === "error") {
     return (
-      <div className="min-h-screen bg-[#F0F1F3]">
-        <div className="bg-white border-b border-[#E5E5E5] px-4 py-3">
+      <div className="min-h-screen bg-[#0A0A0A]">
+        <div className="bg-[#0D0D0D] border-b border-[#1E1E1E] px-4 py-3">
           <div className="container mx-auto max-w-4xl flex items-center justify-between">
-            <img src="/Security_n.png" alt="Logo" className="h-10 w-auto object-contain" />
-            <div className="flex items-center gap-1.5 text-xs text-[#888]">
-              <Shield className="w-4 h-4 text-[#2C5F2E]" />
+            <div className="flex items-center gap-2">
+              <span className="text-2xl">🌶️</span><span style={{fontFamily:"'Space Grotesk',sans-serif",fontWeight:900,color:'#CC0000',fontSize:'0.9rem'}}>HOT-SAUCE<br/><span style={{color:'#777',fontSize:'0.7rem',fontWeight:600}}>SHOP</span></span>
+            </div>
+            <div className="flex items-center gap-1.5 text-xs text-[#555]">
+              <Shield className="w-4 h-4 text-[#CC0000]" />
               <span>SSL gesichert</span>
             </div>
           </div>
@@ -1320,14 +1324,14 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
             <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-red-600 mb-5 shadow-lg">
               <AlertCircle className="w-10 h-10 text-white" />
             </div>
-            <h1 className="text-3xl font-black text-[#1A1A1A] tracking-tight mb-2">Fehler bei der Bestellung</h1>
-            <p className="text-[#666] text-base">Es gab ein Problem beim Verarbeiten Ihrer Zahlung. Bitte versuchen Sie es erneut.</p>
+            <h1 className="text-3xl font-black text-white tracking-tight mb-2">Fehler bei der Bestellung</h1>
+            <p className="text-[#999] text-base">Es gab ein Problem beim Verarbeiten Ihrer Zahlung. Bitte versuchen Sie es erneut.</p>
           </div>
           <div className="space-y-3">
-            <Button onClick={() => setOrderStatus("pending")} className="w-full bg-[#2C5F2E] hover:bg-[#1A4520] text-white font-bold py-4 rounded-xl text-base">
+            <Button onClick={() => setOrderStatus("pending")} className="w-full bg-[#CC0000] hover:bg-[#AA0000] text-white font-bold py-4 rounded-xl text-base">
               Erneut versuchen
             </Button>
-            <Button onClick={onBackToStore} variant="outline" className="w-full rounded-xl py-4">
+            <Button onClick={onBackToStore} variant="outline" className="w-full rounded-xl py-4 border-[#333] text-[#DDD] hover:bg-[#1A1A1A]">
               Zurück zum Shop
             </Button>
           </div>
@@ -1337,25 +1341,27 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
   }
 
   return (
-    <div className="min-h-screen bg-[#F0F1F3]">
+    <div className="min-h-screen bg-[#0A0A0A]">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b border-[#E0E0E0] sticky top-0 z-30 flex-shrink-0">
+      <div className="bg-[#0D0D0D] border-b border-[#1E1E1E] sticky top-0 z-30 flex-shrink-0">
         <div className="container mx-auto px-4 max-w-7xl py-3 sm:py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <button
               onClick={onBackToStore}
-              className="w-9 h-9 flex items-center justify-center rounded-full border-2 border-[#2C5F2E]/30 text-[#2C5F2E] hover:bg-[#2C5F2E] hover:text-white hover:border-[#2C5F2E] transition-all"
+              className="w-9 h-9 flex items-center justify-center rounded-full border-2 border-[#CC0000]/30 text-[#CC0000] hover:bg-[#CC0000] hover:text-white hover:border-[#CC0000] transition-all"
             >
               <ArrowLeft className="w-4 h-4" />
             </button>
-            <img src="/Security_n.png" alt="Logo" className="h-10 w-auto object-contain hidden sm:block" />
+            <div className="hidden sm:flex items-center gap-2">
+              <span className="text-2xl">🌶️</span><span style={{fontFamily:"'Space Grotesk',sans-serif",fontWeight:900,color:'#CC0000',fontSize:'0.9rem'}}>HOT-SAUCE<br/><span style={{color:'#777',fontSize:'0.7rem',fontWeight:600}}>SHOP</span></span>
+            </div>
             <div>
-              <span className="sm:hidden" style={{ fontFamily: "'Rubik Dirt', sans-serif", color: '#1A1A1A', fontSize: '1.1rem' }}>Warenkorb</span>
-              <span className="hidden sm:inline" style={{ fontFamily: "'Rubik Dirt', sans-serif", color: '#1A1A1A', fontSize: '1.1rem' }}>Warenkorb · Sicher &amp; verschlüsselt</span>
+              <span className="sm:hidden" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#DDD', fontSize: '1.1rem', fontWeight: 800 }}>Warenkorb</span>
+              <span className="hidden sm:inline" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#DDD', fontSize: '1.1rem', fontWeight: 800 }}>Warenkorb · Sicher &amp; verschlüsselt</span>
             </div>
           </div>
-          <div className="flex items-center gap-2 text-xs text-[#888]">
-            <Shield className="w-4 h-4 text-[#2C5F2E]" />
+          <div className="flex items-center gap-2 text-xs text-[#555]">
+            <Shield className="w-4 h-4 text-[#CC0000]" />
             <span>SSL gesichert</span>
           </div>
         </div>
@@ -1363,25 +1369,25 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
       <div className="container mx-auto px-4 max-w-7xl py-8">
 
           {isLoggedIn && currentUser && (
-            <div className="flex items-center justify-between gap-4 bg-[#F8FAF8] border border-[#2C5F2E]/20 rounded-2xl px-5 py-4 mb-8">
+            <div className="flex items-center justify-between gap-4 bg-[#141414] border border-[#2A2A2A] rounded-2xl px-5 py-4 mb-8">
               {/* Avatar + info */}
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-[#2C5F2E] flex items-center justify-center flex-shrink-0">
+                <div className="w-10 h-10 rounded-full bg-[#CC0000] flex items-center justify-center flex-shrink-0">
                   <span className="text-white text-sm font-black">
                     {currentUser.firstName?.[0]?.toUpperCase()}{currentUser.lastName?.[0]?.toUpperCase()}
                   </span>
                 </div>
                 <div>
-                  <p className="text-[11px] font-semibold text-[#2C5F2E] uppercase tracking-widest">Angemeldet</p>
-                  <p className="font-black text-[#1A1A1A] text-sm leading-tight">{currentUser.firstName} {currentUser.lastName}</p>
-                  <p className="text-xs text-[#888]">{currentUser.email}</p>
+                  <p className="text-[11px] font-semibold text-[#CC0000] uppercase tracking-widest">Angemeldet</p>
+                  <p className="font-black text-white text-sm leading-tight">{currentUser.firstName} {currentUser.lastName}</p>
+                  <p className="text-xs text-[#777]">{currentUser.email}</p>
                 </div>
               </div>
               {/* Actions */}
               <div className="flex items-center gap-2 flex-shrink-0">
                 <button
                   onClick={() => router.push("/profile?back=" + encodeURIComponent(window.location.pathname + window.location.search))}
-                  className="flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl border border-[#2C5F2E]/30 text-[#2C5F2E] hover:bg-[#2C5F2E] hover:text-white transition-colors"
+                  className="flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl border border-[#CC0000]/30 text-[#CC0000] hover:bg-[#CC0000] hover:text-white transition-colors"
                 >
                   <User className="w-4 h-4" />
                   <span className="text-[9px] font-semibold leading-none sm:hidden">Profil</span>
@@ -1403,7 +1409,7 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
           <div className="space-y-6">
             {/* Login Section — above the form */}
             {!isLoggedIn && (
-              <Card className="rounded-2xl shadow-sm border-[#2C5F2E]/20 bg-[#F8FCF8]">
+              <Card className="rounded-2xl shadow-sm border-[#2A2A2A] bg-[#141414]">
                 <CardContent className="pt-4 pb-4">
                   <div className="flex items-center space-x-2 mb-3">
                     <Checkbox
@@ -1414,14 +1420,14 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
                         if (checked) setShowCreateAccount(false)
                       }}
                     />
-                    <Label htmlFor="showLogin" className="flex items-center cursor-pointer font-semibold text-[#2C5F2E]">
+                    <Label htmlFor="showLogin" className="flex items-center cursor-pointer font-semibold text-[#CC0000]">
                       <User className="w-4 h-4 mr-2" />
                       Ich habe bereits ein Konto — Anmelden
                     </Label>
                   </div>
 
                   {showLogin && (
-                    <div className="space-y-4 bg-white p-4 rounded-xl border border-[#2C5F2E]/15">
+                    <div className="space-y-4 bg-[#1A1A1A] p-4 rounded-xl border border-[#2A2A2A]">
                       <div>
                         <Label htmlFor="loginEmail">E-Mail *</Label>
                         <Input
@@ -1429,7 +1435,7 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
                           type="email"
                           value={loginData.email}
                           onChange={(e) => setLoginData((prev) => ({ ...prev, email: e.target.value }))}
-                          className={`bg-white ${loginErrors.email ? "border-red-500" : ""}`}
+                          className={`bg-[#111] text-[#DDD] border-[#333] ${loginErrors.email ? "border-red-500" : ""}`}
                           placeholder="ihre@email.com"
                         />
                         {loginErrors.email && <p className="text-red-500 text-sm mt-1">{loginErrors.email}</p>}
@@ -1443,7 +1449,7 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
                             variant="link"
                             size="sm"
                             onClick={openPasswordReset}
-                            className="text-xs text-[#2C5F2E] hover:text-[#1A4520] p-0 h-auto"
+                            className="text-xs text-[#CC0000] hover:text-[#AA0000] p-0 h-auto"
                           >
                             Passwort vergessen?
                           </Button>
@@ -1454,7 +1460,7 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
                             type={showLoginPassword ? "text" : "password"}
                             value={loginData.password}
                             onChange={(e) => setLoginData((prev) => ({ ...prev, password: e.target.value }))}
-                            className={`bg-white pr-10 ${loginErrors.password ? "border-red-500" : ""}`}
+                            className={`bg-[#111] text-[#DDD] border-[#333] pr-10 ${loginErrors.password ? "border-red-500" : ""}`}
                             placeholder="Ihr Passwort"
                           />
                           <Button
@@ -1474,7 +1480,7 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
                         <Button
                           onClick={handleLogin}
                           disabled={isLoggingIn || !loginData.email || !loginData.password}
-                          className="w-full bg-[#2C5F2E] hover:bg-[#1A4520] text-white"
+                          className="w-full bg-[#CC0000] hover:bg-[#AA0000] text-white"
                         >
                           {isLoggingIn ? (
                             <>
@@ -1502,9 +1508,9 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
                         </div>
                       )}
 
-                      <div className="bg-[#F0F9F0] p-3 rounded-xl border border-[#2C5F2E]/15">
-                        <p className="text-sm text-[#2C5F2E] font-semibold">Nach der Anmeldung:</p>
-                        <ul className="text-sm text-[#2C5F2E]/80 mt-1 space-y-1">
+                      <div className="bg-[#1A1A1A] p-3 rounded-xl border border-[#CC0000]/15">
+                        <p className="text-sm text-[#CC0000] font-semibold">Nach der Anmeldung:</p>
+                        <ul className="text-sm text-[#CC0000]/80 mt-1 space-y-1">
                           <li>• Ihre Daten werden automatisch ausgefüllt</li>
                           <li>• Schnellerer Checkout-Prozess</li>
                           <li>• Zugriff auf Ihr Profil und Bestellhistorie</li>
@@ -1516,11 +1522,11 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
               </Card>
             )}
 
-            <Card className="rounded-2xl shadow-sm border-[#EBEBEB]">
+            <Card className="rounded-2xl shadow-sm border-[#2A2A2A] bg-[#141414]">
               <CardHeader>
                 <CardTitle className="flex items-center justify-between text-xl">
                   <div className="flex items-center">
-                    <User className="w-5 h-5 mr-2 text-[#2C5F2E]" />
+                    <User className="w-5 h-5 mr-2 text-[#CC0000]" />
                     Persönliche Daten
                   </div>
                   {!isLoggedIn && (
@@ -1545,7 +1551,7 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
                       id="firstName"
                       value={customerInfo.firstName}
                       onChange={(e) => handleInputChange("firstName", e.target.value)}
-                      className={`bg-white ${formErrors.firstName ? "border-red-500" : ""}`}
+                      className={`bg-[#1A1A1A] text-[#DDD] border-[#333] ${formErrors.firstName ? "border-red-500" : ""}`}
                     />
                     {formErrors.firstName && <p className="text-red-500 text-sm mt-1">{formErrors.firstName}</p>}
                   </div>
@@ -1555,7 +1561,7 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
                       id="lastName"
                       value={customerInfo.lastName}
                       onChange={(e) => handleInputChange("lastName", e.target.value)}
-                      className={`bg-white ${formErrors.lastName ? "border-red-500" : ""}`}
+                      className={`bg-[#1A1A1A] text-[#DDD] border-[#333] ${formErrors.lastName ? "border-red-500" : ""}`}
                     />
                     {formErrors.lastName && <p className="text-red-500 text-sm mt-1">{formErrors.lastName}</p>}
                   </div>
@@ -1568,7 +1574,7 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
                     type="email"
                     value={customerInfo.email}
                     onChange={(e) => handleInputChange("email", e.target.value)}
-                    className={`bg-white ${formErrors.email ? "border-red-500" : ""}`}
+                    className={`bg-[#1A1A1A] text-[#DDD] border-[#333] ${formErrors.email ? "border-red-500" : ""}`}
                     disabled={isLoggedIn}
                   />
                   {formErrors.email && <p className="text-red-500 text-sm mt-1">{formErrors.email}</p>}
@@ -1580,7 +1586,7 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
                     id="phone"
                     value={customerInfo.phone}
                     onChange={(e) => handleInputChange("phone", e.target.value)}
-                    className={`bg-white ${formErrors.phone ? "border-red-500" : ""}`}
+                    className={`bg-[#1A1A1A] text-[#DDD] border-[#333] ${formErrors.phone ? "border-red-500" : ""}`}
                     placeholder="+41 XX XXX XX XX"
                   />
                   {formErrors.phone && <p className="text-red-500 text-sm mt-1">{formErrors.phone}</p>}
@@ -1588,7 +1594,7 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
 
                 {/* Show success message when logged in */}
                 {isLoggedIn && (
-                  <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                  <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-lg p-4">
                     <div className="flex items-center">
                       <CheckCircle className="w-5 h-5 text-green-600 mr-2" />
                       <div>
@@ -1616,13 +1622,13 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
                         }}
                       />
                       <Label htmlFor="showLogin" className="flex items-center cursor-pointer">
-                        <User className="w-4 h-4 mr-2 text-[#2C5F2E]" />
+                        <User className="w-4 h-4 mr-2 text-[#CC0000]" />
                         Ich habe bereits ein Konto - Anmelden
                       </Label>
                     </div>
 
                     {showLogin && (
-                      <div className="space-y-4 bg-[#F0F9F0] p-4 rounded-xl border border-[#2C5F2E]/15">
+                      <div className="space-y-4 bg-[#1A1A1A] p-4 rounded-xl border border-[#CC0000]/15">
                         <div>
                           <Label htmlFor="loginEmail">E-Mail *</Label>
                           <Input
@@ -1630,7 +1636,7 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
                             type="email"
                             value={loginData.email}
                             onChange={(e) => setLoginData((prev) => ({ ...prev, email: e.target.value }))}
-                            className={`bg-white ${loginErrors.email ? "border-red-500" : ""}`}
+                            className={`bg-[#111] text-[#DDD] border-[#333] ${loginErrors.email ? "border-red-500" : ""}`}
                             placeholder="ihre@email.com"
                           />
                           {loginErrors.email && <p className="text-red-500 text-sm mt-1">{loginErrors.email}</p>}
@@ -1644,7 +1650,7 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
                               variant="link"
                               size="sm"
                               onClick={openPasswordReset}
-                              className="text-xs text-[#2C5F2E] hover:text-[#1A4520] p-0 h-auto"
+                              className="text-xs text-[#CC0000] hover:text-[#AA0000] p-0 h-auto"
                             >
                               Passwort vergessen?
                             </Button>
@@ -1655,7 +1661,7 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
                               type={showLoginPassword ? "text" : "password"}
                               value={loginData.password}
                               onChange={(e) => setLoginData((prev) => ({ ...prev, password: e.target.value }))}
-                              className={`bg-white pr-10 ${loginErrors.password ? "border-red-500" : ""}`}
+                              className={`bg-[#111] text-[#DDD] border-[#333] pr-10 ${loginErrors.password ? "border-red-500" : ""}`}
                               placeholder="Ihr Passwort"
                             />
                             <Button
@@ -1676,7 +1682,7 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
                           <Button
                             onClick={handleLogin}
                             disabled={isLoggingIn || !loginData.email || !loginData.password}
-                            className="w-full bg-[#2C5F2E] hover:bg-[#1A4520] text-white"
+                            className="w-full bg-[#CC0000] hover:bg-[#AA0000] text-white"
                           >
                             {isLoggingIn ? (
                               <>
@@ -1705,11 +1711,11 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
                           </div>
                         )}
 
-                        <div className="bg-[#F0F9F0] p-3 rounded-xl border border-[#2C5F2E]/15">
-                          <p className="text-sm text-[#2C5F2E] font-semibold">
+                        <div className="bg-[#1A1A1A] p-3 rounded-xl border border-[#CC0000]/15">
+                          <p className="text-sm text-[#CC0000] font-semibold">
                             Nach der Anmeldung:
                           </p>
-                          <ul className="text-sm text-[#2C5F2E]/80 mt-1 space-y-1">
+                          <ul className="text-sm text-[#CC0000]/80 mt-1 space-y-1">
                             <li>• Ihre Daten werden automatisch ausgefüllt</li>
                             <li>• Schnellerer Checkout-Prozess</li>
                             <li>• Zugriff auf Ihr Profil und Bestellhistorie</li>
@@ -1722,10 +1728,10 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
               </CardContent>
             </Card>
 
-            <Card className="rounded-2xl shadow-sm border-[#EBEBEB]">
+            <Card className="rounded-2xl shadow-sm border-[#2A2A2A] bg-[#141414]">
               <CardHeader>
                 <CardTitle className="flex items-center text-xl">
-                  <MapPin className="w-5 h-5 mr-2 text-[#2C5F2E]" />
+                  <MapPin className="w-5 h-5 mr-2 text-[#CC0000]" />
                   Lieferadresse
                 </CardTitle>
               </CardHeader>
@@ -1736,7 +1742,7 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
                     id="country"
                     value={customerInfo.country}
                     onChange={(e) => handleInputChange("country", e.target.value)}
-                    className="flex h-10 w-full rounded-md border border-input bg-white px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                    className="flex h-10 w-full rounded-md border border-[#333] bg-[#1A1A1A] text-[#DDD] px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                   >
                     {(["CH","DE","AT","FR","IT","NL","BE","ES","PL","PT","CZ","DK","SE","FI","NO","HU","RO","HR","SK","SI","LU","LI","OTHER"] as const)
                       .filter(c => enabledCountries.includes(c))
@@ -1763,7 +1769,7 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
                     id="address"
                     value={customerInfo.address}
                     onChange={(e) => handleInputChange("address", e.target.value)}
-                    className={`bg-white ${formErrors.address ? "border-red-500" : ""}`}
+                    className={`bg-[#1A1A1A] text-[#DDD] border-[#333] ${formErrors.address ? "border-red-500" : ""}`}
                   />
                   {formErrors.address && <p className="text-red-500 text-sm mt-1">{formErrors.address}</p>}
                 </div>
@@ -1775,7 +1781,7 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
                       id="postalCode"
                       value={customerInfo.postalCode}
                       onChange={(e) => handleInputChange("postalCode", e.target.value)}
-                      className={`bg-white ${formErrors.postalCode ? "border-red-500" : ""}`}
+                      className={`bg-[#1A1A1A] text-[#DDD] border-[#333] ${formErrors.postalCode ? "border-red-500" : ""}`}
                       placeholder="1234"
                     />
                     {formErrors.postalCode && <p className="text-red-500 text-sm mt-1">{formErrors.postalCode}</p>}
@@ -1786,7 +1792,7 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
                       id="city"
                       value={customerInfo.city}
                       onChange={(e) => handleInputChange("city", e.target.value)}
-                      className={`bg-white ${formErrors.city ? "border-red-500" : ""}`}
+                      className={`bg-[#1A1A1A] text-[#DDD] border-[#333] ${formErrors.city ? "border-red-500" : ""}`}
                     />
                     {formErrors.city && <p className="text-red-500 text-sm mt-1">{formErrors.city}</p>}
                   </div>
@@ -1798,7 +1804,7 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
                     id="canton"
                     value={customerInfo.canton}
                     onChange={(e) => handleInputChange("canton", e.target.value)}
-                    className={`bg-white ${formErrors.canton ? "border-red-500" : ""}`}
+                    className={`bg-[#1A1A1A] text-[#DDD] border-[#333] ${formErrors.canton ? "border-red-500" : ""}`}
                     placeholder="z.B. Zürich, Bern, Basel..."
                   />
                   {formErrors.canton && <p className="text-red-500 text-sm mt-1">{formErrors.canton}</p>}
@@ -1812,14 +1818,14 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
                     onChange={(e) => handleInputChange("notes", e.target.value)}
                     placeholder="Besondere Lieferhinweise..."
                     rows={3}
-                    className="bg-white"
+                    className="bg-[#1A1A1A] text-[#DDD] border-[#333]"
                   />
                 </div>
               </CardContent>
             </Card>
 
             {/* Billing Address Section */}
-            <Card className="rounded-2xl shadow-sm border-[#EBEBEB]">
+            <Card className="rounded-2xl shadow-sm border-[#2A2A2A] bg-[#141414]">
               <CardContent className="pt-6">
                 <div className="flex items-center space-x-2 mb-4">
                   <Checkbox
@@ -1842,14 +1848,14 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
                     }}
                   />
                   <Label htmlFor="differentBillingAddress" className="flex items-center cursor-pointer">
-                    <CreditCard className="w-4 h-4 mr-2 text-[#2C5F2E]" />
+                    <CreditCard className="w-4 h-4 mr-2 text-[#CC0000]" />
                     Rechnungsadresse anders als Lieferadresse
                   </Label>
                 </div>
 
                 {useDifferentBillingAddress && (
-                  <div className="space-y-4 bg-[#F0F9F0] p-4 rounded-xl border border-[#2C5F2E]/20">
-                    <h4 className="font-semibold text-[#2C5F2E] mb-3">Rechnungsadresse</h4>
+                  <div className="space-y-4 bg-[#1A1A1A] p-4 rounded-xl border border-[#2A2A2A]">
+                    <h4 className="font-semibold text-[#CC0000] mb-3">Rechnungsadresse</h4>
                     
                     <div className="grid grid-cols-2 gap-4">
                       <div>
@@ -1858,7 +1864,7 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
                           id="billingFirstName"
                           value={billingAddress.firstName}
                           onChange={(e) => handleBillingInputChange("firstName", e.target.value)}
-                          className={`bg-white ${billingErrors.firstName ? "border-red-500" : ""}`}
+                          className={`bg-[#1A1A1A] text-[#DDD] border-[#333] ${billingErrors.firstName ? "border-red-500" : ""}`}
                         />
                         {billingErrors.firstName && <p className="text-red-500 text-sm mt-1">{billingErrors.firstName}</p>}
                       </div>
@@ -1868,7 +1874,7 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
                           id="billingLastName"
                           value={billingAddress.lastName}
                           onChange={(e) => handleBillingInputChange("lastName", e.target.value)}
-                          className={`bg-white ${billingErrors.lastName ? "border-red-500" : ""}`}
+                          className={`bg-[#1A1A1A] text-[#DDD] border-[#333] ${billingErrors.lastName ? "border-red-500" : ""}`}
                         />
                         {billingErrors.lastName && <p className="text-red-500 text-sm mt-1">{billingErrors.lastName}</p>}
                       </div>
@@ -1880,7 +1886,7 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
                         id="billingAddress"
                         value={billingAddress.address}
                         onChange={(e) => handleBillingInputChange("address", e.target.value)}
-                        className={`bg-white ${billingErrors.address ? "border-red-500" : ""}`}
+                        className={`bg-[#1A1A1A] text-[#DDD] border-[#333] ${billingErrors.address ? "border-red-500" : ""}`}
                       />
                       {billingErrors.address && <p className="text-red-500 text-sm mt-1">{billingErrors.address}</p>}
                     </div>
@@ -1892,7 +1898,7 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
                           id="billingPostalCode"
                           value={billingAddress.postalCode}
                           onChange={(e) => handleBillingInputChange("postalCode", e.target.value)}
-                          className={`bg-white ${billingErrors.postalCode ? "border-red-500" : ""}`}
+                          className={`bg-[#1A1A1A] text-[#DDD] border-[#333] ${billingErrors.postalCode ? "border-red-500" : ""}`}
                           placeholder="1234"
                         />
                         {billingErrors.postalCode && <p className="text-red-500 text-sm mt-1">{billingErrors.postalCode}</p>}
@@ -1903,7 +1909,7 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
                           id="billingCity"
                           value={billingAddress.city}
                           onChange={(e) => handleBillingInputChange("city", e.target.value)}
-                          className={`bg-white ${billingErrors.city ? "border-red-500" : ""}`}
+                          className={`bg-[#1A1A1A] text-[#DDD] border-[#333] ${billingErrors.city ? "border-red-500" : ""}`}
                         />
                         {billingErrors.city && <p className="text-red-500 text-sm mt-1">{billingErrors.city}</p>}
                       </div>
@@ -1915,14 +1921,14 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
                         id="billingCanton"
                         value={billingAddress.canton}
                         onChange={(e) => handleBillingInputChange("canton", e.target.value)}
-                        className={`bg-white ${billingErrors.canton ? "border-red-500" : ""}`}
+                        className={`bg-[#1A1A1A] text-[#DDD] border-[#333] ${billingErrors.canton ? "border-red-500" : ""}`}
                         placeholder="z.B. Zürich, Bern, Basel..."
                       />
                       {billingErrors.canton && <p className="text-red-500 text-sm mt-1">{billingErrors.canton}</p>}
                     </div>
 
-                    <div className="bg-[#E8F5E9] p-3 rounded-xl border border-[#2C5F2E]/15">
-                      <p className="text-sm text-[#2C5F2E]">
+                    <div className="bg-[#1A1A1A] p-3 rounded-xl border border-[#CC0000]/15">
+                      <p className="text-sm text-[#CC0000]">
                         <strong>Hinweis:</strong> Die Rechnungsadresse wird nur für die Rechnungsstellung verwendet und nicht in der Datenbank gespeichert.
                       </p>
                     </div>
@@ -1933,7 +1939,7 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
 
             {/* Create Account Section - ONLY show if NOT logged in */}
             {!isLoggedIn && (
-              <Card className="rounded-2xl shadow-sm border-[#EBEBEB]">
+              <Card className="rounded-2xl shadow-sm border-[#2A2A2A] bg-[#141414]">
                 <CardContent className="pt-6">
                   <div className="flex items-center space-x-2 mb-4">
                     <Checkbox
@@ -1947,13 +1953,13 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
                       }}
                     />
                     <Label htmlFor="createAccount" className="flex items-center cursor-pointer">
-                      <UserPlus className="w-4 h-4 mr-2 text-[#2C5F2E]" />
+                      <UserPlus className="w-4 h-4 mr-2 text-[#CC0000]" />
                       Konto erstellen und Daten für zukünftige Bestellungen speichern
                     </Label>
                   </div>
 
                   {showCreateAccount && (
-                    <div className="space-y-4 bg-[#F0F9F0] p-4 rounded-xl border border-[#2C5F2E]/15">
+                    <div className="space-y-4 bg-[#1A1A1A] p-4 rounded-xl border border-[#CC0000]/15">
                       <div>
                         <Label htmlFor="password">Passwort *</Label>
                         <div className="relative">
@@ -1962,7 +1968,7 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
                             type={showPassword ? "text" : "password"}
                             value={createAccountData.password}
                             onChange={(e) => setCreateAccountData((prev) => ({ ...prev, password: e.target.value }))}
-                            className={`bg-white pr-10 ${accountErrors.password ? "border-red-500" : ""}`}
+                            className={`bg-[#1A1A1A] text-[#DDD] border-[#333] pr-10 ${accountErrors.password ? "border-red-500" : ""}`}
                             placeholder="Mindestens 6 Zeichen"
                           />
                           <Button
@@ -1990,7 +1996,7 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
                             onChange={(e) =>
                               setCreateAccountData((prev) => ({ ...prev, confirmPassword: e.target.value }))
                             }
-                            className={`bg-white pr-10 ${accountErrors.confirmPassword ? "border-red-500" : ""}`}
+                            className={`bg-[#1A1A1A] text-[#DDD] border-[#333] pr-10 ${accountErrors.confirmPassword ? "border-red-500" : ""}`}
                             placeholder="Passwort wiederholen"
                           />
                           <Button
@@ -2044,7 +2050,7 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
                           )}
                         </Button>
 
-                        <p className="text-xs text-gray-500 mt-2 text-center">
+                        <p className="text-xs text-[#555] mt-2 text-center">
                           Sie können Ihr Konto jetzt erstellen oder später beim Bezahlen
                         </p>
                       </div>
@@ -2062,11 +2068,11 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
                         </div>
                       )}
 
-                      <div className="bg-[#F0F9F0] p-3 rounded-xl border border-[#2C5F2E]/15">
-                        <p className="text-sm text-[#2C5F2E] font-semibold">
+                      <div className="bg-[#1A1A1A] p-3 rounded-xl border border-[#CC0000]/15">
+                        <p className="text-sm text-[#CC0000] font-semibold">
                           Vorteile eines Kontos:
                         </p>
-                        <ul className="text-sm text-[#2C5F2E]/80 mt-1 space-y-1">
+                        <ul className="text-sm text-[#CC0000]/80 mt-1 space-y-1">
                           <li>• Automatisches Ausfüllen bei zukünftigen Bestellungen</li>
                           <li>• Bestellhistorie einsehen</li>
                           <li>• Adressdaten verwalten</li>
@@ -2082,18 +2088,18 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
 
           {/* Order summary */}
           <div className="space-y-6">
-            <Card className="rounded-2xl shadow-sm border-[#EBEBEB]">
+            <Card className="rounded-2xl shadow-sm border-[#2A2A2A] bg-[#141414]">
               <CardHeader>
                 <CardTitle className="flex items-center text-xl">
-                  <Package className="w-5 h-5 mr-2 text-[#2C5F2E]" />
+                  <Package className="w-5 h-5 mr-2 text-[#CC0000]" />
                   Ihre Bestellung
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
                   {cart.map((item) => (
-                    <div key={item.id} className="flex items-center space-x-4 p-3 bg-gray-50 rounded-2xl border border-gray-100">
-                      <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 bg-white border border-gray-100">
+                    <div key={item.id} className="flex items-center space-x-4 p-3 bg-[#1A1A1A] rounded-2xl border border-[#2A2A2A]">
+                      <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 bg-[#111] border border-[#2A2A2A]">
                         <ProductImage
                           src={item.image_url || item.image}
                           candidates={item.image_url_candidates}
@@ -2109,7 +2115,7 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
                               size="sm"
                               variant="outline"
                               onClick={() => handleDecreaseQuantity(item)}
-                              className="h-8 w-8 p-0 bg-white hover:bg-gray-100"
+                              className="h-8 w-8 p-0 bg-[#222] hover:bg-[#333]"
                               disabled={!onRemoveFromCart}
                             >
                               <Minus className="w-3 h-3" />
@@ -2119,7 +2125,7 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
                               size="sm"
                               variant="outline"
                               onClick={() => handleIncreaseQuantity(item)}
-                              className="h-8 w-8 p-0 bg-white hover:bg-gray-100"
+                              className="h-8 w-8 p-0 bg-[#222] hover:bg-[#333]"
                               disabled={!onAddToCart}
                             >
                               <Plus className="w-3 h-3" />
@@ -2152,7 +2158,7 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
                     <span>
                       Versand
                       {shippingInfo.zone && (
-                        <span className="text-xs text-gray-500 ml-1">({shippingInfo.zone} · {shippingInfo.range})</span>
+                        <span className="text-xs text-[#555] ml-1">({shippingInfo.zone} · {shippingInfo.range})</span>
                       )}:
                     </span>
                     <span>
@@ -2165,17 +2171,17 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
                   <Separator />
                   <div className="flex justify-between text-xl font-black">
                     <span>Gesamt:</span>
-                    <span className="text-[#2C5F2E]">{getFinalTotal().toFixed(2)} CHF</span>
+                    <span className="text-[#CC0000]">{getFinalTotal().toFixed(2)} CHF</span>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
             {/* Shipping information */}
-            <Card className="bg-[#F0F9F0] border-[#2C5F2E]/25 rounded-2xl">
+            <Card className="bg-[#141414] border-[#CC0000]/25 rounded-2xl">
               <CardContent className="p-6">
-                <h3 className="font-semibold text-[#2C5F2E] mb-2">📦 Versandinformationen</h3>
-                <ul className="text-sm text-[#2C5F2E]/80 space-y-1">
+                <h3 className="font-semibold text-[#CC0000] mb-2">📦 Versandinformationen</h3>
+                <ul className="text-sm text-[#CC0000]/80 space-y-1">
                   <li>• Lieferzeit: 2-3 Werktage</li>
                   <li>• Versand aus 9745 Sevelen</li>
                   {shippingInfo.zone && <li>• Zone: {shippingInfo.zone} · {shippingInfo.range}</li>}
@@ -2184,10 +2190,10 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
             </Card>
 
             {/* Payment Method Selection */}
-            <Card className="rounded-2xl shadow-sm border-[#EBEBEB]">
+            <Card className="rounded-2xl shadow-sm border-[#2A2A2A] bg-[#141414]">
               <CardHeader>
                 <CardTitle className="flex items-center text-xl">
-                  <CreditCard className="w-5 h-5 mr-2 text-[#2C5F2E]" />
+                  <CreditCard className="w-5 h-5 mr-2 text-[#CC0000]" />
                   Zahlungsart wählen
                 </CardTitle>
               </CardHeader>
@@ -2198,14 +2204,14 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
                   {paySettings.enable_paypal && (
                     <div
                       onClick={() => setPaymentMethod("paypal")}
-                      className={`flex items-center gap-3 border rounded-xl px-4 py-3 cursor-pointer transition-all ${paymentMethod === "paypal" ? "border-[#2C5F2E] bg-[#F0F9F0]" : "border-gray-200 hover:border-gray-300 bg-white"}`}
+                      className={`flex items-center gap-3 border rounded-xl px-4 py-3 cursor-pointer transition-all ${paymentMethod === "paypal" ? "border-[#CC0000] bg-[#CC0000]/10" : "border-[#2A2A2A] hover:border-[#333] bg-[#1A1A1A]"}`}
                     >
-                      <div className={`w-4 h-4 rounded-full border-2 flex-shrink-0 ${paymentMethod === "paypal" ? "border-[#2C5F2E] bg-[#2C5F2E]" : "border-gray-300"}`}>
+                      <div className={`w-4 h-4 rounded-full border-2 flex-shrink-0 ${paymentMethod === "paypal" ? "border-[#CC0000] bg-[#CC0000]" : "border-[#555]"}`}>
                         {paymentMethod === "paypal" && <div className="w-2 h-2 bg-white rounded-full mx-auto mt-0.5" />}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="font-semibold text-sm text-gray-900">PayPal</p>
-                        <p className="text-xs text-gray-500">Sofortige Zahlung mit PayPal – Sie werden weitergeleitet</p>
+                        <p className="font-semibold text-sm text-[#DDD]">PayPal</p>
+                        <p className="text-xs text-[#777]">Sofortige Zahlung mit PayPal – Sie werden weitergeleitet</p>
                       </div>
                       <img src="/0014294_paypal-express-payment-plugin.png" alt="PayPal" className="h-8 w-auto object-contain flex-shrink-0" />
                     </div>
@@ -2215,14 +2221,14 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
                   {paySettings.enable_stripe && (
                     <div
                       onClick={() => setPaymentMethod("stripe")}
-                      className={`flex items-center gap-3 border rounded-xl px-4 py-3 cursor-pointer transition-all ${paymentMethod === "stripe" ? "border-[#2C5F2E] bg-[#F0F9F0]" : "border-gray-200 hover:border-gray-300 bg-white"}`}
+                      className={`flex items-center gap-3 border rounded-xl px-4 py-3 cursor-pointer transition-all ${paymentMethod === "stripe" ? "border-[#CC0000] bg-[#CC0000]/10" : "border-[#2A2A2A] hover:border-[#333] bg-[#1A1A1A]"}`}
                     >
-                      <div className={`w-4 h-4 rounded-full border-2 flex-shrink-0 ${paymentMethod === "stripe" ? "border-[#2C5F2E] bg-[#2C5F2E]" : "border-gray-300"}`}>
+                      <div className={`w-4 h-4 rounded-full border-2 flex-shrink-0 ${paymentMethod === "stripe" ? "border-[#CC0000] bg-[#CC0000]" : "border-[#555]"}`}>
                         {paymentMethod === "stripe" && <div className="w-2 h-2 bg-white rounded-full mx-auto mt-0.5" />}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="font-semibold text-sm text-gray-900">Kreditkarte</p>
-                        <p className="text-xs text-gray-500">Visa, Mastercard, AMEX – sichere SSL-Zahlung</p>
+                        <p className="font-semibold text-sm text-[#DDD]">Kreditkarte</p>
+                        <p className="text-xs text-[#777]">Visa, Mastercard, AMEX – sichere SSL-Zahlung</p>
                       </div>
                       {/* Visa + Mastercard logos */}
                       <div className="flex items-center gap-1.5 flex-shrink-0">
@@ -2247,14 +2253,14 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
                   {paySettings.enable_stripe && paySettings.stripe_publishable_key && (
                     <div
                       onClick={() => setPaymentMethod("twint_stripe")}
-                      className={`flex items-center gap-3 border rounded-xl px-4 py-3 cursor-pointer transition-all ${paymentMethod === "twint_stripe" ? "border-[#2C5F2E] bg-[#F0F9F0]" : "border-gray-200 hover:border-gray-300 bg-white"}`}
+                      className={`flex items-center gap-3 border rounded-xl px-4 py-3 cursor-pointer transition-all ${paymentMethod === "twint_stripe" ? "border-[#CC0000] bg-[#CC0000]/10" : "border-[#2A2A2A] hover:border-[#333] bg-[#1A1A1A]"}`}
                     >
-                      <div className={`w-4 h-4 rounded-full border-2 flex-shrink-0 ${paymentMethod === "twint_stripe" ? "border-[#2C5F2E] bg-[#2C5F2E]" : "border-gray-300"}`}>
+                      <div className={`w-4 h-4 rounded-full border-2 flex-shrink-0 ${paymentMethod === "twint_stripe" ? "border-[#CC0000] bg-[#CC0000]" : "border-[#555]"}`}>
                         {paymentMethod === "twint_stripe" && <div className="w-2 h-2 bg-white rounded-full mx-auto mt-0.5" />}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="font-semibold text-sm text-gray-900">TWINT <span className="text-[10px] bg-green-100 text-green-700 font-bold px-1.5 py-0.5 rounded ml-1">QR-Code</span></p>
-                        <p className="text-xs text-gray-500">QR-Code scannen oder App-Weiterleitung – via Stripe</p>
+                        <p className="font-semibold text-sm text-[#DDD]">TWINT <span className="text-[10px] bg-green-100 text-green-700 font-bold px-1.5 py-0.5 rounded ml-1">QR-Code</span></p>
+                        <p className="text-xs text-[#777]">QR-Code scannen oder App-Weiterleitung – via Stripe</p>
                       </div>
                       <img src="/twint-logo.svg" alt="TWINT" className="h-7 w-auto object-contain flex-shrink-0" />
                     </div>
@@ -2264,14 +2270,14 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
                   {paySettings.enable_twint && (
                     <div
                       onClick={() => setPaymentMethod("twint")}
-                      className={`flex items-center gap-3 border rounded-xl px-4 py-3 cursor-pointer transition-all ${paymentMethod === "twint" ? "border-[#2C5F2E] bg-[#F0F9F0]" : "border-gray-200 hover:border-gray-300 bg-white"}`}
+                      className={`flex items-center gap-3 border rounded-xl px-4 py-3 cursor-pointer transition-all ${paymentMethod === "twint" ? "border-[#CC0000] bg-[#CC0000]/10" : "border-[#2A2A2A] hover:border-[#333] bg-[#1A1A1A]"}`}
                     >
-                      <div className={`w-4 h-4 rounded-full border-2 flex-shrink-0 ${paymentMethod === "twint" ? "border-[#2C5F2E] bg-[#2C5F2E]" : "border-gray-300"}`}>
+                      <div className={`w-4 h-4 rounded-full border-2 flex-shrink-0 ${paymentMethod === "twint" ? "border-[#CC0000] bg-[#CC0000]" : "border-[#555]"}`}>
                         {paymentMethod === "twint" && <div className="w-2 h-2 bg-white rounded-full mx-auto mt-0.5" />}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="font-semibold text-sm text-gray-900">TWINT <span className="text-[10px] bg-gray-100 text-gray-500 font-bold px-1.5 py-0.5 rounded ml-1">Manuell</span></p>
-                        <p className="text-xs text-gray-500">Bestellbestätigung erhalten, dann manuell überweisen</p>
+                        <p className="font-semibold text-sm text-[#DDD]">TWINT <span className="text-[10px] bg-[#222] text-[#777] font-bold px-1.5 py-0.5 rounded ml-1">Manuell</span></p>
+                        <p className="text-xs text-[#777]">Bestellbestätigung erhalten, dann manuell überweisen</p>
                       </div>
                       <img src="/twint-logo.svg" alt="TWINT" className="h-7 w-auto object-contain flex-shrink-0" />
                     </div>
@@ -2281,16 +2287,16 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
                   {paySettings.enable_invoice && (
                     <div
                       onClick={() => setPaymentMethod("invoice")}
-                      className={`flex items-center gap-3 border rounded-xl px-4 py-3 cursor-pointer transition-all ${paymentMethod === "invoice" ? "border-[#2C5F2E] bg-[#F0F9F0]" : "border-gray-200 hover:border-gray-300 bg-white"}`}
+                      className={`flex items-center gap-3 border rounded-xl px-4 py-3 cursor-pointer transition-all ${paymentMethod === "invoice" ? "border-[#CC0000] bg-[#CC0000]/10" : "border-[#2A2A2A] hover:border-[#333] bg-[#1A1A1A]"}`}
                     >
-                      <div className={`w-4 h-4 rounded-full border-2 flex-shrink-0 ${paymentMethod === "invoice" ? "border-[#2C5F2E] bg-[#2C5F2E]" : "border-gray-300"}`}>
+                      <div className={`w-4 h-4 rounded-full border-2 flex-shrink-0 ${paymentMethod === "invoice" ? "border-[#CC0000] bg-[#CC0000]" : "border-[#555]"}`}>
                         {paymentMethod === "invoice" && <div className="w-2 h-2 bg-white rounded-full mx-auto mt-0.5" />}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="font-semibold text-sm text-gray-900">Kauf auf Rechnung & Vorkasse</p>
-                        <p className="text-xs text-gray-500">Nach Abschluss der Bestellung wird der Verkäufer Sie so bald wie möglich per E-Mail oder Telefon kontaktieren, um die Bestellung abzuschließen.</p>
+                        <p className="font-semibold text-sm text-[#DDD]">Kauf auf Rechnung & Vorkasse</p>
+                        <p className="text-xs text-[#777]">Nach Abschluss der Bestellung wird der Verkäufer Sie so bald wie möglich per E-Mail oder Telefon kontaktieren, um die Bestellung abzuschließen.</p>
                       </div>
-                      <Landmark className="w-6 h-6 text-gray-400 flex-shrink-0" />
+                      <Landmark className="w-6 h-6 text-[#555] flex-shrink-0" />
                     </div>
                   )}
 
@@ -2302,25 +2308,25 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
                 {paymentMethod === "invoice" && (
                   <>
                     {paySettings.bank_iban && (paySettings.enable_paypal || paySettings.enable_stripe || paySettings.enable_twint) && (
-                      <div className="mb-4 border border-gray-200 rounded-xl overflow-hidden">
-                        <div className="bg-gray-50 px-4 py-2 border-b border-gray-200">
-                          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Bankverbindung</p>
+                      <div className="mb-4 border border-[#2A2A2A] rounded-xl overflow-hidden">
+                        <div className="bg-[#1A1A1A] px-4 py-2 border-b border-[#2A2A2A]">
+                          <p className="text-xs font-semibold text-[#555] uppercase tracking-wide">Bankverbindung</p>
                         </div>
                         <div className="px-4 py-3 space-y-2">
                           <div className="flex justify-between items-center">
-                            <span className="text-xs text-gray-500">IBAN</span>
-                            <span className="text-sm font-mono font-semibold text-gray-800">{paySettings.bank_iban}</span>
+                            <span className="text-xs text-[#555]">IBAN</span>
+                            <span className="text-sm font-mono font-semibold text-[#DDD]">{paySettings.bank_iban}</span>
                           </div>
                           {paySettings.bank_holder && (
                             <div className="flex justify-between items-center">
-                              <span className="text-xs text-gray-500">Kontoinhaber</span>
-                              <span className="text-sm font-semibold text-gray-800">{paySettings.bank_holder}</span>
+                              <span className="text-xs text-[#555]">Kontoinhaber</span>
+                              <span className="text-sm font-semibold text-[#DDD]">{paySettings.bank_holder}</span>
                             </div>
                           )}
                           {paySettings.bank_name && (
                             <div className="flex justify-between items-center">
-                              <span className="text-xs text-gray-500">Bank</span>
-                              <span className="text-sm text-gray-700">{paySettings.bank_name}</span>
+                              <span className="text-xs text-[#555]">Bank</span>
+                              <span className="text-sm text-[#999]">{paySettings.bank_name}</span>
                             </div>
                           )}
                         </div>
@@ -2332,7 +2338,7 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
                     <Button
                       onClick={handleInvoicePayment}
                       disabled={isSubmitting}
-                      className="w-full min-h-14 h-auto py-3 text-base font-bold bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white shadow-xl transition-all duration-300"
+                      className="w-full min-h-14 h-auto py-3 text-base font-bold bg-[#CC0000] hover:bg-[#AA0000] text-white shadow-xl transition-all duration-300"
                     >
                       {isSubmitting ? <><div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>Verarbeitung...</> : `Bestellung abschließen · ${getFinalTotal().toFixed(2)} CHF`}
                     </Button>
@@ -2426,7 +2432,7 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
                   </div>
                 )}
 
-                <p className="text-xs text-gray-500 mt-4 text-center">
+                <p className="text-xs text-[#555] mt-4 text-center">
                   Mit Ihrer Bestellung akzeptieren Sie unsere AGB und Datenschutzbestimmungen.
                 </p>
               </CardContent>
@@ -2436,10 +2442,10 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
 
         {/* Password Reset Modal */}
         <Dialog open={showPasswordReset} onOpenChange={setShowPasswordReset}>
-          <DialogContent className="sm:max-w-md">
+          <DialogContent className="sm:max-w-md bg-[#141414] border-[#2A2A2A] text-white">
             <DialogHeader>
               <DialogTitle className="flex items-center">
-                <KeyRound className="w-5 h-5 mr-2 text-[#2C5F2E]" />
+                <KeyRound className="w-5 h-5 mr-2 text-[#CC0000]" />
                 Passwort zurücksetzen
               </DialogTitle>
               <DialogDescription>
@@ -2451,13 +2457,13 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
               <div>
                 <Label htmlFor="resetEmail">E-Mail-Adresse *</Label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[#555]" />
                   <Input
                     id="resetEmail"
                     type="email"
                     value={resetEmail}
                     onChange={(e) => setResetEmail(e.target.value)}
-                    className={`pl-10 ${resetErrors.email ? "border-red-500" : ""}`}
+                    className={`pl-10 bg-[#1A1A1A] border-[#333] text-[#DDD] ${resetErrors.email ? "border-red-500" : ""}`}
                     placeholder="ihre@email.com"
                     disabled={isResettingPassword}
                   />
@@ -2491,9 +2497,9 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
               )}
 
               {/* Info Box */}
-              <div className="bg-[#F0F9F0] border border-[#2C5F2E]/20 rounded-xl p-4">
-                <h4 className="text-[#2C5F2E] font-medium mb-2">ℹ️ Wichtige Hinweise:</h4>
-                <ul className="text-[#2C5F2E]/80 text-sm space-y-1">
+              <div className="bg-[#1A1A1A] border border-[#CC0000]/20 rounded-xl p-4">
+                <h4 className="text-[#CC0000] font-medium mb-2">ℹ️ Wichtige Hinweise:</h4>
+                <ul className="text-[#CC0000]/80 text-sm space-y-1">
                   <li>• Sie erhalten ein neues 8-stelliges Passwort per E-Mail</li>
                   <li>• Melden Sie sich sofort mit dem neuen Passwort an</li>
                   <li>• Ändern Sie das Passwort nach der Anmeldung in Ihrem Profil</li>
@@ -2506,7 +2512,7 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
                 <Button
                   onClick={handlePasswordReset}
                   disabled={isResettingPassword || !resetEmail.trim() || resetStatus === "success"}
-                  className="flex-1 bg-[#2C5F2E] hover:bg-[#1A4520] text-white rounded-xl"
+                  className="flex-1 bg-[#CC0000] hover:bg-[#AA0000] text-white rounded-xl"
                 >
                   {isResettingPassword ? (
                     <>
@@ -2550,17 +2556,17 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
 
       {/* ── Payment footer strip ── */}
       {paySettings && (paySettings.enable_invoice || paySettings.enable_stripe || paySettings.enable_twint || paySettings.enable_paypal) && (
-        <div className="border-t border-[#E0E0E0] py-5 bg-white mt-8">
+        <div className="border-t border-[#1E1E1E] py-5 bg-[#0D0D0D] mt-8">
           <div className="container mx-auto px-4 max-w-7xl">
             <div className="flex flex-wrap items-center justify-center gap-3">
-              <div className="flex items-center gap-1.5 pr-4 border-r border-[#E0E0E0]">
-                <Shield className="w-4 h-4 text-[#2C5F2E]" />
+              <div className="flex items-center gap-1.5 pr-4 border-r border-[#1E1E1E]">
+                <Shield className="w-4 h-4 text-[#CC0000]" />
                 <span className="text-[11px] font-semibold text-[#555] tracking-widest uppercase">Sichere Zahlung</span>
               </div>
               {paySettings.enable_invoice && (
-                <div className="h-9 px-4 rounded-lg bg-[#F5F5F5] border border-[#E0E0E0] flex items-center gap-2 shadow-sm">
+                <div className="h-9 px-4 rounded-lg bg-[#1A1A1A] border border-[#2A2A2A] flex items-center gap-2 shadow-sm">
                   <span className="text-lg">🏦</span>
-                  <span className="text-[11px] font-bold text-[#444] tracking-tight">Rechnung</span>
+                  <span className="text-[11px] font-bold text-[#DDD] tracking-tight">Rechnung</span>
                 </div>
               )}
               {paySettings.enable_twint && (
@@ -2573,15 +2579,15 @@ export function CheckoutPage({ cart, onBackToStore, onClearCart, onAddToCart, on
                   <div className="h-9 px-5 rounded-lg bg-[#1A1F71] flex items-center shadow-sm">
                     <span className="font-black text-white text-base italic tracking-tight">VISA</span>
                   </div>
-                  <div className="h-9 px-4 rounded-lg bg-white border border-[#E0E0E0] flex items-center gap-1 shadow-sm">
+                  <div className="h-9 px-4 rounded-lg bg-[#1A1A1A] border border-[#2A2A2A] flex items-center gap-1 shadow-sm">
                     <div className="w-5 h-5 rounded-full bg-[#EB001B] opacity-90" />
                     <div className="w-5 h-5 rounded-full bg-[#F79E1B] opacity-90 -ml-2" />
-                    <span className="text-[11px] font-bold text-[#333] ml-1.5 tracking-tight">Mastercard</span>
+                    <span className="text-[11px] font-bold text-[#DDD] ml-1.5 tracking-tight">Mastercard</span>
                   </div>
                 </>
               )}
               {paySettings.enable_paypal && (
-                <div className="h-9 px-3 rounded-lg bg-white border border-[#E0E0E0] flex items-center shadow-sm">
+                <div className="h-9 px-3 rounded-lg bg-[#1A1A1A] border border-[#2A2A2A] flex items-center shadow-sm">
                   <img src="/0014294_paypal-express-payment-plugin.png" alt="PayPal" className="h-7 w-auto object-contain" />
                 </div>
               )}

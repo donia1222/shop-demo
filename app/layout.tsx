@@ -6,9 +6,9 @@ import { DemoBanner } from '@/components/demo-banner'
 
 
 export const metadata: Metadata = {
-  title: 'US - Fishing & Huntingshop',
-  description: 'Ihr Spezialist für Jagd- und Angelausrüstung. Premium Outdoor-Ausrüstung zu fairen Preisen.',
-  generator: '9745 Sevelen',
+  title: 'Hot-Sauce Shop — Scharfe Saucen · Schweiz',
+  description: 'Ihr Schweizer Spezialist für Hot Sauces, Chilisaucen & Gewürze aus aller Welt. Über 200 Saucen — von mild bis extrem scharf. Schnelle Lieferung in der Schweiz.',
+  generator: '9475 Sevelen',
   icons: {
     icon: '/favicon.png',
     apple: '/icon-192x192.png',
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  themeColor: '#2C5F2E',
+  themeColor: '#CC0000',
 }
 
 

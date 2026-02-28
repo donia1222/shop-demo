@@ -102,49 +102,49 @@ export default function GalleryPage() {
   }, [])
 
   return (
-    <div className="min-h-screen bg-[#F4F4F5]">
+    <div className="min-h-screen bg-[#0A0A0A]">
 
       {/* Header */}
-      <div className="bg-white border-b border-[#E0E0E0] sticky top-0 z-30 shadow-sm">
+      <div className="bg-[#0D0D0D] border-b border-[#1E1E1E] sticky top-0 z-30 shadow-sm">
         <div className="max-w-6xl mx-auto px-4 h-20 flex items-center gap-3">
           {/* Mobile: hamburger menu */}
           <Sheet>
             <SheetTrigger asChild>
-              <button className="sm:hidden p-2 border border-[#E0E0E0] rounded hover:bg-[#F5F5F5] flex-shrink-0 focus:outline-none">
-                <Menu className="w-5 h-5 text-[#333]" />
+              <button className="sm:hidden p-2 border border-[#2A2A2A] rounded hover:bg-[#1A1A1A] flex-shrink-0 focus:outline-none">
+                <Menu className="w-5 h-5 text-[#DDD]" />
               </button>
             </SheetTrigger>
-            <SheetContent side="left" className="bg-white border-r border-gray-100 w-full sm:w-72 flex flex-col p-0 shadow-2xl h-full">
+            <SheetContent side="left" className="bg-[#0D0D0D] border-r border-[#1E1E1E] w-full sm:w-72 flex flex-col p-0 shadow-2xl h-full">
               <SheetTitle className="sr-only">Navigation</SheetTitle>
-              <div className="flex items-center justify-between p-4 pr-16 border-b border-[#E0E0E0] flex-shrink-0">
+              <div className="flex items-center justify-between p-4 pr-16 border-b border-[#1E1E1E] flex-shrink-0">
                 <div className="flex items-center gap-2">
                   <img src="/Security_n.png" alt="Logo" className="h-14 w-auto object-contain" />
                   <span className="leading-tight">
                     <span style={{ fontFamily: 'Impact, Arial Narrow, sans-serif', fontStyle: 'italic', fontWeight: 900, color: '#CC0000', fontSize: '0.9rem' }}>US-</span>
-                    <span style={{ fontFamily: "'Rubik Dirt', sans-serif", color: '#1A1A1A', fontSize: '0.8rem' }}> FISHING &amp;<br />HUNTINGSHOP</span>
+                    <span style={{ fontFamily: "'Rubik Dirt', sans-serif", color: '#DDD', fontSize: '0.8rem' }}> FISHING &amp;<br />HUNTINGSHOP</span>
                   </span>
                 </div>
                 <div className="flex items-center gap-1">
                   <div className="[&_span]:hidden flex items-center">
                     <LoginAuth onLoginSuccess={() => {}} onLogout={() => {}} onShowProfile={() => router.push("/profile")} isLightSection={true} variant="button" />
                   </div>
-                  <button onClick={() => router.push("/shop")} className="relative p-2 rounded-xl hover:bg-[#F5F5F5] text-[#555]">
+                  <button onClick={() => router.push("/shop")} className="relative p-2 rounded-xl hover:bg-[#1A1A1A] text-[#999]">
                     <ShoppingCart className="w-5 h-5" />
                   </button>
                 </div>
               </div>
               <nav className="p-4 space-y-1 flex-1 overflow-y-auto">
-                <button onClick={() => router.push("/")} className="w-full text-left px-3 py-2.5 text-sm rounded hover:bg-[#F5F5F5] text-[#333] font-medium">Home</button>
-                <button onClick={() => router.push("/shop")} className="w-full text-left px-3 py-2.5 text-sm rounded hover:bg-[#F5F5F5] text-[#333] font-medium">Alle Produkte</button>
+                <button onClick={() => router.push("/")} className="w-full text-left px-3 py-2.5 text-sm rounded hover:bg-[#1A1A1A] text-[#DDD] font-medium">Home</button>
+                <button onClick={() => router.push("/shop")} className="w-full text-left px-3 py-2.5 text-sm rounded hover:bg-[#1A1A1A] text-[#DDD] font-medium">Alle Produkte</button>
                 {categories.map(cat => (
-                  <button key={cat.slug} onClick={() => router.push(`/shop?cat=${encodeURIComponent(cat.name)}`)} className="w-full text-left px-3 py-2.5 text-sm rounded hover:bg-[#F5F5F5] text-[#333] font-medium">
+                  <button key={cat.slug} onClick={() => router.push(`/shop?cat=${encodeURIComponent(cat.name)}`)} className="w-full text-left px-3 py-2.5 text-sm rounded hover:bg-[#1A1A1A] text-[#DDD] font-medium">
                     {cat.name.replace(/\s*\d{4}$/, "")}
                   </button>
                 ))}
-                <div className="pt-2 mt-1 border-t border-[#E0E0E0]">
+                <div className="pt-2 mt-1 border-t border-[#222]">
                   <div className="flex">
-                    <button onClick={() => router.push("/blog")} className="flex items-center gap-1.5 px-3 py-2.5 text-sm rounded hover:bg-[#F5F5F5] text-[#2C5F2E] font-semibold"><Newspaper className="w-4 h-4 shrink-0" />Blog</button>
-                    <button onClick={() => router.push("/gallery")} className="flex items-center gap-1.5 px-3 py-2.5 text-sm rounded font-semibold bg-gray-100 text-[#2C5F2E]"><Images className="w-4 h-4 shrink-0" />Gallery</button>
+                    <button onClick={() => router.push("/blog")} className="flex items-center gap-1.5 px-3 py-2.5 text-sm rounded hover:bg-[#1A1A1A] text-[#CC0000] font-semibold"><Newspaper className="w-4 h-4 shrink-0" />Blog</button>
+                    <button onClick={() => router.push("/gallery")} className="flex items-center gap-1.5 px-3 py-2.5 text-sm rounded font-semibold bg-[#1A1A1A] text-[#CC0000]"><Images className="w-4 h-4 shrink-0" />Gallery</button>
                     <button
                       onClick={() => {
                         const imageUrl = "https://online-shop-seven-delta.vercel.app/Security_n.png"
@@ -159,10 +159,10 @@ export default function GalleryPage() {
                           const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([vcard], { type: "text/vcard" })); a.download = "US-Fishing-Huntingshop.vcf"; document.body.appendChild(a); a.click(); document.body.removeChild(a)
                         })
                       }}
-                      className="flex items-center gap-1.5 px-3 py-2.5 text-sm rounded hover:bg-[#F5F5F5] text-[#2C5F2E] font-semibold"
+                      className="flex items-center gap-1.5 px-3 py-2.5 text-sm rounded hover:bg-[#1A1A1A] text-[#CC0000] font-semibold"
                     ><Download className="w-4 h-4 shrink-0" />VCard</button>
                   </div>
-                  <p className="px-3 pt-3 pb-1 text-sm text-[#AAA] tracking-wide">Jagd · Angeln · Outdoor · Schweiz🇨🇭</p>
+                  <p className="px-3 pt-3 pb-1 text-sm text-[#555] tracking-wide">Jagd · Angeln · Outdoor · Schweiz🇨🇭</p>
                 </div>
               </nav>
             </SheetContent>
@@ -170,19 +170,19 @@ export default function GalleryPage() {
           {/* Desktop: back button */}
           <button
             onClick={() => router.push("/")}
-            className="hidden sm:flex w-9 h-9 items-center justify-center rounded-full border-2 border-[#2C5F2E]/30 text-[#2C5F2E] hover:bg-[#2C5F2E] hover:text-white hover:border-[#2C5F2E] transition-all flex-shrink-0"
+            className="hidden sm:flex w-9 h-9 items-center justify-center rounded-full border-2 border-[#CC0000]/30 text-[#CC0000] hover:bg-[#CC0000] hover:text-white hover:border-[#CC0000] transition-all flex-shrink-0"
           >
             <ArrowLeft className="w-4 h-4" />
           </button>
-          <div className="w-px h-6 bg-[#E5E5E5]" />
+          <div className="w-px h-6 bg-[#2A2A2A]" />
           <img src="/Security_n.png" alt="Logo" className="h-12 w-auto object-contain" />
-          <span className="sm:hidden" style={{ fontFamily: "'Rubik Dirt', sans-serif", fontSize: '1.1rem', color: '#333333' }}>Impressionen</span>
+          <span className="sm:hidden" style={{ fontFamily: "'Rubik Dirt', sans-serif", fontSize: '1.1rem', color: '#DDD' }}>Impressionen</span>
           <div className="hidden sm:block">
             <div className="leading-tight">
               <span style={{ fontFamily: 'Impact, Arial Narrow, sans-serif', fontStyle: 'italic', fontWeight: 900, color: '#CC0000', fontSize: '1rem' }}>US-</span>
-              <span style={{ fontFamily: "'Rubik Dirt', sans-serif", color: '#1A1A1A', fontSize: '0.9rem' }}> FISHING &amp; HUNTINGSHOP</span>
+              <span style={{ fontFamily: "'Rubik Dirt', sans-serif", color: '#DDD', fontSize: '0.9rem' }}> FISHING &amp; HUNTINGSHOP</span>
             </div>
-            <div className="text-[11px] text-[#888] uppercase tracking-widest mt-0.5">Bilder · Impressionen · Outdoor</div>
+            <div className="text-[11px] text-[#777] uppercase tracking-widest mt-0.5">Bilder · Impressionen · Outdoor</div>
           </div>
         </div>
       </div>
@@ -190,10 +190,10 @@ export default function GalleryPage() {
       {/* Page title */}
       <div className="max-w-6xl mx-auto px-4 pt-10 pb-2">
         <div className="flex items-center gap-3 mb-1">
-          <div className="w-1 h-7 bg-[#2C5F2E] rounded-full" />
-          <h1 className="text-3xl font-black text-[#1A1A1A] tracking-tight">Galerie</h1>
+          <div className="w-1 h-7 bg-[#CC0000] rounded-full" />
+          <h1 className="text-3xl font-black text-white tracking-tight">Galerie</h1>
         </div>
-        <p className="text-sm text-[#888] ml-4">Eindrücke aus unserem Shop, Veranstaltungen und Outdoor-Erlebnisse.</p>
+        <p className="text-sm text-[#777] ml-4">Eindrücke aus unserem Shop, Veranstaltungen und Outdoor-Erlebnisse.</p>
       </div>
 
       <div className="max-w-6xl mx-auto px-4 py-8">
@@ -202,15 +202,15 @@ export default function GalleryPage() {
         {loading && (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
             {Array.from({ length: 8 }).map((_, i) => (
-              <div key={i} className="aspect-square bg-white rounded-2xl border border-[#EBEBEB] animate-pulse" />
+              <div key={i} className="aspect-square bg-[#141414] rounded-2xl border border-[#2A2A2A] animate-pulse" />
             ))}
           </div>
         )}
 
         {!loading && images.length === 0 && (
           <div className="text-center py-32">
-            <Images className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-            <p className="text-[#BBB] font-semibold text-lg">Noch keine Bilder vorhanden.</p>
+            <Images className="w-16 h-16 text-[#555] mx-auto mb-4" />
+            <p className="text-[#555] font-semibold text-lg">Noch keine Bilder vorhanden.</p>
           </div>
         )}
 
@@ -220,7 +220,7 @@ export default function GalleryPage() {
               <div
                 key={img.id}
                 onClick={() => setLightboxIndex(i)}
-                className="break-inside-avoid bg-white rounded-2xl overflow-hidden border border-[#EBEBEB] shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 cursor-zoom-in group"
+                className="break-inside-avoid bg-[#141414] rounded-2xl overflow-hidden border border-[#2A2A2A] shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 cursor-zoom-in group"
               >
                 <div className="overflow-hidden">
                   <img
@@ -231,7 +231,7 @@ export default function GalleryPage() {
                 </div>
                 {img.title && (
                   <div className="px-3 py-2.5">
-                    <p className="text-xs font-semibold text-[#444] leading-snug">{img.title}</p>
+                    <p className="text-xs font-semibold text-[#999] leading-snug">{img.title}</p>
                   </div>
                 )}
               </div>

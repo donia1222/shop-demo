@@ -343,12 +343,12 @@ function PremiumHotSauceStoreInner() {
 
   // 🏪 Renderizar página principal del store
   return (
-    <div className="bg-white">
+    <div className="bg-[#0A0A0A]">
 
       {/* 📢 Announcement modal */}
       {announcement && (
         <Dialog open={isAnnOpen} onOpenChange={open => { if (!open) handleCloseAnnouncement() }}>
-          <DialogContent hideClose className="max-w-md bg-white p-0 overflow-hidden rounded-2xl border-0 shadow-2xl">
+          <DialogContent hideClose className="max-w-md bg-[#141414] p-0 overflow-hidden rounded-2xl border border-[#2A2A2A] shadow-2xl">
             {/* Close button */}
             <button
               onClick={handleCloseAnnouncement}
@@ -373,9 +373,9 @@ function PremiumHotSauceStoreInner() {
 
             {/* Content */}
             <div className="p-6">
-              <h2 className="text-xl font-black text-[#1A1A1A] leading-tight">{announcement.title}</h2>
+              <h2 className="text-xl font-black text-white leading-tight">{announcement.title}</h2>
               {announcement.subtitle && (
-                <p className="text-[#666] mt-2 text-sm leading-relaxed">{announcement.subtitle}</p>
+                <p className="text-[#999] mt-2 text-sm leading-relaxed">{announcement.subtitle}</p>
               )}
 
               {announcement.type === 'product' && announcement.product_url && (
@@ -384,7 +384,7 @@ function PremiumHotSauceStoreInner() {
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={handleCloseAnnouncement}
-                  className="mt-4 w-full flex items-center justify-center gap-2 bg-[#2C5F2E] hover:bg-[#1A4520] text-white font-bold py-3 px-6 rounded-xl transition-colors"
+                  className="mt-4 w-full flex items-center justify-center gap-2 bg-[#CC0000] hover:bg-[#AA0000] text-white font-bold py-3 px-6 rounded-xl transition-colors"
                 >
                   Produkt ansehen →
                 </a>
@@ -412,7 +412,7 @@ function PremiumHotSauceStoreInner() {
 
 
 
-        <Bot/>
+      
 
 
       <FadeSection>

@@ -83,22 +83,22 @@ export function RecommendedProducts() {
   const visibleProducts = products.filter(p => !failedIds.has(p.id)).slice(0, 12)
 
   if (loading) return (
-    <section className="bg-white border-t border-[#E0E0E0] py-12">
+    <section className="bg-[#0D0D0D] border-t border-[#1A1A1A] py-12">
       <div className="container mx-auto px-4">
         <div className="flex items-end justify-between mb-8">
           <div className="space-y-2 animate-pulse">
-            <div className="h-5 w-24 bg-gray-100 rounded-full" />
-            <div className="h-6 w-52 bg-gray-200 rounded-full" />
-            <div className="h-4 w-64 bg-gray-100 rounded-full" />
+            <div className="h-5 w-24 bg-[#1A1A1A] rounded-full" />
+            <div className="h-6 w-52 bg-[#222] rounded-full" />
+            <div className="h-4 w-64 bg-[#1A1A1A] rounded-full" />
           </div>
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 animate-pulse">
           {Array.from({ length: 12 }).map((_, i) => (
             <div key={i}>
-              <div className="aspect-square bg-gray-100 rounded-2xl mb-3" />
-              <div className="h-3 bg-gray-100 rounded-full w-5/6 mb-1" />
-              <div className="h-3 bg-gray-100 rounded-full w-3/4 mb-1" />
-              <div className="h-4 bg-gray-200 rounded-full w-1/2" />
+              <div className="aspect-square bg-[#1A1A1A] rounded-2xl mb-3" />
+              <div className="h-3 bg-[#1A1A1A] rounded-full w-5/6 mb-1" />
+              <div className="h-3 bg-[#1A1A1A] rounded-full w-3/4 mb-1" />
+              <div className="h-4 bg-[#222] rounded-full w-1/2" />
             </div>
           ))}
         </div>
@@ -109,22 +109,22 @@ export function RecommendedProducts() {
   if (visibleProducts.length === 0) return null
 
   return (
-    <section className="bg-white border-t border-[#E0E0E0] py-12">
+    <section className="bg-[#0D0D0D] border-t border-[#1A1A1A] py-12">
       <div className="container mx-auto px-4">
 
         {/* Header */}
         <div className="flex items-end justify-between mb-8">
           <div>
-            <div className="inline-flex items-center gap-1.5 bg-[#2C5F2E]/8 text-[#2C5F2E] text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-3">
-              <span className="w-1.5 h-1.5 bg-[#2C5F2E] rounded-full" />
+            <div className="inline-flex items-center gap-1.5 bg-[#CC0000]/10 text-[#FF4500] text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-3">
+              <span className="w-1.5 h-1.5 bg-[#FF4500] rounded-full" />
               Empfohlen für dich
             </div>
-            <h2 className="text-2xl font-black text-[#1A1A1A] tracking-tight">Empfohlene Produkte</h2>
-            <p className="text-sm text-[#888] mt-1">Handverlesene Auswahl aus unserem Sortiment.</p>
+            <h2 className="text-2xl font-black text-white tracking-tight">Empfohlene Produkte</h2>
+            <p className="text-sm text-[#666] mt-1">Handverlesene Auswahl aus unserem Sortiment.</p>
           </div>
           <button
             onClick={() => router.push("/shop")}
-            className="hidden sm:flex items-center gap-1.5 text-sm text-[#2C5F2E] font-semibold hover:gap-3 transition-all duration-200 whitespace-nowrap"
+            className="hidden sm:flex items-center gap-1.5 text-sm text-[#CC0000] font-semibold hover:gap-3 transition-all duration-200 whitespace-nowrap"
           >
             Alle Produkte <span>→</span>
           </button>
@@ -150,7 +150,7 @@ export function RecommendedProducts() {
                 className="cursor-pointer group"
               >
                 {/* Image */}
-                <div className="relative bg-[#F8F8F8] rounded-2xl overflow-hidden aspect-square mb-3 border border-[#EFEFEF] group-hover:shadow-lg group-hover:-translate-y-1 transition-all duration-300">
+                <div className="relative bg-[#1A1A1A] rounded-2xl overflow-hidden aspect-square mb-3 border border-[#2A2A2A] group-hover:shadow-[0_8px_30px_rgba(204,0,0,0.2)] group-hover:-translate-y-1 transition-all duration-300">
                   <ProductImage
                     src={product.image_url}
                     candidates={product.image_url_candidates}
@@ -175,24 +175,24 @@ export function RecommendedProducts() {
 
                   {/* Hover CTA */}
                   <div className="absolute inset-0 flex items-end justify-center pb-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                    <span className="bg-white text-[#1A1A1A] text-xs font-bold px-3 py-1.5 rounded-full shadow-md">
+                    <span className="bg-[#CC0000] text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-md">
                       Ansehen →
                     </span>
                   </div>
                 </div>
 
                 {/* Name */}
-                <p className="text-xs font-semibold text-[#1A1A1A] leading-tight line-clamp-2 mb-1.5 group-hover:text-[#2C5F2E] transition-colors">
+                <p className="text-xs font-semibold text-[#DDD] leading-tight line-clamp-2 mb-1.5 group-hover:text-[#FF4500] transition-colors">
                   {product.name}
                 </p>
 
                 {/* Price */}
                 <div className="flex items-baseline gap-1.5 flex-wrap">
-                  <span className="text-sm font-black text-[#1A1A1A]">
+                  <span className="text-sm font-black text-white">
                     CHF {product.price.toFixed(2)}
                   </span>
                   {hasDiscount && (
-                    <span className="text-[11px] text-[#BBB] line-through">
+                    <span className="text-[11px] text-[#555] line-through">
                       CHF {product.original_price!.toFixed(2)}
                     </span>
                   )}

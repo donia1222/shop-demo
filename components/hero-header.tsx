@@ -125,7 +125,7 @@ export function HeroHeader({ onCartOpen, cartCount = 0 }: HeroHeaderProps) {
       ═══════════════════════════════════════════ */}
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          scrolled ? "bg-white border-b border-[#E0E0E0] shadow-sm" : "bg-transparent"
+          scrolled ? "bg-[#0D0D0D]/95 backdrop-blur-md border-b border-[#1E1E1E] shadow-[0_4px_24px_rgba(0,0,0,0.7)]" : "bg-transparent"
         }`}
       >
         {/* Main row */}
@@ -140,30 +140,30 @@ export function HeroHeader({ onCartOpen, cartCount = 0 }: HeroHeaderProps) {
                 <button
                   className={`lg:hidden p-2 border rounded transition-colors flex-shrink-0 ${
                     scrolled
-                      ? "border-[#E0E0E0] hover:bg-[#F5F5F5]"
+                      ? "border-[#333] hover:bg-[#1A1A1A]"
                       : "border-white/30 hover:bg-white/10"
                   }`}
                 >
                   <Menu
                     className={`w-5 h-5 transition-colors duration-300 ${
-                      scrolled ? "text-[#333]" : "text-white"
+                      scrolled ? "text-[#DDD]" : "text-white"
                     }`}
                   />
                 </button>
               </SheetTrigger>
               <SheetContent
                 side="left"
-                className="bg-white border-r border-gray-100 w-full sm:w-72 flex flex-col p-0 shadow-2xl h-full"
+                className="bg-[#0D0D0D] border-r border-[#1E1E1E] w-full sm:w-72 flex flex-col p-0 shadow-2xl h-full"
               >
                 <SheetTitle className="sr-only">Navigation</SheetTitle>
-                <div className="flex items-center justify-between p-4 pr-16 border-b border-[#E0E0E0] flex-shrink-0">
+                <div className="flex items-center justify-between p-4 pr-16 border-b border-[#1E1E1E] flex-shrink-0">
                   <div className="flex items-center gap-2">
                     <span className="text-3xl leading-none">🌶️</span>
                     <span className="leading-tight">
                       <span style={{ fontFamily: "Impact, Arial Narrow, sans-serif", fontStyle: "italic", fontWeight: 900, color: "#CC0000", fontSize: "0.9rem" }}>
                         HOT-SAUCE
                       </span>
-                      <span style={{ fontFamily: "Impact, Arial Narrow, sans-serif", color: "#1A1A1A", fontSize: "0.8rem" }}>
+                      <span style={{ fontFamily: "Impact, Arial Narrow, sans-serif", color: "#CCC", fontSize: "0.8rem" }}>
                         <br />SHOP
                       </span>
                     </span>
@@ -180,7 +180,7 @@ export function HeroHeader({ onCartOpen, cartCount = 0 }: HeroHeaderProps) {
                     </div>
                     <button
                       onClick={() => { onCartOpen?.(); setIsMenuOpen(false) }}
-                      className="relative p-2 rounded-xl hover:bg-[#F5F5F5] text-[#555]"
+                      className="relative p-2 rounded-xl hover:bg-[#1A1A1A] text-[#AAA]"
                     >
                       <ShoppingCart className="w-5 h-5" />
                       {cartCount > 0 && (
@@ -195,7 +195,7 @@ export function HeroHeader({ onCartOpen, cartCount = 0 }: HeroHeaderProps) {
                 <nav className="p-4 space-y-1 flex-1 overflow-y-auto">
                   <button
                     onClick={() => { router.push("/"); setIsMenuOpen(false) }}
-                    className="w-full text-left px-3 py-2.5 text-sm rounded hover:bg-[#F5F5F5] text-[#333] font-medium"
+                    className="w-full text-left px-3 py-2.5 text-sm rounded hover:bg-[#1A1A1A] text-[#DDD] font-medium"
                   >
                     Home
                   </button>
@@ -203,33 +203,33 @@ export function HeroHeader({ onCartOpen, cartCount = 0 }: HeroHeaderProps) {
                     <button
                       key={i}
                       onClick={() => { router.push(item.href); setIsMenuOpen(false) }}
-                      className="w-full text-left px-3 py-2.5 text-sm rounded hover:bg-[#F5F5F5] text-[#333] font-medium"
+                      className="w-full text-left px-3 py-2.5 text-sm rounded hover:bg-[#1A1A1A] text-[#DDD] font-medium"
                     >
                       {item.label}
                     </button>
                   ))}
-                  <div className="pt-2 mt-1 border-t border-[#E0E0E0]">
+                  <div className="pt-2 mt-1 border-t border-[#1E1E1E]">
                     <div className="flex flex-wrap">
                       <button
                         onClick={() => { router.push("/blog"); setIsMenuOpen(false) }}
-                        className="flex items-center gap-1.5 px-3 py-2.5 text-sm rounded hover:bg-[#F5F5F5] text-[#CC0000] font-semibold"
+                        className="flex items-center gap-1.5 px-3 py-2.5 text-sm rounded hover:bg-[#1A1A1A] text-[#CC0000] font-semibold"
                       >
                         <Newspaper className="w-4 h-4 shrink-0" /> Blog
                       </button>
                       <button
                         onClick={() => { router.push("/gallery"); setIsMenuOpen(false) }}
-                        className="flex items-center gap-1.5 px-3 py-2.5 text-sm rounded hover:bg-[#F5F5F5] text-[#CC0000] font-semibold"
+                        className="flex items-center gap-1.5 px-3 py-2.5 text-sm rounded hover:bg-[#1A1A1A] text-[#CC0000] font-semibold"
                       >
                         <Images className="w-4 h-4 shrink-0" /> Gallery
                       </button>
                       <button
                         onClick={downloadVcard}
-                        className="flex items-center gap-1.5 px-3 py-2.5 text-sm rounded hover:bg-[#F5F5F5] text-[#CC0000] font-semibold"
+                        className="flex items-center gap-1.5 px-3 py-2.5 text-sm rounded hover:bg-[#1A1A1A] text-[#CC0000] font-semibold"
                       >
                         <Download className="w-4 h-4 shrink-0" /> VCard
                       </button>
                     </div>
-                    <p className="px-3 pt-3 pb-1 text-sm text-[#AAA] tracking-wide">
+                    <p className="px-3 pt-3 pb-1 text-sm text-[#555] tracking-wide">
                       Scharfe Saucen · Schweiz 🇨🇭
                     </p>
                   </div>
@@ -249,7 +249,7 @@ export function HeroHeader({ onCartOpen, cartCount = 0 }: HeroHeaderProps) {
                     HOT-SAUCE
                   </span>
                   <span
-                    className={`transition-colors duration-300 ${scrolled ? "text-[#1A1A1A]" : "text-white"}`}
+                    className={`transition-colors duration-300 ${scrolled ? "text-[#DDD]" : "text-white"}`}
                     style={{ fontFamily: "Impact, Arial Narrow, sans-serif", fontWeight: 900, fontSize: "1.05rem" }}
                   >
                     {" "}SHOP
@@ -257,7 +257,7 @@ export function HeroHeader({ onCartOpen, cartCount = 0 }: HeroHeaderProps) {
                 </div>
                 <div
                   className={`text-xs tracking-widest uppercase mt-0.5 transition-colors duration-300 ${
-                    scrolled ? "text-[#666]" : "text-white/60"
+                    scrolled ? "text-[#555]" : "text-white/60"
                   }`}
                 >
                   Scharfe Saucen · Schweiz
@@ -276,7 +276,7 @@ export function HeroHeader({ onCartOpen, cartCount = 0 }: HeroHeaderProps) {
               <button
                 key={i}
                 onClick={() => router.push(item.href)}
-                className="px-3 py-1.5 text-sm font-medium text-[#333] hover:text-[#CC0000] whitespace-nowrap transition-colors"
+                className="px-3 py-1.5 text-sm font-medium text-[#CCC] hover:text-[#CC0000] whitespace-nowrap transition-colors"
               >
                 {item.label}
               </button>
@@ -437,14 +437,14 @@ export function HeroHeader({ onCartOpen, cartCount = 0 }: HeroHeaderProps) {
       {/* ═══════════════════════════════════════════
           BRANDS MARQUEE
       ═══════════════════════════════════════════ */}
-      <div className="bg-white border-b border-[#E0E0E0] py-8">
+      <div className="bg-[#0D0D0D] border-b border-[#1A1A1A] py-8">
         <div className="container mx-auto px-4 mb-5">
           <div className="flex items-center gap-4">
-            <div className="h-px flex-1 bg-gradient-to-l from-[#E0E0E0] to-transparent" />
-            <h2 className="text-xs font-black text-[#888] uppercase tracking-[0.18em] whitespace-nowrap">
+            <div className="h-px flex-1 bg-gradient-to-l from-[#222] to-transparent" />
+            <h2 className="text-xs font-black text-[#555] uppercase tracking-[0.18em] whitespace-nowrap">
               Unsere beliebtesten Marken
             </h2>
-            <div className="h-px flex-1 bg-gradient-to-r from-[#E0E0E0] to-transparent" />
+            <div className="h-px flex-1 bg-gradient-to-r from-[#222] to-transparent" />
           </div>
         </div>
         <div className="overflow-hidden w-full">
@@ -474,7 +474,7 @@ export function HeroHeader({ onCartOpen, cartCount = 0 }: HeroHeaderProps) {
               ].map((brand) => (
                 <div
                   key={`${copy}-${brand.name}`}
-                  className="flex-shrink-0 mx-[5px] px-4 py-2 rounded-full border border-[#EBEBEB] bg-white flex items-center gap-2.5 select-none"
+                  className="flex-shrink-0 mx-[5px] px-4 py-2 rounded-full border border-[#2A2A2A] bg-[#141414] flex items-center gap-2.5 select-none"
                 >
                   <img
                     src={`https://www.google.com/s2/favicons?domain=${brand.domain}&sz=64`}
@@ -493,7 +493,7 @@ export function HeroHeader({ onCartOpen, cartCount = 0 }: HeroHeaderProps) {
       {/* ═══════════════════════════════════════════
           TOP KATEGORIEN
       ═══════════════════════════════════════════ */}
-      <div id="spice-discovery" className="bg-white border-b border-[#E8E8E8] py-14">
+      <div id="spice-discovery" className="bg-[#0D0D0D] border-b border-[#1A1A1A] py-14">
         <div className="container mx-auto px-4">
 
           {/* Header */}
@@ -503,12 +503,12 @@ export function HeroHeader({ onCartOpen, cartCount = 0 }: HeroHeaderProps) {
                 <span className="w-6 h-0.5 bg-[#CC0000] rounded-full" />
                 <p className="text-[11px] font-bold uppercase tracking-widest text-[#CC0000]">Sortiment</p>
               </div>
-              <h2 className="text-3xl font-black text-[#1A1A1A] tracking-tight">Unsere Top Kategorien</h2>
-              <p className="text-sm text-[#999] mt-1.5">Entdecke die besten Saucen nach Kategorie.</p>
+              <h2 className="text-3xl font-black text-white tracking-tight">Unsere Top Kategorien</h2>
+              <p className="text-sm text-[#666] mt-1.5">Entdecke die besten Saucen nach Kategorie.</p>
             </div>
             <button
               onClick={() => router.push("/shop")}
-              className="hidden sm:inline-flex items-center gap-2 bg-[#F5F5F5] hover:bg-[#CC0000] hover:text-white text-[#1A1A1A] text-sm font-bold px-5 py-2.5 rounded-full transition-all duration-200"
+              className="hidden sm:inline-flex items-center gap-2 bg-[#1A1A1A] hover:bg-[#CC0000] hover:text-white text-[#CCC] text-sm font-bold px-5 py-2.5 rounded-full transition-all duration-200 border border-[#2A2A2A] hover:border-[#CC0000]"
             >
               Alle anzeigen <span>→</span>
             </button>
@@ -518,7 +518,7 @@ export function HeroHeader({ onCartOpen, cartCount = 0 }: HeroHeaderProps) {
           {categories.length === 0 && (
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               {Array.from({ length: 6 }).map((_, i) => (
-                <div key={i} className="rounded-3xl bg-[#F0F1F3] animate-pulse aspect-[4/3]" />
+                <div key={i} className="rounded-3xl bg-[#141414] animate-pulse aspect-[4/3]" />
               ))}
             </div>
           )}
@@ -615,7 +615,7 @@ export function HeroHeader({ onCartOpen, cartCount = 0 }: HeroHeaderProps) {
       {showScrollTop && (
         <button
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          className="fixed right-6 bottom-6 z-50 bg-white hover:bg-gray-50 text-gray-700 rounded-2xl p-3 shadow-xl border border-gray-200 transition-all hover:scale-110 active:scale-95"
+          className="fixed right-6 bottom-6 z-50 bg-[#1A1A1A] hover:bg-[#222] text-[#CCC] rounded-2xl p-3 shadow-xl border border-[#333] transition-all hover:scale-110 active:scale-95"
           aria-label="Nach oben scrollen"
         >
           <ArrowUp className="w-5 h-5" />

@@ -92,25 +92,25 @@ export function CategoryPreviewSection() {
   }, [])
 
   if (loading) return (
-    <div className="bg-[#F0F1F3] border-t border-[#E0E0E0] py-12">
+    <div className="bg-[#0D0D0D] border-t border-[#1A1A1A] py-12">
       <div className="container mx-auto px-4 space-y-6">
         {[0, 1].map(i => (
-          <div key={i} className="rounded-3xl overflow-hidden bg-white border border-[#EBEBEB] shadow-sm animate-pulse">
-            <div className="h-[280px] bg-gray-200" />
+          <div key={i} className="rounded-3xl overflow-hidden bg-[#141414] border border-[#2A2A2A] shadow-sm animate-pulse">
+            <div className="h-[280px] bg-[#222]" />
             <div className="p-5 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
               {Array.from({ length: 6 }).map((_, j) => (
-                <div key={j} className="rounded-2xl overflow-hidden border border-gray-100">
-                  <div className="aspect-square bg-gray-100" />
+                <div key={j} className="rounded-2xl overflow-hidden border border-[#2A2A2A]">
+                  <div className="aspect-square bg-[#1A1A1A]" />
                   <div className="p-3 space-y-2">
-                    <div className="h-3 bg-gray-100 rounded-full w-5/6" />
-                    <div className="h-3 bg-gray-100 rounded-full w-3/4" />
-                    <div className="h-4 bg-gray-200 rounded-full w-1/2" />
+                    <div className="h-3 bg-[#1A1A1A] rounded-full w-5/6" />
+                    <div className="h-3 bg-[#1A1A1A] rounded-full w-3/4" />
+                    <div className="h-4 bg-[#222] rounded-full w-1/2" />
                   </div>
                 </div>
               ))}
             </div>
             <div className="px-5 pb-5">
-              <div className="h-12 bg-gray-100 rounded-xl" />
+              <div className="h-12 bg-[#1A1A1A] rounded-xl" />
             </div>
           </div>
         ))}
@@ -129,14 +129,14 @@ export function CategoryPreviewSection() {
   if (sections.length === 0) return null
 
   return (
-    <div className="bg-[#F0F1F3] border-t border-[#E0E0E0] py-12">
+    <div className="bg-[#0D0D0D] border-t border-[#1A1A1A] py-12">
       <div className="container mx-auto px-4 space-y-6">
 
         {sections.map(({ label, cat, image, emoji, headline, accent, description, accentColor, overlayFrom, stats, ctaLabel, catParam, products: catProducts }) => {
           const visible = catProducts.filter(p => !failedIds.has(p.id)).slice(0, 6)
           if (visible.length === 0) return null
           return (
-            <div key={cat} className="rounded-3xl overflow-hidden bg-white border border-[#EBEBEB] shadow-md">
+            <div key={cat} className="rounded-3xl overflow-hidden bg-[#141414] border border-[#2A2A2A] shadow-md">
 
               {/* ── Banner ── */}
               <div className="relative h-[260px] sm:h-[380px] group overflow-hidden cursor-pointer"
@@ -194,9 +194,9 @@ export function CategoryPreviewSection() {
                     <div
                       key={product.id}
                       onClick={() => router.push(`/product/${product.id}`)}
-                      className={`group bg-white rounded-2xl overflow-hidden border border-[#EBEBEB] hover:border-[#D5D5D5] hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 cursor-pointer ${i >= 4 ? "hidden sm:block" : ""}`}
+                      className={`group bg-[#0D0D0D] rounded-2xl overflow-hidden border border-[#2A2A2A] hover:border-[#CC0000]/40 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 cursor-pointer ${i >= 4 ? "hidden sm:block" : ""}`}
                     >
-                      <div className="aspect-square bg-[#F8F8F8] overflow-hidden">
+                      <div className="aspect-square bg-[#1A1A1A] overflow-hidden">
                         {imgs.length > 0 ? (
                           <img
                             src={imgs[0]}
@@ -217,11 +217,11 @@ export function CategoryPreviewSection() {
                         )}
                       </div>
                       <div className="p-3 flex flex-col h-[72px]">
-                        <p className="text-xs font-semibold text-[#1A1A1A] line-clamp-2 leading-tight group-hover:text-[#CC0000] transition-colors flex-1">
+                        <p className="text-xs font-semibold text-[#DDD] line-clamp-2 leading-tight group-hover:text-[#CC0000] transition-colors flex-1">
                           {product.name}
                         </p>
                         {product.price > 0 && (
-                          <p className="text-sm font-black text-[#1A1A1A] mt-1">
+                          <p className="text-sm font-black text-white mt-1">
                             CHF {product.price.toFixed(2)}
                           </p>
                         )}

@@ -22,21 +22,21 @@ export function CookieBanner() {
 
   return (
     <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-[999] w-[calc(100%-2rem)] max-w-xl">
-      <div className="bg-white border border-gray-200 rounded-2xl shadow-lg px-5 py-4 flex items-center gap-4">
-        <p className="text-sm text-gray-600 flex-1">
+      <div className="bg-[#141414] border border-[#2A2A2A] rounded-2xl shadow-lg px-5 py-4 flex items-center gap-4 backdrop-blur-sm">
+        <p className="text-sm text-[#999] flex-1">
           Wir verwenden Cookies, um Ihr Erlebnis zu verbessern.{" "}
-          <span className="text-gray-400">Durch die weitere Nutzung stimmen Sie zu.</span>
+          <span className="text-[#666]">Durch die weitere Nutzung stimmen Sie zu.</span>
         </p>
         <Button
           onClick={accept}
           size="sm"
-          className="bg-[#2C5F2E] hover:bg-[#1A4520] text-white rounded-full px-4 flex-shrink-0"
+          className="bg-[#CC0000] hover:bg-[#AA0000] text-white rounded-full px-4 flex-shrink-0"
         >
           OK
         </Button>
         <button
           onClick={accept}
-          className="text-gray-400 hover:text-gray-600 flex-shrink-0"
+          className="text-[#555] hover:text-[#999] flex-shrink-0"
           aria-label="Schließen"
         >
           <X className="w-4 h-4" />
