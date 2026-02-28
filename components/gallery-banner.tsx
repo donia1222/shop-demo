@@ -16,11 +16,11 @@ export function GalleryBanner() {
           {/* Background image with overlay */}
           <div className="absolute inset-0">
             <img
-              src="/images/shop/46503497_763729157311247_9165108232799125504_ncopia.jpg"
+              src="/images/hot-sauce/gallery.jpg"
               alt=""
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-[#0A0A1F]/90 via-[#1A1A3A]/75 to-[#2E2C5F]/40" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#1A0000]/80 via-[#1A0000]/55 to-[#1A0000]/10" />
           </div>
 
           {/* Content */}
@@ -35,17 +35,17 @@ export function GalleryBanner() {
 
               <h2 className="text-3xl sm:text-4xl font-black text-white leading-tight tracking-tight mb-4">
                 Eindrücke aus unserem Shop<br className="hidden sm:block" />
-                <span className="text-[#8B8BFF]"> & Outdoor-Abenteuer</span>
+                <span className="text-[#CC0000]"> & scharfe Momente</span>
               </h2>
 
               <p className="text-white/75 text-base leading-relaxed max-w-xl">
-                Entdecke Bilder aus unserem Fachgeschäft, von Veranstaltungen und unvergesslichen Momenten in der Natur.
+                Entdecke Bilder aus unserem Fachgeschäft, von Verkostungen und unvergesslichen Sauce-Erlebnissen.
               </p>
             </div>
 
             {/* Right: CTA */}
             <div className="flex-shrink-0">
-              <div className="flex items-center gap-3 bg-white text-[#1A1A3A] font-black text-sm px-7 py-4 rounded-2xl group-hover:bg-[#8B8BFF] transition-colors duration-300 shadow-lg">
+              <div className="flex items-center gap-3 bg-white text-[#1A1A1A] font-black text-sm px-7 py-4 rounded-2xl group-hover:bg-[#CC0000] group-hover:text-white transition-colors duration-300 shadow-lg">
                 <Images className="w-5 h-5" />
                 Zur Galerie
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />

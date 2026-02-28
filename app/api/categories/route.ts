@@ -1,22 +1,10 @@
-import { NextResponse } from "next/server"
-
-const PHP_URL = process.env.NEXT_PUBLIC_API_BASE_URL + "/get_categories.php"
-const CACHE_TTL = 30_000 // 30 segundos
-
-let cache: { data: unknown; at: number } | null = null
-
-export async function GET() {
-  if (cache && Date.now() - cache.at < CACHE_TTL) {
-    return NextResponse.json(cache.data)
-  }
-  try {
-    const res = await fetch(PHP_URL, { method: "POST", cache: "no-store" })
-    if (!res.ok) throw new Error(`${res.status}`)
-    const data = await res.json()
-    cache = { data, at: Date.now() }
-    return NextResponse.json(data)
-  } catch (e: any) {
-    if (cache) return NextResponse.json(cache.data) // serve stale on error
-    return NextResponse.json({ success: false, error: e.message }, { status: 502 })
-  }
+export const dynamic = 'force-dynamic'
+import { NextRequest, NextResponse } from 'next/server'
+import { getOrCreateStore, createSessionId } from '@/lib/demo-store'
+function getSessionId(req: NextRequest) { return req.cookies.get('demo-session')?.value || createSessionId() }
+function setSession(res: NextResponse, sid: string) { res.cookies.set('demo-session', sid, { path: '/', maxAge: 60*60*24*365, httpOnly: false, sameSite: 'lax' }); return res }
+export async function GET(req: NextRequest) {
+  const sid = getSessionId(req)
+  const store = getOrCreateStore(sid)
+  return setSession(NextResponse.json({ success: true, categories: store.categories, total: store.categories.length }), sid)
 }

@@ -1,19 +1,20 @@
-import { NextRequest, NextResponse } from "next/server"
-
-const PHP_URL = process.env.NEXT_PUBLIC_API_BASE_URL + "/update_order.php"
-
+export const dynamic = 'force-dynamic'
+import { NextRequest, NextResponse } from 'next/server'
+import { getOrCreateStore, saveStore, createSessionId } from '@/lib/demo-store'
+function getSessionId(req: NextRequest) { return req.cookies.get('demo-session')?.value || createSessionId() }
+function setSession(res: NextResponse, sid: string) { res.cookies.set('demo-session', sid, { path: '/', maxAge: 60*60*24*365, httpOnly: false, sameSite: 'lax' }); return res }
 export async function POST(req: NextRequest) {
-  try {
-    const body = await req.json()
-    const res = await fetch(PHP_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-      cache: "no-store",
-    })
-    const data = await res.json()
-    return NextResponse.json(data)
-  } catch (e: any) {
-    return NextResponse.json({ success: false, error: e.message }, { status: 502 })
+  const sid = getSessionId(req)
+  const store = getOrCreateStore(sid)
+  let data: any = {}
+  try { data = await req.json() } catch {}
+  const id = parseInt(data.id || data.orderId || '0')
+  const idx = store.orders.findIndex((o: any) => o.id === id)
+  if (idx !== -1) {
+    if (data.status) store.orders[idx].status = data.status
+    if (data.payment_status) store.orders[idx].payment_status = data.payment_status
+    store.orders[idx].updated_at = new Date().toISOString()
   }
+  saveStore(sid, store)
+  return setSession(NextResponse.json({ success: true, message: 'Pedido actualizado' }), sid)
 }

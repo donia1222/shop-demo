@@ -42,8 +42,8 @@ export function Login({
 }: LoginProps) {
   // Login states
   const [loginData, setLoginData] = useState({
-    email: initialEmail,
-    password: "",
+    email: initialEmail || "demo@example.com",
+    password: "demo1234",
   })
   const [showLoginPassword, setShowLoginPassword] = useState(false)
   const [loginErrors, setLoginErrors] = useState<any>({})
@@ -271,6 +271,10 @@ export function Login({
 
   const LoginForm = () => (
     <div className="space-y-4">
+      <div className="bg-orange-50 border border-orange-200 rounded-lg p-3 text-xs text-orange-700">
+        <p className="font-semibold">🔥 DEMO — Zugangsdaten bereits ausgefüllt</p>
+        <p>Einfach auf <strong>Anmelden</strong> klicken</p>
+      </div>
       <div>
         <Label htmlFor="loginEmail">E-Mail *</Label>
         <Input

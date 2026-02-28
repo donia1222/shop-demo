@@ -1,24 +1,13 @@
-import { NextRequest, NextResponse } from "next/server"
-import { galleryCache } from "../cache"
-
-const PHP_URL = process.env.NEXT_PUBLIC_API_BASE_URL + "/delete_gallery_image.php"
-
+export const dynamic = 'force-dynamic'
+import { NextRequest, NextResponse } from 'next/server'
+import { getOrCreateStore, saveStore, createSessionId } from '@/lib/demo-store'
+function getSessionId(req: NextRequest) { return req.cookies.get('demo-session')?.value || createSessionId() }
+function setSession(res: NextResponse, sid: string) { res.cookies.set('demo-session', sid, { path: '/', maxAge: 60*60*24*365, httpOnly: false, sameSite: 'lax' }); return res }
 export async function DELETE(req: NextRequest) {
-  try {
-    const id = req.nextUrl.searchParams.get("id")
-    const res = await fetch(`${PHP_URL}?id=${id}&_method=DELETE`, {
-      method: "DELETE",
-      cache: "no-store",
-    })
-    const text = await res.text()
-    try {
-      const data = JSON.parse(text)
-      if (data.success) galleryCache.clear()
-      return NextResponse.json(data)
-    } catch {
-      return NextResponse.json({ success: false, error: text.slice(0, 300) }, { status: 502 })
-    }
-  } catch (e: any) {
-    return NextResponse.json({ success: false, error: e.message }, { status: 502 })
-  }
+  const sid = getSessionId(req)
+  const store = getOrCreateStore(sid)
+  const id = parseInt(req.nextUrl.searchParams.get('id') || '0')
+  store.gallery_images = store.gallery_images.filter((img: any) => img.id !== id)
+  saveStore(sid, store)
+  return setSession(NextResponse.json({ success: true, message: 'Imagen eliminada' }), sid)
 }

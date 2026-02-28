@@ -188,7 +188,7 @@ export function UserProfile({ onClose, onAccountDeleted }: UserProfileProps) {
       const response = await fetch(`${API_BASE_URL}/get_user.php`, {
         method: "POST",
         mode: "cors",
-        credentials: "omit",
+        credentials: "same-origin",
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
@@ -263,7 +263,7 @@ export function UserProfile({ onClose, onAccountDeleted }: UserProfileProps) {
       const response = await fetch(`${API_BASE_URL}/get_ordersuser.php?${params.toString()}`, {
         method: "GET",
         mode: "cors",
-        credentials: "omit",
+        credentials: "same-origin",
         headers: {
           Accept: "application/json",
           "X-Requested-With": "XMLHttpRequest",
@@ -318,7 +318,7 @@ export function UserProfile({ onClose, onAccountDeleted }: UserProfileProps) {
       const response = await fetch(`${API_BASE_URL}/update_user.php`, {
         method: "PUT",
         mode: "cors",
-        credentials: "omit",
+        credentials: "same-origin",
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
@@ -374,7 +374,7 @@ export function UserProfile({ onClose, onAccountDeleted }: UserProfileProps) {
       const response = await fetch(`${API_BASE_URL}/delete_user.php`, {
         method: "DELETE",
         mode: "cors",
-        credentials: "omit",
+        credentials: "same-origin",
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
@@ -487,7 +487,7 @@ export function UserProfile({ onClose, onAccountDeleted }: UserProfileProps) {
       const response = await fetch(`${API_BASE_URL}/change_password.php`, {
         method: "PUT",
         mode: "cors",
-        credentials: "omit",
+        credentials: "same-origin",
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",

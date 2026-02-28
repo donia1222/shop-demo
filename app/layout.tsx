@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import './globals.css'
 import { Analytics } from '@vercel/analytics/next';
 import { CookieBanner } from '@/components/cookie-banner'
+import { DemoBanner } from '@/components/demo-banner'
 
 
 export const metadata: Metadata = {

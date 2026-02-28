@@ -2,6 +2,7 @@ export const dynamic = "force-dynamic"
 
 import { type NextRequest, NextResponse } from "next/server"
 import * as XLSX from "xlsx"
+import { getOrCreateStore, saveStore, createSessionId } from "@/lib/demo-store"
 
 function toSlug(sheetName: string): string {
   return sheetName
@@ -48,7 +49,7 @@ export async function POST(request: NextRequest) {
     const buffer = Buffer.from(await file.arrayBuffer())
     const workbook = XLSX.read(buffer, { type: "buffer" })
 
-    const allProducts: object[] = []
+    const allProducts: any[] = []
 
     for (const sheetName of workbook.SheetNames) {
       const ws = workbook.Sheets[sheetName]
@@ -127,20 +128,60 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: false, error: "No se encontraron productos válidos en el archivo" }, { status: 400 })
     }
 
-    // Llama al PHP que NO borra nada
-    const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL
-    const phpResponse = await fetch(`${apiBase}/add_products_excel.php`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ products: allProducts }),
-    })
+    // Add to demo store (does NOT delete existing products)
+    const sid = request.cookies.get('demo-session')?.value || createSessionId()
+    const store = getOrCreateStore(sid)
+    const now = new Date().toISOString()
 
-    const result = await phpResponse.json()
+    let added = 0
+    let updated = 0
 
-    return NextResponse.json({
-      ...result,
+    for (const p of allProducts) {
+      const existingIdx = store.products.findIndex((ep: any) => ep.id === p.id)
+      const enriched = {
+        ...p,
+        heat_level: p.heat_level || 1,
+        rating: p.rating || 4.5,
+        badge: p.badge || '',
+        weight_kg: p.weight_kg || 0.5,
+        image: p.image_url || '',
+        image_url: p.image_url || '',
+        image_url_candidates: p.image_url ? [p.image_url] : [],
+        stock_status: p.stock === 0 ? 'out_of_stock' : p.stock <= 10 ? 'low_stock' : 'in_stock',
+        created_at: now,
+        updated_at: now,
+      }
+      if (existingIdx >= 0) {
+        store.products[existingIdx] = { ...store.products[existingIdx], ...enriched, updated_at: now }
+        updated++
+      } else {
+        store.products.push(enriched)
+        added++
+      }
+
+      // Ensure category exists
+      if (!store.categories.find((c: any) => c.slug === p.category)) {
+        store.categories.push({
+          id: store.nextIds.category++,
+          slug: p.category,
+          name: p.category_name || p.category,
+          description: '',
+          created_at: now,
+        })
+      }
+    }
+
+    saveStore(sid, store)
+
+    const res = NextResponse.json({
+      success: true,
+      message: `${added} Produkte hinzugefügt, ${updated} aktualisiert`,
       parsed: allProducts.length,
+      added,
+      updated,
     })
+    res.cookies.set('demo-session', sid, { path: '/', maxAge: 60*60*24*365, httpOnly: false, sameSite: 'lax' })
+    return res
   } catch (error) {
     console.error("Error añadiendo productos:", error)
     return NextResponse.json({ success: false, error: "Error interno al procesar el archivo" }, { status: 500 })

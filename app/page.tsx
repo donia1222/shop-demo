@@ -17,6 +17,8 @@ import { FadeSection } from "@/components/fade-section"
 import  Bot  from "@/components/bot"
 import { Dialog, DialogContent } from "@/components/ui/dialog"
 import { X } from "lucide-react"
+import SpiceDiscovery from "@/components/spice-discovery" 
+
 
 interface Announcement {
   id: number
@@ -410,6 +412,15 @@ function PremiumHotSauceStoreInner() {
       <FadeSection>
         <GalleryBanner />
       </FadeSection>
+
+          <FadeSection>
+        <SpiceDiscovery />
+      </FadeSection>
+
+
+
+        <Bot/>
+
 
       <FadeSection>
         <ReviewsSection />

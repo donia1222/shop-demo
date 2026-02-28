@@ -78,8 +78,8 @@ export function LoginAuth({
 
   // Login states
   const [loginData, setLoginData] = useState({
-    email: "",
-    password: "",
+    email: "demo@example.com",
+    password: "demo1234",
   })
   const [showLoginPassword, setShowLoginPassword] = useState(false)
   const [loginErrors, setLoginErrors] = useState<any>({})
@@ -89,11 +89,11 @@ export function LoginAuth({
 
   // Register states
   const [registerData, setRegisterData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
+    firstName: "Max",
+    lastName: "Mustermann",
+    email: "neu@example.com",
+    password: "demo1234",
+    confirmPassword: "demo1234",
   })
   const [showRegisterPassword, setShowRegisterPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
@@ -136,7 +136,7 @@ export function LoginAuth({
       const response = await fetch(`${API_BASE_URL}/get_user.php`, {
         method: "POST",
         mode: "cors",
-        credentials: "omit",
+        credentials: "same-origin",
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
@@ -238,29 +238,43 @@ export function LoginAuth({
 
       console.log("📡 Respuesta de login:", response.status)
 
-      if (!response.ok) {
-        const errorText = await response.text()
-        console.error("❌ Error HTTP:", response.status, errorText)
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`)
-      }
-
-      const result = await response.json()
+      // Parse JSON regardless of status (400 = user not found, we auto-create)
+      const result = await response.json().catch(() => ({ success: false }))
       console.log("✅ Respuesta de login:", result)
+
+      // Demo: si el login falla, auto-crear el usuario y reintentar
+      if (!result.success) {
+        const regRes = await fetch(`${API_BASE_URL}/create_user.php`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: loginData.email,
+            password: loginData.password,
+            firstName: loginData.email.split("@")[0],
+            lastName: "Demo",
+          }),
+        })
+        const regData = await regRes.json()
+        if (regData.success) {
+          result.success = true
+          result.sessionToken = regData.sessionToken
+          result.user = regData.user
+        }
+      }
 
       if (result.success && result.sessionToken) {
         const sessionToken = result.sessionToken
-        console.log("💾 Guardando token de login:", sessionToken.substring(0, 20) + "...")
         localStorage.setItem("user-session-token", sessionToken)
 
         const userData = {
           id: result.user.id,
           email: result.user.email,
-          firstName: result.user.firstName || "",
-          lastName: result.user.lastName || "",
+          firstName: result.user.firstName || result.user.first_name || "",
+          lastName: result.user.lastName || result.user.last_name || "",
           phone: result.user.phone || "",
           address: result.user.address || "",
           city: result.user.city || "",
-          postalCode: result.user.postal_code || "",
+          postalCode: result.user.postalCode || result.user.postal_code || "",
           canton: result.user.canton || "",
           notes: result.user.notes || "",
         }
@@ -268,27 +282,17 @@ export function LoginAuth({
         setIsLoggedIn(true)
         setCurrentUser(userData)
         setLoginStatus("success")
-        setLoginMessage("¡Anmeldung erfolgreich!")
+        setLoginMessage("Anmeldung erfolgreich!")
 
-        // Clear login data
-        setLoginData({
-          email: "",
-          password: "",
-        })
+        setLoginData({ email: "demo@example.com", password: "demo1234" })
 
-        // Notify parent component
-        if (onLoginSuccess) {
-          onLoginSuccess(userData)
-        }
+        if (onLoginSuccess) onLoginSuccess(userData)
 
-        // Navigate to profile after success
         setTimeout(() => {
           setShowAuthModal(false)
           setLoginStatus("idle")
           router.push("/profile")
         }, 1500)
-
-        console.log("✅ Login exitoso")
       } else {
         throw new Error(result.error || "Login failed")
       }
@@ -392,13 +396,12 @@ export function LoginAuth({
         setRegisterStatus("success")
         setRegisterMessage("¡Konto erfolgreich erstellt!")
 
-        // Clear register data
         setRegisterData({
-          firstName: "",
-          lastName: "",
-          email: "",
-          password: "",
-          confirmPassword: "",
+          firstName: "Max",
+          lastName: "Mustermann",
+          email: "neu@example.com",
+          password: "demo1234",
+          confirmPassword: "demo1234",
         })
 
         // Notify parent component
@@ -613,15 +616,20 @@ export function LoginAuth({
               <div className="space-y-4">
                 <h2 className="text-2xl font-bold text-[#1A1A1A]">Anmelden</h2>
 
+                <div className="bg-orange-50 border border-orange-200 rounded-xl p-3 text-xs text-orange-700">
+                  <p className="font-semibold">🔥 DEMO — Zugangsdaten bereits ausgefüllt</p>
+                  <p>Einfach auf <strong>Anmelden →</strong> klicken</p>
+                </div>
+
                 <div>
                   <p className="text-sm text-gray-600 mb-1">Geben Sie Ihre E-Mail-Adresse ein</p>
                   <Input
                     id="loginEmail"
                     type="email"
                     value={loginData.email}
-                    onChange={(e) => setLoginData((prev) => ({ ...prev, email: e.target.value }))}
-                    className={`rounded-full bg-white border-gray-200 text-gray-900 h-12 px-5 ${loginErrors.email ? "border-red-500" : ""}`}
-                    placeholder="E-Mail"
+                    onChange={() => {}}
+                    readOnly
+                    className="rounded-full bg-gray-50 border-gray-200 text-gray-500 h-12 px-5 cursor-default select-none"
                   />
                   {loginErrors.email && <p className="text-red-500 text-sm mt-1 pl-2">{loginErrors.email}</p>}
                 </div>
@@ -633,9 +641,9 @@ export function LoginAuth({
                       id="loginPassword"
                       type={showLoginPassword ? "text" : "password"}
                       value={loginData.password}
-                      onChange={(e) => setLoginData((prev) => ({ ...prev, password: e.target.value }))}
-                      className={`rounded-full bg-white border-gray-200 text-gray-900 h-12 px-5 pr-12 ${loginErrors.password ? "border-red-500" : ""}`}
-                      placeholder="Ihr Passwort"
+                      onChange={() => {}}
+                      readOnly
+                      className="rounded-full bg-gray-50 border-gray-200 text-gray-500 h-12 px-5 pr-12 cursor-default select-none"
                     />
                     <Button
                       type="button"
@@ -659,7 +667,7 @@ export function LoginAuth({
 
                 <Button
                   onClick={handleLogin}
-                  disabled={isLoggingIn || !loginData.email || !loginData.password}
+                  disabled={isLoggingIn}
                   className="w-full h-12 rounded-full bg-[#2C5F2E] hover:bg-[#1A4520] text-white font-semibold text-base"
                 >
                   {isLoggingIn ? (
@@ -689,15 +697,20 @@ export function LoginAuth({
               <div className="space-y-4">
                 <h2 className="text-2xl font-bold text-[#1A1A1A]">Konto erstellen</h2>
 
+                <div className="bg-orange-50 border border-orange-200 rounded-xl p-3 text-xs text-orange-700">
+                  <p className="font-semibold">🔥 DEMO — Felder bereits ausgefüllt</p>
+                  <p>Einfach auf <strong>Konto erstellen →</strong> klicken</p>
+                </div>
+
                 <div className="grid grid-cols-2 gap-3">
                   <div>
                     <p className="text-sm text-gray-600 mb-1">Vorname</p>
                     <Input
                       id="firstName"
                       value={registerData.firstName}
-                      onChange={(e) => setRegisterData((prev) => ({ ...prev, firstName: e.target.value }))}
-                      className={`rounded-full bg-white border-gray-200 text-gray-900 h-11 px-4 ${registerErrors.firstName ? "border-red-500" : ""}`}
-                      placeholder="Max"
+                      onChange={() => {}}
+                      readOnly
+                      className="rounded-full bg-gray-50 border-gray-200 text-gray-500 h-11 px-4 cursor-default select-none"
                     />
                     {registerErrors.firstName && <p className="text-red-500 text-xs mt-1 pl-1">{registerErrors.firstName}</p>}
                   </div>
@@ -706,9 +719,9 @@ export function LoginAuth({
                     <Input
                       id="lastName"
                       value={registerData.lastName}
-                      onChange={(e) => setRegisterData((prev) => ({ ...prev, lastName: e.target.value }))}
-                      className={`rounded-full bg-white border-gray-200 text-gray-900 h-11 px-4 ${registerErrors.lastName ? "border-red-500" : ""}`}
-                      placeholder="Mustermann"
+                      onChange={() => {}}
+                      readOnly
+                      className="rounded-full bg-gray-50 border-gray-200 text-gray-500 h-11 px-4 cursor-default select-none"
                     />
                     {registerErrors.lastName && <p className="text-red-500 text-xs mt-1 pl-1">{registerErrors.lastName}</p>}
                   </div>
@@ -720,9 +733,9 @@ export function LoginAuth({
                     id="registerEmail"
                     type="email"
                     value={registerData.email}
-                    onChange={(e) => setRegisterData((prev) => ({ ...prev, email: e.target.value }))}
-                    className={`rounded-full bg-white border-gray-200 text-gray-900 h-12 px-5 ${registerErrors.email ? "border-red-500" : ""}`}
-                    placeholder="ihre@email.com"
+                    onChange={() => {}}
+                    readOnly
+                    className="rounded-full bg-gray-50 border-gray-200 text-gray-500 h-12 px-5 cursor-default select-none"
                   />
                   {registerErrors.email && <p className="text-red-500 text-sm mt-1 pl-2">{registerErrors.email}</p>}
                 </div>
@@ -734,9 +747,9 @@ export function LoginAuth({
                       id="registerPassword"
                       type={showRegisterPassword ? "text" : "password"}
                       value={registerData.password}
-                      onChange={(e) => setRegisterData((prev) => ({ ...prev, password: e.target.value }))}
-                      className={`rounded-full bg-white border-gray-200 text-gray-900 h-12 px-5 pr-12 ${registerErrors.password ? "border-red-500" : ""}`}
-                      placeholder="Mindestens 6 Zeichen"
+                      onChange={() => {}}
+                      readOnly
+                      className="rounded-full bg-gray-50 border-gray-200 text-gray-500 h-12 px-5 pr-12 cursor-default select-none"
                     />
                     <Button type="button" variant="ghost" size="icon" className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 hover:bg-transparent" onClick={() => setShowRegisterPassword(!showRegisterPassword)}>
                       {showRegisterPassword ? <EyeOff className="w-4 h-4 text-gray-400" /> : <Eye className="w-4 h-4 text-gray-400" />}
@@ -752,9 +765,9 @@ export function LoginAuth({
                       id="confirmPassword"
                       type={showConfirmPassword ? "text" : "password"}
                       value={registerData.confirmPassword}
-                      onChange={(e) => setRegisterData((prev) => ({ ...prev, confirmPassword: e.target.value }))}
-                      className={`rounded-full bg-white border-gray-200 text-gray-900 h-12 px-5 pr-12 ${registerErrors.confirmPassword ? "border-red-500" : ""}`}
-                      placeholder="Passwort wiederholen"
+                      onChange={() => {}}
+                      readOnly
+                      className="rounded-full bg-gray-50 border-gray-200 text-gray-500 h-12 px-5 pr-12 cursor-default select-none"
                     />
                     <Button type="button" variant="ghost" size="icon" className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 hover:bg-transparent" onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
                       {showConfirmPassword ? <EyeOff className="w-4 h-4 text-gray-400" /> : <Eye className="w-4 h-4 text-gray-400" />}
@@ -765,7 +778,7 @@ export function LoginAuth({
 
                 <Button
                   onClick={handleRegister}
-                  disabled={isRegistering || !registerData.email || !registerData.password || !registerData.firstName || !registerData.lastName}
+                  disabled={isRegistering}
                   className="w-full h-12 rounded-full bg-[#2C5F2E] hover:bg-[#1A4520] text-white font-semibold text-base"
                 >
                   {isRegistering ? (

@@ -16,11 +16,11 @@ export function BlogBanner() {
           {/* Background image with overlay */}
           <div className="absolute inset-0">
             <img
-              src="/images/shop/132718579_1370015803349243_4576092651755794772_n.jpg"
+              src="/images/hot-sauce/blog.jpg"
               alt=""
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-[#0A1F0A]/90 via-[#1A3A1A]/75 to-[#2C5F2E]/40" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#1A0000]/80 via-[#1A0000]/55 to-[#1A0000]/10" />
           </div>
 
           {/* Content */}
@@ -34,18 +34,18 @@ export function BlogBanner() {
               </div>
 
               <h2 className="text-3xl sm:text-4xl font-black text-white leading-tight tracking-tight mb-4">
-                Expertentipps & Neuigkeiten<br className="hidden sm:block" />
-                <span className="text-[#7DC87D]"> aus dem Shop</span>
+                Rezepte, Tests & Neuigkeiten<br className="hidden sm:block" />
+                <span className="text-[#CC0000]"> aus dem Hot-Sauce Shop</span>
               </h2>
 
               <p className="text-white/75 text-base leading-relaxed max-w-xl">
-                Entdecke Produkttests, Angelguides, Messerpflege-Tipps und alles rund um Jagd &amp; Outdoor — direkt aus unserem Fachgeschäft in Sevelen.
+                Entdecke Saucen-Tests, scharfe Rezepte, Scoville-Guides und alles rund um Hot Sauces — direkt aus unserem Shop in Sevelen.
               </p>
             </div>
 
             {/* Right: CTA */}
             <div className="flex-shrink-0">
-              <div className="flex items-center gap-3 bg-white text-[#1A3A1A] font-black text-sm px-7 py-4 rounded-2xl group-hover:bg-[#7DC87D] transition-colors duration-300 shadow-lg">
+              <div className="flex items-center gap-3 bg-white text-[#1A1A1A] font-black text-sm px-7 py-4 rounded-2xl group-hover:bg-[#CC0000] group-hover:text-white transition-colors duration-300 shadow-lg">
                 <BookOpen className="w-5 h-5" />
                 Zum Blog
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />

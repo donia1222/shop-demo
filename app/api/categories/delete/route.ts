@@ -1,19 +1,15 @@
-import { NextRequest, NextResponse } from "next/server"
-
-const PHP_URL = process.env.NEXT_PUBLIC_API_BASE_URL + "/delete_category.php"
-
+export const dynamic = 'force-dynamic'
+import { NextRequest, NextResponse } from 'next/server'
+import { getOrCreateStore, saveStore, createSessionId } from '@/lib/demo-store'
+function getSessionId(req: NextRequest) { return req.cookies.get('demo-session')?.value || createSessionId() }
+function setSession(res: NextResponse, sid: string) { res.cookies.set('demo-session', sid, { path: '/', maxAge: 60*60*24*365, httpOnly: false, sameSite: 'lax' }); return res }
 export async function POST(req: NextRequest) {
-  try {
-    const body = await req.text()
-    const res = await fetch(PHP_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body,
-    })
-    const text = await res.text()
-    const data = JSON.parse(text)
-    return NextResponse.json(data, { status: res.ok ? 200 : res.status })
-  } catch (e: any) {
-    return NextResponse.json({ success: false, error: e.message }, { status: 502 })
-  }
+  const sid = getSessionId(req)
+  const store = getOrCreateStore(sid)
+  const body = await req.text()
+  const params = new URLSearchParams(body)
+  const id = parseInt(params.get('id') || '0')
+  store.categories = store.categories.filter((c: any) => c.id !== id)
+  saveStore(sid, store)
+  return setSession(NextResponse.json({ success: true, message: 'Categoría eliminada' }), sid)
 }

@@ -44,7 +44,7 @@ export function AdminAuth({ isLightSection = false, subtle = false }: AdminAuthP
   // Estados del sistema de admin
   const [isLoginOpen, setIsLoginOpen] = useState(false)
   const [isProfileOpen, setIsProfileOpen] = useState(false)
-  const [loginData, setLoginData] = useState({ email: "", password: "" })
+  const [loginData, setLoginData] = useState({ email: "admin@demo.com", password: "demo" })
   const [showPassword, setShowPassword] = useState(false)
   const [loginError, setLoginError] = useState("")
   const [isLoggingIn, setIsLoggingIn] = useState(false)
@@ -242,17 +242,10 @@ export function AdminAuth({ isLightSection = false, subtle = false }: AdminAuthP
     // Simular delay de autenticación
     await new Promise((resolve) => setTimeout(resolve, 1000))
 
-    // Verificar credenciales con fallback para testing
+    // Demo mode: any non-empty email and password works
     let credentialsValid = false
-    if (adminEmail && adminPassword) {
-      credentialsValid = loginData.email === adminEmail && loginData.password === adminPassword
-      console.log("🔍 Verificando con variables de entorno:", credentialsValid ? "✅ Válidas" : "❌ Inválidas")
-    } else {
-      // Fallback para testing si no hay variables de entorno
-      console.log("⚠️ Variables de entorno no disponibles, usando credenciales de prueba")
-      credentialsValid = loginData.email === "admin@hotbbq.com" && loginData.password === "admin123"
-      console.log("🔍 Verificando con credenciales de prueba:", credentialsValid ? "✅ Válidas" : "❌ Inválidas")
-    }
+    credentialsValid = !!(loginData.email && loginData.password.length >= 1)
+    console.log("🔍 Demo mode - aceptando cualquier credencial:", credentialsValid ? "✅ Válidas" : "❌ Inválidas")
 
     
     // Actualizar debug info
@@ -422,14 +415,11 @@ export function AdminAuth({ isLightSection = false, subtle = false }: AdminAuthP
                 <span className="text-2xl font-bold text-[#1A1A1A]">Anmelden</span>
               </div>
 
-              {/* Debug info */}
-              {(!debugInfo.envEmailExists || !debugInfo.envPasswordExists) && (
-                <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-3 mb-4 text-xs text-yellow-700">
-                  <p className="font-medium mb-1">⚠️ Fallback-Zugangsdaten:</p>
-                  <p>Email: admin@hotbbq.com</p>
-                  <p>Passwort: admin123</p>
-                </div>
-              )}
+              {/* Demo mode banner */}
+              <div className="bg-orange-50 border border-orange-200 rounded-xl p-3 mb-4 text-xs text-orange-700">
+                <p className="font-semibold mb-1">🔥 DEMO — Zugangsdaten bereits ausgefüllt</p>
+                <p>Einfach auf <strong>Anmelden</strong> klicken</p>
+              </div>
 
               <form onSubmit={handleLogin} className="space-y-4">
                 <div>

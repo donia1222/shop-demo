@@ -1,22 +1,19 @@
-import { NextRequest, NextResponse } from "next/server"
-
-const PHP_URL = process.env.NEXT_PUBLIC_API_BASE_URL + "/add_category.php"
-
+export const dynamic = 'force-dynamic'
+import { NextRequest, NextResponse } from 'next/server'
+import { getOrCreateStore, saveStore, createSessionId } from '@/lib/demo-store'
+function getSessionId(req: NextRequest) { return req.cookies.get('demo-session')?.value || createSessionId() }
+function setSession(res: NextResponse, sid: string) { res.cookies.set('demo-session', sid, { path: '/', maxAge: 60*60*24*365, httpOnly: false, sameSite: 'lax' }); return res }
 export async function POST(req: NextRequest) {
-  try {
-    const formData = await req.formData()
-    const params = new URLSearchParams()
-    formData.forEach((value, key) => params.append(key, value.toString()))
-
-    const res = await fetch(PHP_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: params.toString(),
-    })
-    const text = await res.text()
-    const data = JSON.parse(text)
-    return NextResponse.json(data, { status: res.ok ? 200 : res.status })
-  } catch (e: any) {
-    return NextResponse.json({ success: false, error: e.message }, { status: 502 })
-  }
+  const sid = getSessionId(req)
+  const store = getOrCreateStore(sid)
+  const fd = await req.formData()
+  const name = fd.get('name')?.toString() || ''
+  const description = fd.get('description')?.toString() || ''
+  if (!name) return setSession(NextResponse.json({ success: false, error: 'Nombre requerido' }, { status: 400 }), sid)
+  const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
+  if (store.categories.find((c: any) => c.slug === slug)) return setSession(NextResponse.json({ success: false, error: 'Categoría ya existe' }, { status: 400 }), sid)
+  const cat = { id: store.nextIds.category++, slug, name, description, created_at: new Date().toISOString() }
+  store.categories.push(cat)
+  saveStore(sid, store)
+  return setSession(NextResponse.json({ success: true, message: 'Categoría añadida', category: cat }), sid)
 }

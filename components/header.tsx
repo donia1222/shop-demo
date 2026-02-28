@@ -68,10 +68,10 @@ export function Header({ onCartOpen, cartCount = 0 }: HeaderProps) {
                 <SheetTitle className="sr-only">Navigation</SheetTitle>
                 <div className="flex items-center justify-between p-4 pr-16 border-b border-[#E0E0E0] flex-shrink-0">
                   <div className="flex items-center gap-2">
-                    <img src="/Security_n.png" alt="Logo" className="h-14 w-auto object-contain" />
+                    <span className="text-3xl leading-none">🌶️</span>
                     <span className="leading-tight">
-                      <span style={{ fontFamily: 'Impact, Arial Narrow, sans-serif', fontStyle: 'italic', fontWeight: 900, color: '#CC0000', fontSize: '0.9rem' }}>US-</span>
-                      <span style={{ fontFamily: "'Rubik Dirt', sans-serif", color: '#1A1A1A', fontSize: '0.8rem' }}> FISHING &amp;<br />HUNTINGSHOP</span>
+                      <span style={{ fontFamily: 'Impact, Arial Narrow, sans-serif', fontStyle: 'italic', fontWeight: 900, color: '#CC0000', fontSize: '0.9rem' }}>HOT-SAUCE</span>
+                      <span style={{ fontFamily: 'Impact, Arial Narrow, sans-serif', color: '#1A1A1A', fontSize: '0.8rem' }}><br />SHOP</span>
                     </span>
                   </div>
                   <div className="flex items-center gap-1">
@@ -111,14 +111,14 @@ export function Header({ onCartOpen, cartCount = 0 }: HeaderProps) {
                     <div className="flex">
                       <button
                         onClick={() => { router.push("/blog"); setIsMenuOpen(false) }}
-                        className="flex items-center gap-1.5 px-3 py-2.5 text-sm rounded hover:bg-[#F5F5F5] text-[#2C5F2E] font-semibold"
+                        className="flex items-center gap-1.5 px-3 py-2.5 text-sm rounded hover:bg-[#F5F5F5] text-[#CC0000] font-semibold"
                       >
                         <Newspaper className="w-4 h-4 shrink-0" />
                         Blog
                       </button>
                       <button
                         onClick={() => { router.push("/gallery"); setIsMenuOpen(false) }}
-                        className="flex items-center gap-1.5 px-3 py-2.5 text-sm rounded hover:bg-[#F5F5F5] text-[#2C5F2E] font-semibold"
+                        className="flex items-center gap-1.5 px-3 py-2.5 text-sm rounded hover:bg-[#F5F5F5] text-[#CC0000] font-semibold"
                       >
                         <Images className="w-4 h-4 shrink-0" />
                         Gallery
@@ -133,29 +133,29 @@ export function Header({ onCartOpen, cartCount = 0 }: HeaderProps) {
                               const reader = new FileReader()
                               reader.onloadend = function () {
                                 const base64data = (reader.result as string).split(",")[1]
-                                const vcard = `BEGIN:VCARD\nVERSION:3.0\nFN:US - Fishing & Huntingshop\nORG:US - Fishing & Huntingshop\nTITLE:JAGD · ANGELN · OUTDOOR\nADR:;;Bahnhofstrasse 2;Sevelen;;9475;Switzerland\nTEL:+41786066105\nEMAIL:info@usfh.ch\nURL:https://usfh.ch\nPHOTO;ENCODING=b;TYPE=PNG:${base64data}\nEND:VCARD`
+                                const vcard = `BEGIN:VCARD\nVERSION:3.0\nFN:Hot-Sauce Shop\nORG:Hot-Sauce Shop\nTITLE:SCHARFE SAUCEN · SCHWEIZ\nADR:;;Bahnhofstrasse 2;Sevelen;;9475;Switzerland\nTEL:+41786066105\nEMAIL:info@hot-sauce-shop.ch\nURL:https://hot-sauce-shop.ch\nEND:VCARD`
                                 const link = document.createElement("a")
                                 link.href = URL.createObjectURL(new Blob([vcard], { type: "text/vcard;charset=utf-8" }))
-                                link.download = "US-Fishing-Huntingshop.vcf"
+                                link.download = "Hot-Sauce-Shop.vcf"
                                 document.body.appendChild(link); link.click(); document.body.removeChild(link)
                               }
                               reader.readAsDataURL(blob)
                             })
                             .catch(() => {
-                              const vcard = `BEGIN:VCARD\nVERSION:3.0\nFN:US - Fishing & Huntingshop\nORG:US - Fishing & Huntingshop\nTITLE:JAGD · ANGELN · OUTDOOR\nADR:;;Bahnhofstrasse 2;Sevelen;;9475;Switzerland\nTEL:+41786066105\nEMAIL:info@usfh.ch\nURL:https://usfh.ch\nEND:VCARD`
+                              const vcard = `BEGIN:VCARD\nVERSION:3.0\nFN:Hot-Sauce Shop\nORG:Hot-Sauce Shop\nTITLE:SCHARFE SAUCEN · SCHWEIZ\nADR:;;Bahnhofstrasse 2;Sevelen;;9475;Switzerland\nTEL:+41786066105\nEMAIL:info@hot-sauce-shop.ch\nURL:https://hot-sauce-shop.ch\nEND:VCARD`
                               const link = document.createElement("a")
                               link.href = URL.createObjectURL(new Blob([vcard], { type: "text/vcard;charset=utf-8" }))
-                              link.download = "US-Fishing-Huntingshop.vcf"
+                              link.download = "Hot-Sauce-Shop.vcf"
                               document.body.appendChild(link); link.click(); document.body.removeChild(link)
                             })
                         }}
-                        className="flex items-center gap-1.5 px-3 py-2.5 text-sm rounded hover:bg-[#F5F5F5] text-[#2C5F2E] font-semibold"
+                        className="flex items-center gap-1.5 px-3 py-2.5 text-sm rounded hover:bg-[#F5F5F5] text-[#CC0000] font-semibold"
                       >
                         <Download className="w-4 h-4 shrink-0" />
                         VCard
                       </button>
                     </div>
-                    <p className="px-3 pt-3 pb-1 text-sm text-[#AAA] tracking-wide">Jagd · Angeln · Outdoor · Schweiz🇨🇭</p>
+                    <p className="px-3 pt-3 pb-1 text-sm text-[#AAA] tracking-wide">Scharfe Saucen · Schweiz 🇨🇭</p>
                   </div>
                 </nav>
               </SheetContent>
@@ -166,17 +166,13 @@ export function Header({ onCartOpen, cartCount = 0 }: HeaderProps) {
               onClick={() => router.push("/")}
               className="flex items-center gap-3 flex-shrink-0"
             >
-              <img
-                src="/Security_n.png"
-                alt="US - Fishing & Huntingshop"
-                className="h-16 w-auto object-contain"
-              />
+              <span className="text-4xl leading-none">🌶️</span>
               <div className="hidden sm:block">
                 <div className="leading-tight tracking-tight">
-                  <span style={{ fontFamily: 'Impact, Arial Narrow, sans-serif', fontStyle: 'italic', fontWeight: 900, color: '#CC0000', fontSize: '1.25rem' }}>US-</span>
-                  <span style={{ fontFamily: "'Rubik Dirt', sans-serif", color: '#1A1A1A', fontSize: '1.1rem' }}> FISHING &amp; HUNTINGSHOP</span>
+                  <span style={{ fontFamily: 'Impact, Arial Narrow, sans-serif', fontStyle: 'italic', fontWeight: 900, color: '#CC0000', fontSize: '1.25rem' }}>HOT-SAUCE</span>
+                  <span style={{ fontFamily: 'Impact, Arial Narrow, sans-serif', fontWeight: 900, color: '#1A1A1A', fontSize: '1.1rem' }}> SHOP</span>
                 </div>
-                <div className="text-xs text-[#666] tracking-widest uppercase mt-1">Jagd · Angeln · Outdoor</div>
+                <div className="text-xs text-[#666] tracking-widest uppercase mt-1">Scharfe Saucen · Schweiz</div>
               </div>
             </button>
           </div>
@@ -224,7 +220,7 @@ export function Header({ onCartOpen, cartCount = 0 }: HeaderProps) {
                 onClick={() => router.push(cat.href)}
                 className={`
                   flex items-center gap-1 px-4 py-3.5 text-[15px] font-medium whitespace-nowrap border-b-2 border-transparent flex-shrink-0
-                  hover:border-[#2C5F2E] hover:text-[#2C5F2E] transition-colors
+                  hover:border-[#CC0000] hover:text-[#CC0000] transition-colors
                   ${cat.highlight ? "text-[#CC0000] font-bold hover:border-[#CC0000] hover:text-[#CC0000]" : "text-[#333333]"}
                 `}
               >

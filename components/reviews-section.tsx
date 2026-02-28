@@ -4,55 +4,55 @@ const reviews = [
   {
     name: "Camille Dürr",
     date: "Vor 1 Jahr",
-    text: "Ich habe meine Leidenschaft für das Angeln entdeckt. Die Auswahl ist hervorragend. Die Öffnungszeiten sind sehr praktisch und das Personal ist sehr aufmerksam und kompetent. Ich komme sehr gerne wieder.",
+    text: "Ich habe meine Leidenschaft für scharfe Saucen hier entdeckt. Die Auswahl ist hervorragend. Das Personal ist sehr aufmerksam und kompetent. Ich komme sehr gerne wieder.",
     stars: 5,
   },
   {
     name: "Ikarus von Roll",
     date: "Vor 1 Jahr",
-    text: "Ein gutes und kompetentes Angelgeschäft, die Beratung ist ausgezeichnet und selbst Anfänger fühlen sich gut betreut. 👍🏻",
+    text: "Ein toller Hot-Sauce Shop mit ausgezeichneter Beratung. Selbst Einsteiger fühlen sich gut betreut und finden die passende Sauce. 👍🏻",
     stars: 5,
   },
   {
     name: "Damian",
     date: "Vor 2 Jahren",
-    text: "Ausgezeichnetes Angelgeschäft. Hervorragende Auswahl und ausgezeichnete Köder.",
+    text: "Ausgezeichnete Auswahl an Chilisaucen aus aller Welt. Hier findet man wirklich alles, von mild bis extrem scharf.",
     stars: 5,
   },
   {
     name: "Paaatrice",
     date: "Vor 1 Jahr",
-    text: "Ausgezeichnete Beratung und Service. Würde dort wieder einkaufen. 💪🏻",
+    text: "Ausgezeichnete Beratung und Service. Die Tabasco-Auswahl ist unglaublich. Würde dort wieder einkaufen. 💪🏻",
     stars: 5,
   },
   {
     name: "Frog Gray",
     date: "Vor 4 Jahren",
-    text: "Amazing guy very helpful great shop.",
+    text: "Amazing selection of hot sauces. Very helpful staff and great shop overall!",
     stars: 5,
   },
   {
     name: "C. Mullis",
     date: "Vor 7 Monaten",
-    text: "Toller Verkäufer, sehr gut informiert.",
+    text: "Toller Laden, sehr gut sortiert. Die El Yucateco Saucen hier sind mein Favorit.",
     stars: 5,
   },
   {
     name: "Bierschnecke Liechtenstein",
     date: "Vor 4 Jahren",
-    text: "Eine tolle Beratung und auch für Angelliebhaber geeignet :-) Ich fand die vollständige Köderauswahl, insbesondere Lebendköder, und die 24-Stunden-Angel-Notfallversorgung einzigartig.",
+    text: "Eine tolle Beratung für alle Hot-Sauce Liebhaber. Die Auswahl an exklusiven Saucen ist einzigartig in der Schweiz. Sehr empfehlenswert!",
     stars: 5,
   },
 ]
 
 const avatarGradients = [
-  "from-[#2C5F2E] to-[#4a8f4c]",
+  "from-[#CC0000] to-[#ef4444]",
   "from-[#1A6B8A] to-[#2a9bbf]",
   "from-[#7C3AED] to-[#a855f7]",
-  "from-[#DC2626] to-[#ef4444]",
+  "from-[#FF4500] to-[#FF6B35]",
   "from-[#D97706] to-[#f59e0b]",
   "from-[#0891B2] to-[#06b6d4]",
-  "from-[#059669] to-[#10b981]",
+  "from-[#8B0000] to-[#CC0000]",
 ]
 
 const GoogleLogo = ({ size = 5 }: { size?: number }) => (

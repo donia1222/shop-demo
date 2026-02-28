@@ -2,6 +2,7 @@ export const dynamic = "force-dynamic"
 
 import { type NextRequest, NextResponse } from "next/server"
 import * as XLSX from "xlsx"
+import { getOrCreateStore, saveStore, createSessionId } from "@/lib/demo-store"
 
 // Convierte el nombre de una hoja en un slug de categoría
 // "Messer 2026" → "messer-2026"  |  " Rauch+Grill 2026" → "rauch-grill-2026"
@@ -53,7 +54,7 @@ export async function POST(request: NextRequest) {
     const buffer = Buffer.from(await file.arrayBuffer())
     const workbook = XLSX.read(buffer, { type: "buffer" })
 
-    const allProducts: object[] = []
+    const allProducts: any[] = []
 
     for (const sheetName of workbook.SheetNames) {
       const ws = workbook.Sheets[sheetName]
@@ -63,7 +64,6 @@ export async function POST(request: NextRequest) {
       const categoryName = sheetName.trim()
 
       // Construir mapa Artikel-Nr. → URL escaneando celdas raw de cada fila
-      // Detecta cualquier celda con http://usfh.ch/img/ (texto plano o hipervínculo)
       const artikelToUrl = new Map<string, string>()
       const sheetRef = ws["!ref"]
       if (sheetRef) {
@@ -75,27 +75,11 @@ export async function POST(request: NextRequest) {
           if (h === "Artikel-Nr.") { artikelCol = c; break }
         }
         if (artikelCol >= 0) {
-          // DEBUG: mostrar primeras 3 filas con sus celdas
-          for (let r = range.s.r + 1; r <= Math.min(range.s.r + 4, range.e.r); r++) {
-            const artCell = ws[XLSX.utils.encode_cell({ r, c: artikelCol })] as any
-            const artNr = String(artCell?.v ?? "").trim()
-            const rowCells: string[] = []
-            for (let c = range.s.c; c <= range.e.c; c++) {
-              const cell = ws[XLSX.utils.encode_cell({ r, c })] as any
-              if (cell) {
-                const val = String(cell.v ?? cell.l?.Target ?? cell.f ?? "").trim()
-                if (val) rowCells.push(`col${c}(t=${cell.t})="${val.substring(0,40)}"`)
-              }
-            }
-            console.log(`[DBG] ${sheetName} fila ${r} art="${artNr}":`, rowCells.join(" | "))
-          }
-
           for (let r = range.s.r + 1; r <= range.e.r; r++) {
             const artCell = ws[XLSX.utils.encode_cell({ r, c: artikelCol })] as any
             if (!artCell) continue
             const artNr = String(artCell.v ?? "").trim()
             if (!artNr) continue
-            // Escanear todas las celdas de esta fila buscando URL
             for (let c = range.s.c; c <= range.e.c; c++) {
               const cell = ws[XLSX.utils.encode_cell({ r, c })] as any
               if (!cell) continue
@@ -107,7 +91,6 @@ export async function POST(request: NextRequest) {
             }
           }
         }
-        console.log(`[DBG] ${sheetName}: artikelToUrl size=${artikelToUrl.size}`)
       }
 
       for (const row of rows) {
@@ -125,7 +108,6 @@ export async function POST(request: NextRequest) {
         const supplier = String(getCol(row, "Lieferant") ?? "").trim()
         const origin = String(getCol(row, "Hersteller") ?? "").trim()
 
-        // Guardar URL sin extensión — frontend prueba .jpg / .JPG / .jpeg
         const artikelNr = String(id).trim()
         const rawImage = artikelToUrl.get(artikelNr)
           || String(getCol(row, "URLs der Bilder", "Bild", "Bild URL", "Image", "image_url", "Foto") ?? "").trim()
@@ -153,20 +135,51 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: false, error: "No se encontraron productos válidos en el archivo" }, { status: 400 })
     }
 
-    // Enviar al endpoint PHP
-    const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL
-    const phpResponse = await fetch(`${apiBase}/import_products.php`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ products: allProducts }),
-    })
+    // Save to demo store (replaces all products with imported ones)
+    const sid = request.cookies.get('demo-session')?.value || createSessionId()
+    const store = getOrCreateStore(sid)
+    const now = new Date().toISOString()
 
-    const result = await phpResponse.json()
+    // Replace store products with imported products
+    store.products = allProducts.map((p: any) => ({
+      ...p,
+      heat_level: p.heat_level || 1,
+      rating: p.rating || 4.5,
+      badge: p.badge || '',
+      weight_kg: p.weight_kg || 0.5,
+      image: p.image_url || '',
+      image_url: p.image_url || '',
+      image_url_candidates: p.image_url ? [p.image_url] : [],
+      stock_status: p.stock === 0 ? 'out_of_stock' : p.stock <= 10 ? 'low_stock' : 'in_stock',
+      created_at: now,
+      updated_at: now,
+    }))
 
-    return NextResponse.json({
-      ...result,
+    // Ensure categories exist for imported products
+    const categorySlugs = [...new Set(allProducts.map((p: any) => p.category))]
+    for (const slug of categorySlugs) {
+      if (!store.categories.find((c: any) => c.slug === slug)) {
+        const product = allProducts.find((p: any) => p.category === slug)
+        store.categories.push({
+          id: store.nextIds.category++,
+          slug,
+          name: product?.category_name || slug,
+          description: '',
+          created_at: now,
+        })
+      }
+    }
+
+    saveStore(sid, store)
+
+    const res = NextResponse.json({
+      success: true,
+      message: `${allProducts.length} Produkte importiert`,
       parsed: allProducts.length,
+      imported: allProducts.length,
     })
+    res.cookies.set('demo-session', sid, { path: '/', maxAge: 60*60*24*365, httpOnly: false, sameSite: 'lax' })
+    return res
   } catch (error) {
     console.error("Error importando productos:", error)
     return NextResponse.json({ success: false, error: "Error interno al procesar el archivo" }, { status: 500 })

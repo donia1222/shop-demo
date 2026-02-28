@@ -109,7 +109,7 @@ export function HeroSection() {
                 className="flex items-center gap-1.5 section-fade"
                 style={{ animationDelay: `${i * 120}ms` }}
               >
-                <span className="text-[#2C5F2E] font-bold">✓</span>
+                <span className="text-[#CC0000] font-bold">✓</span>
                 <span>{item}</span>
               </span>
             ))}
@@ -117,8 +117,8 @@ export function HeroSection() {
               className="flex items-center gap-1.5 section-fade"
               style={{ animationDelay: "360ms" }}
             >
-              <span className="text-[#2C5F2E] font-bold">✓</span>
-              <span><span className="font-bold">{count}+</span> Artikel im Sortiment</span>
+              <span className="text-[#CC0000] font-bold">✓</span>
+              <span><span className="font-bold">{count}+</span> Saucen im Sortiment</span>
             </span>
           </div>
         </div>
@@ -131,7 +131,7 @@ export function HeroSection() {
         style={{ minHeight: "520px" }}
       >
         <img
-          src="/images/shop/header.jpeg"
+          src="/images/hot-sauce/hero.jpg"
           alt=""
           className="absolute inset-0 w-full h-full object-cover"
           style={{ transform: "scale(1.04)", transformOrigin: "center center" }}
@@ -140,7 +140,7 @@ export function HeroSection() {
             el.style.display = "none"
             if (el.parentElement) {
               el.parentElement.style.background =
-                "linear-gradient(135deg, #0d1a0a 0%, #1a2e10 50%, #2d4a1e 100%)"
+                "linear-gradient(135deg, #1a0000 0%, #2a0000 50%, #4a0000 100%)"
             }
           }}
         />
@@ -173,13 +173,13 @@ export function HeroSection() {
                 letterSpacing: "-0.02em",
               }}
             >
-              Top-Ausrüstung<br />
-              <span className="text-[#6DBF6A]">zu Bestpreisen</span>
+              Scharfe Saucen<br />
+              <span className="text-[#CC0000]">aus aller Welt</span>
             </h1>
 
             <p className="text-white/75 text-lg mb-8 leading-relaxed max-w-lg">
-              Jagd, Angeln & Outdoor — alles was du brauchst,<br />
-              jetzt zum Frühjahrs-Sale-Preis.
+              Hot Sauces, Chilisaucen & Gewürze — entdecke<br />
+              einzigartige Aromen jetzt zum Sale-Preis.
             </p>
 
             <div className="flex flex-wrap gap-3">
@@ -199,7 +199,7 @@ export function HeroSection() {
 
             <div className="flex items-center gap-8 mt-10 pt-8 border-t border-white/12">
               {[
-                { val: "500+", label: "Artikel" },
+                { val: "200+", label: "Saucen" },
                 { val: "1–3 Tage", label: "Lieferung" },
                 { val: "100%", label: "Schweizer Shop" },
               ].map(({ val, label }) => (
@@ -212,7 +212,7 @@ export function HeroSection() {
           </div>
         </div>
 
-        <div className="absolute right-0 top-0 bottom-0 w-0.5 bg-gradient-to-b from-transparent via-[#2C5F2E]/70 to-transparent" />
+        <div className="absolute right-0 top-0 bottom-0 w-0.5 bg-gradient-to-b from-transparent via-[#CC0000]/70 to-transparent" />
       </div>
 
       {/* ── Unsere beliebtesten Marken ── */}
@@ -235,19 +235,19 @@ export function HeroSection() {
           <div className="flex marquee-track w-max">
             {[...Array(2)].flatMap((_, copy) =>
               [
-                { name: "AIRSOFT",      domain: "airsoft.ch",               style: "text-[#1A1A1A] font-black text-base tracking-widest" },
-                { name: "BLACKFLASH",   domain: "black-flash-archery.com",  style: "text-[#1A1A1A] font-black text-base tracking-widest" },
-                { name: "BÖKER",        domain: "boker.de",                 style: "text-[#8B0000] font-black text-base tracking-wide" },
-                { name: "FISHERMAN'S",  domain: "fishermans-partner.eu",    style: "text-[#1A5276] font-black text-sm" },
-                { name: "HALLER",       domain: "haller-stahlwaren.de",     style: "text-[#2C5F2E] font-black text-base tracking-wide" },
-                { name: "JENZI",        domain: "jenzi.com",                style: "text-[#FF6600] font-black text-base" },
-                { name: "LINDER",       domain: "linder.de",                style: "text-[#333] font-black text-base tracking-wide" },
-                { name: "NATURZONE",    domain: "naturzone.ch",             style: "text-[#2C5F2E] font-bold text-sm tracking-wide" },
-                { name: "POHLFORCE",    domain: "pohlforce.de",             style: "text-[#CC0000] font-black text-base" },
-                { name: "SMOKI",        domain: "smoki-raeuchertechnik.de", style: "text-[#8B6914] font-black text-sm" },
-                { name: "STEAMBOW",     domain: "steambow.at",              style: "text-[#1A1A8C] font-black text-base tracking-wider" },
-                { name: "SYTONG",       domain: "sytong.global",            style: "text-[#003087] font-black text-sm tracking-wider" },
-                { name: "WILTEC",       domain: "wiltec.de",                style: "text-[#555] font-black text-sm tracking-wide" },
+                { name: "TABASCO",       domain: "tabasco.com",            style: "text-[#CC0000] font-black text-base tracking-widest" },
+                { name: "EL YUCATECO",   domain: "elyucateco.com",         style: "text-[#1A7A1A] font-black text-base tracking-wide" },
+                { name: "CHOLULA",       domain: "cholula.com",            style: "text-[#CC0000] font-black text-base tracking-wide" },
+                { name: "FRANK'S",       domain: "franksredhot.com",       style: "text-[#CC0000] font-black text-sm tracking-widest" },
+                { name: "VALENTINA",     domain: "valentina.com.mx",       style: "text-[#8B0000] font-black text-base tracking-wide" },
+                { name: "MAD DOG",       domain: "asifoods.com",           style: "text-[#1A1A1A] font-black text-base" },
+                { name: "MARIE SHARP'S", domain: "mariesharp.com",         style: "text-[#CC6600] font-black text-sm" },
+                { name: "MELINDA'S",     domain: "melindas.com",           style: "text-[#FF4500] font-black text-sm tracking-wide" },
+                { name: "BLAIR'S",       domain: "extremefood.com",        style: "text-[#8B0000] font-bold text-sm tracking-wide" },
+                { name: "DAVE'S",        domain: "davesgourtmet.com",      style: "text-[#CC0000] font-black text-base" },
+                { name: "YELLOWBIRD",    domain: "yellowbirdsauce.com",    style: "text-[#CC8800] font-black text-base tracking-wide" },
+                { name: "TORCHBEARER",   domain: "torchbearersauces.com",  style: "text-[#333] font-black text-sm tracking-wide" },
+                { name: "SECRET AARDVARK", domain: "secretaardvark.com",   style: "text-[#555] font-black text-sm" },
               ].map((brand) => (
                 <div
                   key={`${copy}-${brand.name}`}
@@ -272,13 +272,13 @@ export function HeroSection() {
         <div className="container mx-auto px-4">
           <div className="flex items-end justify-between mb-6">
             <div>
-              <p className="text-[11px] font-bold uppercase tracking-widest text-[#2C5F2E] mb-1">Sortiment</p>
+              <p className="text-[11px] font-bold uppercase tracking-widest text-[#CC0000] mb-1">Sortiment</p>
               <h2 className="text-2xl font-black text-[#1A1A1A] tracking-tight">Unsere Top Kategorien</h2>
               <p className="text-sm text-[#888] mt-1">Schnell und einfach zu den passenden Produkten.</p>
             </div>
             <button
               onClick={() => router.push("/shop")}
-              className="hidden sm:flex items-center gap-1.5 text-sm text-[#2C5F2E] font-semibold hover:underline transition-all pb-1"
+              className="hidden sm:flex items-center gap-1.5 text-sm text-[#CC0000] font-semibold hover:underline transition-all pb-1"
             >
               Alle anzeigen →
             </button>
@@ -332,7 +332,7 @@ export function HeroSection() {
           <div className="mt-5 sm:hidden">
             <button
               onClick={() => router.push("/shop")}
-              className="w-full py-3 rounded-2xl border-2 border-[#2C5F2E]/25 hover:border-[#2C5F2E] text-sm font-bold text-[#2C5F2E] transition-all"
+              className="w-full py-3 rounded-2xl border-2 border-[#CC0000]/25 hover:border-[#CC0000] text-sm font-bold text-[#CC0000] transition-all"
             >
               Alle Kategorien anzeigen →
             </button>

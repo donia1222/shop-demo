@@ -27,34 +27,34 @@ function getImages(p: Product): string[] {
 
 const CATEGORY_CONFIG = [
   {
-    keyword:     "Messer",
-    label:       "Unsere Messer",
-    cat:         "Messer",
-    image:       "/images/messer/488659357_1257006842863540_6360458103650416865_n.jpg",
-    emoji:       "🔪",
-    headline:    ["Schärfer.", "Präziser."],
+    keyword:     "Hot Sauce",
+    label:       "Hot Sauces",
+    cat:         "Hot Sauce",
+    image:       "/images/hot-sauce/cat1.jpg",
+    emoji:       "🌶️",
+    headline:    ["Schärfer.", "Intensiver."],
     accent:      "Besser.",
-    description: "Premium Messer für jeden Einsatz — von Outdoor bis Küche, Qualität die überzeugt.",
-    accentColor: "#E8C547",
-    overlayFrom: "#1A0800",
-    stats:       [["50+", "Modelle"], ["Top", "Qualität"], ["Swiss", "Service"]],
-    ctaLabel:    "Alle Messer entdecken",
-    catParam:    "Messer",
+    description: "Premium Hot Sauces aus aller Welt — von mild bis extrem scharf, Qualität die überzeugt.",
+    accentColor: "#FF6B35",
+    overlayFrom: "#1A0000",
+    stats:       [["200+", "Saucen"], ["Top", "Qualität"], ["Swiss", "Service"]],
+    ctaLabel:    "Alle Hot Sauces entdecken",
+    catParam:    "Hot Sauce",
   },
   {
-    keyword:     "Armbrust",
-    label:       "Unsere Armbrüste",
-    cat:         "Armbrust",
-    image:       "/images/shop/488657394_1257007002863524_6579276074813205025_n.jpg",
-    emoji:       "🏹",
-    headline:    ["Präzision auf", "den Punkt."],
-    accent:      "Gebracht.",
-    description: "Leistungsstarke Armbrüste für Sport und Freizeit — Qualität, der man vertrauen kann.",
-    accentColor: "#5BC8E8",
-    overlayFrom: "#04111f",
-    stats:       [["20+", "Modelle"], ["Top", "Präzision"], ["Gratis", "Beratung"]],
-    ctaLabel:    "Alle Armbrüste entdecken",
-    catParam:    "Armbrust",
+    keyword:     "Chilisauce",
+    label:       "Chilisaucen",
+    cat:         "Chilisauce",
+    image:       "/images/hot-sauce/cat2.jpg",
+    emoji:       "🔥",
+    headline:    ["Feuer auf", "dem Teller."],
+    accent:      "Erleben.",
+    description: "Karibische und mexikanische Chilisaucen — Aromen aus aller Welt direkt zu dir.",
+    accentColor: "#FF4500",
+    overlayFrom: "#1a0800",
+    stats:       [["50+", "Saucen"], ["Exotisch", "Aromen"], ["Gratis", "Beratung"]],
+    ctaLabel:    "Alle Chilisaucen entdecken",
+    catParam:    "Chilisauce",
   },
 ]
 
@@ -245,28 +245,28 @@ export function CategoryPreviewSection() {
           )
         })}
 
-        {/* ── Angeln & Fischen Banner ── */}
+        {/* ── Würzmittel & Spezialitäten Banner ── */}
         <div className="relative rounded-3xl overflow-hidden h-[420px] group">
           <img
-            src="/images/fischen/472679633_1183608080203417_7913441867178334031_n.jpg"
-            alt="Angeln & Fischen"
+            src="/images/hot-sauce/cat3.jpg"
+            alt="Würzmittel & Spezialitäten"
             className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#04111f] via-[#04111f]/80 to-[#04111f]/20" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#04111f]/70 via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#1a0000] via-[#1a0000]/80 to-[#1a0000]/20" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#1a0000]/70 via-transparent to-transparent" />
           <div className="relative h-full flex flex-col justify-center px-10 max-w-lg gap-5">
-            <span className="inline-flex items-center gap-1.5 self-start bg-[#5BC8E8]/20 text-[#5BC8E8] border border-[#5BC8E8]/40 text-[11px] font-bold uppercase tracking-[0.15em] px-3 py-1.5 rounded-full">
-              🎣 Angeln & Fischen
+            <span className="inline-flex items-center gap-1.5 self-start bg-[#FF6B35]/20 text-[#FF6B35] border border-[#FF6B35]/40 text-[11px] font-bold uppercase tracking-[0.15em] px-3 py-1.5 rounded-full">
+              🌶️ Alle Saucen & Spezialitäten
             </span>
             <h2 className="text-white font-black text-4xl leading-[1.1]" style={{ letterSpacing: "-0.02em" }}>
-              Alles für den<br />
-              <span className="text-[#5BC8E8]">perfekten Angeltag</span>
+              Die grösste<br />
+              <span className="text-[#FF6B35]">Hot-Sauce-Auswahl</span>
             </h2>
             <p className="text-white/65 text-sm leading-relaxed max-w-xs">
-              Ruten, Rollen, Köder und Zubehör — Top-Qualität für Angler aller Niveaus.
+              Über 200 Saucen aus aller Welt — von Tabasco bis zu exklusiven Importartikel in der Schweiz.
             </p>
             <div className="flex gap-7">
-              {[["500+", "Produkte"], ["Top", "Qualität"], ["Gratis", "Beratung"]].map(([val, lbl]) => (
+              {[["200+", "Saucen"], ["Top", "Qualität"], ["Gratis", "Beratung"]].map(([val, lbl]) => (
                 <div key={lbl}>
                   <p className="text-white font-black text-lg leading-none">{val}</p>
                   <p className="text-white/45 text-[11px] mt-1">{lbl}</p>
@@ -275,7 +275,7 @@ export function CategoryPreviewSection() {
             </div>
             <button
               onClick={() => router.push("/shop")}
-              className="self-start bg-[#5BC8E8] text-[#04111f] font-bold px-6 py-3 text-sm hover:bg-white transition-all duration-200 rounded-xl inline-flex items-center gap-2 shadow-xl"
+              className="self-start bg-[#FF6B35] text-white font-bold px-6 py-3 text-sm hover:bg-white hover:text-[#CC0000] transition-all duration-200 rounded-xl inline-flex items-center gap-2 shadow-xl"
             >
               Jetzt entdecken →
             </button>
