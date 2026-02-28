@@ -622,3 +622,4 @@ npm run lint      # Lint
 
 
 *Documentation generated on 27 February 2026 — US Fishing & Huntingshop*
+# shop-demo
